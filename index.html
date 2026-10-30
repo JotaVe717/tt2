@@ -34,16 +34,65 @@
       overflow-x: hidden;
     }
     .header {
+      position: relative;
       text-align: center;
       margin-bottom: 24px;
       background: rgba(15, 20, 28, 0.78);
       backdrop-filter: blur(8px);
-      padding: 16px 20px;
+      padding: 20px 20px 16px 20px;
       border-radius: 12px;
       border: 1px solid rgba(43, 57, 74, 0.6);
       max-width: 900px;
       width: 100%;
     }
+    
+    /* BOTÃO DINÂMICO DE PERFIL / DISCORD */
+    .top-profile-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      background: #5865F2;
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 12.5px;
+      font-weight: 700;
+      padding: 7px 16px;
+      border-radius: 20px;
+      margin-bottom: 14px;
+      border: 1px solid rgba(255,255,255,0.2);
+      box-shadow: 0 4px 14px rgba(88, 101, 242, 0.35);
+      transition: all 0.2s ease;
+    }
+    .top-profile-btn:hover {
+      background: #4752c4;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(88, 101, 242, 0.55);
+    }
+    .top-profile-btn.logged-in {
+      background: rgba(80, 227, 194, 0.12);
+      border-color: #50e3c2;
+      color: #50e3c2;
+      box-shadow: 0 0 12px rgba(80, 227, 194, 0.25);
+    }
+    .top-profile-btn.logged-in:hover {
+      background: rgba(80, 227, 194, 0.2);
+      box-shadow: 0 0 16px rgba(80, 227, 194, 0.4);
+    }
+    .top-profile-btn svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #50e3c2;
+      box-shadow: 0 0 8px #50e3c2;
+      display: inline-block;
+    }
+
     .header h1 {
       font-size: 26px;
       font-weight: 800;
@@ -314,7 +363,6 @@
       text-align: center;
     }
 
-    /* OTIMIZAÇÕES MOBILE RIGOROSAS (ATÉ 600PX) */
     @media (max-width: 600px) {
       body {
         padding: 20px 10px 30px 10px;
@@ -367,13 +415,21 @@
 <body>
 
   <div class="header">
+    <!-- BOTÃO COM DETECÇÃO DINÂMICA DE SESSÃO -->
+    <a href="perfil.html" id="btnPerfilTop" class="top-profile-btn">
+      <svg viewBox="0 0 127.14 96.36">
+        <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,45.91,53.91,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,45.91,96.12,53,91.08,65.69,84.69,65.69Z"/>
+      </svg>
+      <span id="labelPerfilTop">Entrar com Discord</span>
+    </a>
+
     <h1>Guia de Decks & Raids <span>Tap Titans 2</span></h1>
     <p>Selecione um guia ou tabela abaixo para visualizar as composições ideais e métricas de dano.</p>
   </div>
 
   <div class="deck-grid">
 
-    <!-- 1. RAID EM TEMPO REAL (DESTAQUE PRINCIPAL) -->
+    <!-- 1. RAID EM TEMPO REAL -->
     <a href="painel_raid.html" class="deck-card live-highlight">
       <img src="Cards/tt.png" alt="Raid em Tempo Real" class="deck-thumb" onerror="this.src='Cards/wc.png'">
       <div class="deck-info">
@@ -383,7 +439,7 @@
       </div>
     </a>
 
-    <!-- 2. ATAQUES & RANKING (NOVO) -->
+    <!-- 2. ATAQUES & RANKING -->
     <a href="ataques_ranking.html" class="deck-card highlight">
       <div class="deck-icon-thumb">⚡</div>
       <div class="deck-info">
@@ -403,7 +459,17 @@
       </div>
     </a>
 
-    <!-- 4. FLUXOGRAMAS DE DECKS -->
+    <!-- 4. ANÁLISE DE DANO -->
+    <a href="analise_dano.html" class="deck-card highlight">
+      <div class="deck-icon-thumb">📊</div>
+      <div class="deck-info">
+        <span class="deck-badge cyan">Estatísticas de Raid</span>
+        <h2>Análise de Dano</h2>
+        <p>Compare Tap Damage e cartas por parte do Titã a partir do JSON da planilha.</p>
+      </div>
+    </a>
+
+    <!-- 5. FLUXOGRAMAS DE DECKS -->
     <a href="fluxogramas.html" class="deck-card">
       <img src="Cards/tp.png" alt="Fluxogramas de Decks" class="deck-thumb" onerror="this.src='Cards/wc.png'">
       <div class="deck-info">
@@ -413,7 +479,7 @@
       </div>
     </a>
 
-    <!-- 5. TABELA DE AFLIÇÕES -->
+    <!-- 6. TABELA DE AFLIÇÕES -->
     <a href="tabela_aflicoes.html" class="deck-card highlight">
       <img src="Cards/a.png" alt="Tabela de Aflições" class="deck-thumb" onerror="this.src='Cards/wc.png'">
       <div class="deck-info">
@@ -423,7 +489,7 @@
       </div>
     </a>
 
-    <!-- 6. GUIA DE NIVELAMENTO -->
+    <!-- 7. GUIA DE NIVELAMENTO -->
     <a href="nivelamento_decks.html" class="deck-card">
       <img src="Cards/wc.png" alt="Nivelamento" class="deck-thumb">
       <div class="deck-info">
@@ -433,7 +499,7 @@
       </div>
     </a>
 
-    <!-- 7. MÓDULO DE REDUÇÕES -->
+    <!-- 8. MÓDULO DE REDUÇÕES -->
     <a href="reducoes.html" class="deck-card gold-highlight">
       <div class="deck-icon-thumb">⚖️</div>
       <div class="deck-info">
@@ -475,7 +541,6 @@
     </div>
   </div>
 
-  <!-- AVISO DE CÓPIA CONCLUÍDA -->
   <div id="copyToast">Chave PIX copiada com sucesso!</div>
 
   <footer>
@@ -485,6 +550,31 @@
   <script>
     const CHAVE_PIX = "eec03fbb-828a-42be-a53a-1fa6814c7d4e";
     const TAG_DISCORD = "jotave717";
+
+    // Checa se o usuário veio de um redirecionamento ou se já tem sessão salva
+    function atualizarBotaoPerfil() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const uidDaUrl = urlParams.get('uid');
+
+      if (uidDaUrl) {
+        localStorage.setItem('tt2_discord_uid', uidDaUrl);
+        // Limpa a URL para remover o parâmetro visualmente
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
+
+      const uidSalvo = localStorage.getItem('tt2_discord_uid');
+      const btn = document.getElementById('btnPerfilTop');
+      const label = document.getElementById('labelPerfilTop');
+
+      if (uidSalvo) {
+        btn.classList.add('logged-in');
+        btn.innerHTML = `<span class="status-dot"></span> Meu Perfil`;
+        btn.href = `perfil.html?uid=${uidSalvo}`;
+      } else {
+        btn.classList.remove('logged-in');
+        btn.href = 'perfil.html';
+      }
+    }
 
     function showToast(mensagem) {
       const toast = document.getElementById("copyToast");
@@ -518,6 +608,8 @@
         prompt("Copie o Discord abaixo:", TAG_DISCORD);
       }
     }
+
+    window.addEventListener('DOMContentLoaded', atualizarBotaoPerfil);
   </script>
 </body>
 </html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Análise de Dano — Tap Titans 2</title>
+<style>
+:root{color-scheme:dark;--bg:#0f141c;--panel:#171f2b;--panel2:#1d2938;--line:#2b394a;--text:#f4f7fb;--muted:#9eacbd;--purple:#9b7cff;--cyan:#50e3c2;--gold:#f3c969;--red:#ff7979}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#172235 0,#0f141c 55%);color:var(--text);font:15px/1.5 'Segoe UI',Arial,sans-serif;min-height:100vh;padding:24px 14px 42px}
+main{max-width:1100px;margin:auto}.back{display:inline-block;color:var(--muted);text-decoration:none;margin:0 0 18px}.back:hover{color:#fff}
+header,.panel,.stat,.source-card{background:rgba(23,31,43,.94);border:1px solid var(--line);border-radius:14px}
+header{padding:24px;margin-bottom:16px}h1{margin:0 0 6px;font-size:clamp(25px,4vw,36px);letter-spacing:-.5px}h2{font-size:18px;margin:0 0 14px}p{margin:0;color:var(--muted)}.eyebrow{color:var(--cyan);font-size:11px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;margin-bottom:7px}
+.panel{padding:18px;margin-bottom:16px}.controls{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:end}label{display:block;color:var(--muted);font-size:12px;margin-bottom:6px}textarea,select{width:100%;background:#0d131b;border:1px solid var(--line);border-radius:9px;color:var(--text);padding:12px;font:13px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace}textarea{min-height:150px;resize:vertical}select{font:14px 'Segoe UI',Arial,sans-serif;min-width:150px}button{border:0;border-radius:9px;padding:11px 15px;background:var(--purple);color:#110d20;font-weight:800;cursor:pointer}button:hover{filter:brightness(1.1)}.secondary{background:var(--panel2);border:1px solid var(--line);color:var(--text)}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.error{color:var(--red);font-size:13px;margin-top:9px}.hint{font-size:12px;margin-top:8px}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:16px}.stat{padding:16px}.stat span{display:block;color:var(--muted);font-size:12px}.stat strong{display:block;font-size:clamp(20px,3vw,28px);margin-top:4px;overflow-wrap:anywhere}
+.columns{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}.source-list{display:grid;gap:10px}.source-card{padding:14px;background:var(--panel);border-radius:11px}.source-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px}.source-name{font-weight:800}.source-total{font-weight:800;font-variant-numeric:tabular-nums;text-align:right}.tag{display:inline-block;color:var(--cyan);font-size:10px;text-transform:uppercase;letter-spacing:.7px;font-weight:800;margin-bottom:3px}.part{margin-top:10px}.part-head{display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-size:12px}.part-head strong{color:var(--text);font-variant-numeric:tabular-nums}.track{height:6px;background:#0c1219;border-radius:9px;overflow:hidden;margin-top:5px}.fill{height:100%;background:linear-gradient(90deg,#7660df,#b39cff);border-radius:9px;min-width:0}.empty{padding:14px;border:1px dashed var(--line);border-radius:10px;color:var(--muted);font-size:13px}.part-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;padding:10px 0;border-bottom:1px solid rgba(43,57,74,.7)}.part-row:last-child{border-bottom:0}.part-row span{overflow-wrap:anywhere}.part-row strong{font-variant-numeric:tabular-nums}.foot{color:var(--muted);font-size:12px;text-align:center;margin-top:20px}
+@media(max-width:720px){.columns{grid-template-columns:1fr}.controls{grid-template-columns:1fr}.stats{grid-template-columns:1fr}.stat{padding:12px}.source-top{flex-direction:column}.source-total{text-align:left}}
+</style>
+</head>
+<body>
+<main>
+<a class="back" href="index.html">← Voltar ao menu</a>
+<header><div class="eyebrow">Ferramenta de raid</div><h1>Análise de Dano</h1><p>Organize o dano do Tap Damage e das cartas por Titã e por parte atingida.</p></header>
+<section class="panel">
+<h2>Importar dados</h2>
+<label for="jsonInput">Cole o JSON gerado pela sua planilha</label>
+<textarea id="jsonInput" spellcheck="false" aria-label="JSON dos registros de dano"></textarea>
+<div class="actions"><button id="analyzeBtn">Analisar JSON</button><button id="sampleBtn" class="secondary">Carregar exemplo</button><button id="clearBtn" class="secondary">Limpar</button></div>
+<div id="error" class="error" role="alert"></div>
+<p class="hint">O campo <code>id: null</code> é identificado como Tap Damage. Os registros são agrupados por <code>titan_index</code>.</p>
+</section>
+<div id="results" hidden>
+<div class="controls" style="margin-bottom:12px"><div><label for="titanFilter">Filtrar Titã</label><select id="titanFilter"></select></div><p id="recordCount" style="font-size:12px;text-align:right"></p></div>
+<div class="stats">
+<div class="stat"><span>Dano total</span><strong id="totalDamage">0</strong></div>
+<div class="stat"><span>Fontes de dano</span><strong id="sourceCount">0</strong></div>
+<div class="stat"><span>Partes atingidas</span><strong id="partCount">0</strong></div>
+</div>
+<div class="columns">
+<section class="panel"><h2>Dano por fonte</h2><div id="sourceList" class="source-list"></div></section>
+<section class="panel"><h2>Dano por parte do Titã</h2><div id="partList"></div></section>
+</div>
+</div>
+<p class="foot">Análise local no navegador — o JSON não é enviado para nenhum servidor.</p>
+</main>
+<script>
+const sample = [
+ {"titan_index":1,"id":null,"damage_log":[{"id":"ArmorArmUpperRight","value":9484670},{"id":"ArmorHandRight","value":6024384},{"id":"ArmorHead","value":1244708},{"id":"ArmorChestUpper","value":1170025}]},
+ {"titan_index":1,"id":"AstralEcho","damage_log":[]},
+ {"titan_index":1,"id":"SpinalTap","damage_log":[]},
+ {"titan_index":1,"id":"CelestialStatic","damage_log":[{"id":"ArmorHead","value":38892458},{"id":"ArmorChestUpper","value":39915944}]}
+];
+const names = {ArmorHead:"Cabeça",ArmorChestUpper:"Peito superior",ArmorArmUpperRight:"Braço superior direito",ArmorHandRight:"Mão direita",ArmorArmUpperLeft:"Braço superior esquerdo",ArmorHandLeft:"Mão esquerda",ArmorChestLower:"Peito inferior",ArmorShoulderRight:"Ombro direito",ArmorShoulderLeft:"Ombro esquerdo",ArmorLegUpperRight:"Perna superior direita",ArmorLegUpperLeft:"Perna superior esquerda",ArmorLegLowerRight:"Perna inferior direita",ArmorLegLowerLeft:"Perna inferior esquerda"};
+const fmt = n => Number(n||0).toLocaleString('pt-BR');
+const sourceName = id => id === null ? 'Tap Damage' : String(id);
+const input = document.getElementById('jsonInput');
+const error = document.getElementById('error');
+let records = [];
+document.getElementById('sampleBtn').addEventListener('click',()=>{input.value=JSON.stringify(sample,null,2);analyze()});
+document.getElementById('clearBtn').addEventListener('click',()=>{input.value='';error.textContent='';document.getElementById('results').hidden=true});
+document.getElementById('analyzeBtn').addEventListener('click',analyze);
+document.getElementById('titanFilter').addEventListener('change',render);
+function analyze(){
+ error.textContent='';
+ try{
+  const parsed=JSON.parse(input.value);
+  if(!Array.isArray(parsed)) throw new Error('O JSON precisa ser uma lista de registros.');
+  parsed.forEach((r,i)=>{
+   if(!r||typeof r!=='object'||!Array.isArray(r.damage_log)) throw new Error('Registro '+(i+1)+': esperado um campo damage_log em formato de lista.');
+   r.damage_log.forEach((d,j)=>{if(!d||typeof d.id!=='string'||!Number.isFinite(Number(d.value))||Number(d.value)<0)throw new Error('Dano inválido no registro '+(i+1)+', item '+(j+1)+'.');});
+  });
+  records=parsed;
+  const titans=[...new Set(records.map(r=>r.titan_index))].sort((a,b)=>Number(a)-Number(b));
+  const select=document.getElementById('titanFilter');
+  select.innerHTML='<option value="all">Todos os Titãs</option>'+titans.map(t=>'<option value="'+String(t).replace(/"/g,'&quot;')+'">Titã '+escapeHtml(t)+'</option>').join('');
+  document.getElementById('results').hidden=false;
+  render();
+ }catch(e){error.textContent='Não foi possível ler os dados: '+e.message;document.getElementById('results').hidden=true;}
+}
+function escapeHtml(value){return String(value??'—').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function render(){
+ const chosen=document.getElementById('titanFilter').value;
+ const rows=records.filter(r=>chosen==='all'||String(r.titan_index)===chosen);
+ const sources=new Map(),parts=new Map();
+ rows.forEach(r=>{
+  const key=sourceName(r.id);
+  if(!sources.has(key))sources.set(key,{name:key,total:0,parts:new Map()});
+  r.damage_log.forEach(d=>{
+   const value=Number(d.value),part=d.id;
+   const src=sources.get(key);src.total+=value;src.parts.set(part,(src.parts.get(part)||0)+value);
+   parts.set(part,(parts.get(part)||0)+value);
+  });
+ });
+ const total=[...sources.values()].reduce((s,x)=>s+x.total,0);
+ document.getElementById('totalDamage').textContent=fmt(total);
+ document.getElementById('sourceCount').textContent=sources.size;
+ document.getElementById('partCount').textContent=parts.size;
+ document.getElementById('recordCount').textContent=rows.length+' registro(s) · '+(chosen==='all'?'todos os Titãs':'Titã '+chosen);
+ const ordered=[...sources.values()].sort((a,b)=>b.total-a.total);
+ const maxSource=Math.max(1,...ordered.map(s=>s.total));
+ document.getElementById('sourceList').innerHTML=ordered.map(s=>{
+  const detail=[...s.parts.entries()].sort((a,b)=>b[1]-a[1]);
+  return '<article class="source-card"><div class="source-top"><div><div class="tag">'+(s.name==='Tap Damage'?'Dano de toque':'Carta')+'</div><div class="source-name">'+escapeHtml(s.name)+'</div></div><div class="source-total">'+fmt(s.total)+'</div></div><div class="track"><div class="fill" style="width:'+(s.total/maxSource*100)+'%"></div></div>'+(detail.length?detail.map(([id,val])=>'<div class="part"><div class="part-head"><span>'+escapeHtml(names[id]||id)+'</span><strong>'+fmt(val)+'</strong></div><div class="track"><div class="fill" style="width:'+(val/Math.max(1,s.total)*100)+'%"></div></div></div>').join(''):'<div class="empty" style="margin-top:10px">Nenhum dano registrado.</div>')+'</article>';
+ }).join('')||'<div class="empty">Nenhum registro para este filtro.</div>';
+ const sortedParts=[...parts.entries()].sort((a,b)=>b[1]-a[1]),maxPart=Math.max(1,...sortedParts.map(x=>x[1]));
+ document.getElementById('partList').innerHTML=sortedParts.map(([id,val])=>'<div class="part-row"><span>'+escapeHtml(names[id]||id)+'</span><strong>'+fmt(val)+'</strong><div class="track" style="grid-column:1/-1;margin-top:0"><div class="fill" style="width:'+(val/maxPart*100)+'%"></div></div></div>').join('')||'<div class="empty">Nenhum dano registrado para este Titã.</div>';
+}
+input.value=JSON.stringify(sample,null,2);
+analyze();
+</script>
+</body>
+</html>

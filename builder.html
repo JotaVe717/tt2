@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Decks de Raid - Tap Titans 2</title>
+  <title>Decks de Raid por Buff - Tap Titans 2</title>
   <style>
     * {
       box-sizing: border-box;
@@ -18,20 +18,27 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 8px 6px calc(14px + env(safe-area-inset-bottom, 0px)) 6px;
+      padding: 8px 8px calc(20px + env(safe-area-inset-bottom, 0px)) 8px;
       min-height: 100vh;
       overflow-x: hidden;
     }
 
-    /* TOPO COMPACTO EM LINHA */
+    /* BARRA SUPERIOR */
     .top-bar {
       width: 100%;
-      max-width: 480px;
+      max-width: 1040px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 6px;
-      margin-bottom: 8px;
+      gap: 10px;
+      margin-bottom: 10px;
+      position: sticky;
+      top: 0;
+      background: rgba(15, 20, 28, 0.95);
+      backdrop-filter: blur(8px);
+      padding: 6px 4px;
+      z-index: 50;
+      border-bottom: 1px solid #1a2533;
     }
     .back-btn {
       text-decoration: none;
@@ -51,83 +58,142 @@
       background: #18202a;
       border: 1px solid #2d3e52;
       padding: 4px 10px;
-      border-radius: 6px;
+      border-radius: 5px;
     }
     .base-level-compact label {
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 800;
       color: #e2b4f7;
       text-transform: uppercase;
     }
     .base-level-compact input {
       width: 48px;
-      height: 24px;
+      height: 23px;
       background: #0f141c;
       border: 1.5px solid #8e44ad;
       color: #fff;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 800;
       text-align: center;
       border-radius: 4px;
       outline: none;
     }
 
-    .btn-reset-all {
-      background: rgba(231, 76, 60, 0.15);
-      border: 1px solid #e74c3c;
-      color: #e74c3c;
-      font-size: 11px;
-      font-weight: 700;
-      padding: 5px 9px;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    /* CONTAINER PRINCIPAL */
-    .decks-container {
-      width: 100%;
-      max-width: 480px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    /* DECK EM LINHA ÚNICA */
-    .deck-row-card {
-      background: #141c26;
-      border: 1px solid #243344;
-      border-radius: 10px;
-      padding: 6px 8px;
-      display: flex;
-      align-items: center;
+    /* GRADE PRINCIPAL: 4 EM CIMA E 4 EM BAIXO COM LARGURA JUSTA (SEM SOBRAS) */
+    .buff-sections-container {
+      width: auto;
+      max-width: 1040px;
+      display: grid;
+      grid-template-columns: repeat(4, 240px);
+      justify-content: center;
       gap: 10px;
     }
 
-    /* IDENTIFICADOR LATERAL ESQUERDO */
+    @media (max-width: 1020px) {
+      .buff-sections-container {
+        grid-template-columns: repeat(2, 240px);
+      }
+    }
+
+    @media (max-width: 510px) {
+      .buff-sections-container {
+        grid-template-columns: 240px;
+      }
+    }
+
+    /* CARD DE CADA BUFF MOLDADO AO CONTEÚDO */
+    .buff-group-card {
+      background: #10161f;
+      border: 1.5px solid #1f2b38;
+      border-radius: 8px;
+      padding: 6px 5px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+      width: 240px;
+    }
+
+    .buff-group-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 2px 2px 4px 2px;
+      border-bottom: 1px solid #1a2533;
+    }
+    .buff-badge-title {
+      font-size: 10px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.2px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .btn-reset-group {
+      background: rgba(231, 76, 60, 0.12);
+      border: 1px solid rgba(231, 76, 60, 0.6);
+      color: #ff6b6b;
+      font-size: 8px;
+      font-weight: 800;
+      padding: 2px 5px;
+      border-radius: 4px;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .btn-reset-group:hover {
+      background: rgba(231, 76, 60, 0.25);
+    }
+
+    .decks-container {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    /* LINHA DO DECK: 100% PREENCHIDA E ENXUTA */
+    .deck-row-card {
+      background: #141c26;
+      border: 1px solid #243344;
+      border-radius: 6px;
+      padding: 3px 4px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 5px;
+      width: 100%;
+    }
+
     .deck-side-info {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-width: 58px;
+      width: 38px;
+      min-width: 38px;
       flex-shrink: 0;
       text-align: center;
-      gap: 3px;
+      gap: 2px;
     }
     .deck-num {
-      font-size: 15px;
+      font-size: 11px;
       font-weight: 900;
       color: #f5a623;
       line-height: 1;
     }
     .deck-rule-tag {
-      font-size: 8.5px;
+      font-size: 6.5px;
       font-weight: 800;
-      padding: 2px 5px;
-      border-radius: 4px;
+      padding: 1.5px 2px;
+      border-radius: 2px;
       text-transform: uppercase;
       line-height: 1;
       white-space: nowrap;
+      width: 100%;
+      text-align: center;
     }
     .status-complete {
       background: rgba(80, 227, 194, 0.15);
@@ -145,22 +211,19 @@
       color: #f5a623;
     }
 
-    /* OS 3 SLOTS ALINHADOS */
+    /* SLOTS PERFEITAMENTE 1:1 FIXADOS EM 58px */
     .deck-slots-row {
       display: flex;
-      gap: 6px;
-      flex: 1;
-      justify-content: flex-end;
+      gap: 4px;
+      flex-shrink: 0;
     }
-
-    /* FIXADO EM 90px */
     .slot-box {
-      width: 90px;
-      height: 90px;
+      width: 58px;
+      height: 58px;
       aspect-ratio: 1 / 1;
       background: #0f141c;
-      border: 1.5px dashed #3a4b60;
-      border-radius: 8px;
+      border: 1.2px dashed #3a4b60;
+      border-radius: 5px;
       position: relative;
       display: flex;
       flex-direction: column;
@@ -179,12 +242,12 @@
     }
 
     .slot-empty-icon {
-      font-size: 18px;
+      font-size: 12px;
       color: #4f637b;
       line-height: 1;
     }
     .slot-empty-text {
-      font-size: 8px;
+      font-size: 6.5px;
       font-weight: 700;
       color: #5c728e;
       text-transform: uppercase;
@@ -197,49 +260,46 @@
       display: block;
     }
 
-    /* BADGE PAPEL (INFERIOR ESQUERDO) */
     .slot-badge-role {
       position: absolute;
-      bottom: 2.5px;
-      left: 2.5px;
-      font-size: 7.5px;
+      bottom: 1.5px;
+      left: 1.5px;
+      font-size: 6px;
       font-weight: 800;
-      padding: 1px 4px;
-      border-radius: 3px;
+      padding: 0.5px 2.5px;
+      border-radius: 2px;
       text-transform: uppercase;
       color: #ffffff;
       line-height: 1;
       pointer-events: none;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.8);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.8);
     }
-
-    /* BADGE NÍVEL (INFERIOR DIREITO) */
     .slot-sug-lvl {
       position: absolute;
-      bottom: 2.5px;
-      right: 2.5px;
+      bottom: 1.5px;
+      right: 1.5px;
       background: rgba(15, 20, 28, 0.94);
       border: 1px solid rgba(255, 255, 255, 0.35);
       color: #50e3c2;
       font-weight: 900;
-      font-size: 8.5px;
-      padding: 1px 3.5px;
-      border-radius: 3px;
+      font-size: 6.5px;
+      padding: 0.5px 2.5px;
+      border-radius: 2px;
       line-height: 1;
       pointer-events: none;
     }
 
     .btn-remove-card {
       position: absolute;
-      top: 2.5px;
-      right: 2.5px;
-      width: 16px;
-      height: 16px;
+      top: 1.5px;
+      right: 1.5px;
+      width: 12px;
+      height: 12px;
       background: rgba(15, 20, 28, 0.9);
       border: 1px solid rgba(255, 255, 255, 0.3);
       color: #ff5252;
       border-radius: 50%;
-      font-size: 11px;
+      font-size: 8.5px;
       font-weight: 900;
       display: flex;
       align-items: center;
@@ -254,7 +314,7 @@
     .role-efeito { background: #2980b9; }
     .role-especifico { background: #576574; }
 
-    /* MODAL DE SELEÇÃO DE CARTAS */
+    /* MODAL DE SELEÇÃO */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -270,23 +330,23 @@
     .modal-content {
       background: #18202a;
       border: 1.5px solid #2d3e52;
-      border-radius: 12px;
+      border-radius: 10px;
       width: 100%;
-      max-width: 440px;
+      max-width: 400px;
       max-height: 85vh;
       display: flex;
       flex-direction: column;
       box-shadow: 0 16px 40px rgba(0,0,0,0.8);
     }
     .modal-header {
-      padding: 10px 12px;
+      padding: 8px 10px;
       border-bottom: 1px solid #243344;
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
     .modal-title {
-      font-size: 13px;
+      font-size: 11px;
       font-weight: 800;
       text-transform: uppercase;
       color: #f5a623;
@@ -295,23 +355,23 @@
       background: none;
       border: none;
       color: #8fa0b5;
-      font-size: 20px;
+      font-size: 18px;
       cursor: pointer;
       line-height: 1;
     }
     .modal-body {
-      padding: 10px;
+      padding: 8px;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 8px;
     }
     .modal-group-title {
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 0.4px;
-      margin-bottom: 6px;
+      letter-spacing: 0.3px;
+      margin-bottom: 4px;
       display: flex;
       align-items: center;
       gap: 4px;
@@ -319,12 +379,12 @@
     .modal-cards-grid {
       display: grid;
       grid-template-columns: repeat(6, 1fr);
-      gap: 5px;
+      gap: 4px;
     }
     .modal-card-item {
       aspect-ratio: 1 / 1;
-      border-radius: 6px;
-      border: 1.5px solid #2d3e52;
+      border-radius: 5px;
+      border: 1.2px solid #2d3e52;
       background: #101721;
       cursor: pointer;
       position: relative;
@@ -351,10 +411,9 @@
       <label for="deckBaseLevel">Nível Base:</label>
       <input type="number" id="deckBaseLevel" value="60" min="1" max="100">
     </div>
-    <button class="btn-reset-all" onclick="resetAllDecks()">Limpar</button>
   </div>
 
-  <div class="decks-container" id="decksGrid"></div>
+  <div class="buff-sections-container" id="buffSectionsContainer"></div>
 
   <!-- MODAL DE SELEÇÃO -->
   <div class="modal-overlay" id="modalPicker">
@@ -368,8 +427,22 @@
   </div>
 
   <script>
+    const BUFF_BLOCKS = [
+      // Linha Superior (Aflição + 3s)
+      { id: "buff_affliction_dmg", name: "+30% Dano de Aflição", color: "#3498db" },
+      { id: "buff_affliction_ch",  name: "x1.3 Chance de Aflição", color: "#3498db" },
+      { id: "buff_affliction_dur", name: "+50% Duração de Aflição", color: "#3498db" },
+      { id: "buff_duration_3s",    name: "+3s Duração", color: "#9b59b6" },
+
+      // Linha Inferior (Explosão + Suporte + All Raid)
+      { id: "buff_burst_dmg",      name: "+30% Dano de Explosão", color: "#e67e22" },
+      { id: "buff_burst_ch",       name: "x1.3 Chance de Explosão", color: "#e67e22" },
+      { id: "buff_support_eff",    name: "+15% Efeito de Suporte", color: "#2ecc71" },
+      { id: "buff_all_raid_dmg",   name: "+15% All Raid Damage", color: "#f1c40f" }
+    ];
+
     const CARDS = [
-      // DANO (Explosão / Aflição)
+      // DANO
       { id: "mf", name: "Mirror Force", role: "dano", roleLabel: "Dano", img: "Cards/mf.png" },
       { id: "csb", name: "Clanship Barrage", role: "dano", roleLabel: "Dano", img: "Cards/csb.png" },
       { id: "cs", name: "Celestial Static", role: "dano", roleLabel: "Dano", img: "Cards/cs.png" },
@@ -411,7 +484,7 @@
       { id: "vm", name: "Victory March", role: "buff", roleLabel: "Buff", img: "Cards/vm.png" },
       { id: "bd", name: "Battle Drums", role: "buff", roleLabel: "Buff", img: "Cards/bd.png" },
 
-      // EFEITO FIXO
+      // FIXO
       { id: "af", name: "Ancestral Favor", role: "efeito", roleLabel: "Fixo", img: "Cards/af.png" },
       { id: "rg", name: "Rancid Gas", role: "efeito", roleLabel: "Fixo", img: "Cards/rg.png" },
       { id: "ae", name: "Astral Echo", role: "efeito", roleLabel: "Fixo", img: "Cards/ae.png" },
@@ -425,17 +498,24 @@
       "ad", "bi", "ds", "fb", "gs", "tp", "ra", "rs", "rr", "bb", "ma", "am", "sot"
     ];
 
-    const STORAGE_KEY = "tt2_user_decks_v1";
+    const STORAGE_PREFIX = "tt2_buff_decks_v2_";
     const BASE_STORAGE_KEY = "tt2_base_lvl_v1";
 
-    let decks = [
-      [null, null, null],
-      [null, null, null],
-      [null, null, null],
-      [null, null, null],
-      [null, null, null],
-      [null, null, null]
-    ];
+    function createEmptyDecks() {
+      return [
+        [null, null, null],
+        [null, null, null],
+        [null, null, null],
+        [null, null, null],
+        [null, null, null],
+        [null, null, null]
+      ];
+    }
+
+    const allBuffDecks = {};
+    BUFF_BLOCKS.forEach(b => {
+      allBuffDecks[b.id] = createEmptyDecks();
+    });
 
     let currentSelecting = null;
 
@@ -447,11 +527,15 @@
 
     function loadSavedData() {
       try {
-        const savedDecks = localStorage.getItem(STORAGE_KEY);
-        if (savedDecks) {
-          const parsed = JSON.parse(savedDecks);
-          if (Array.isArray(parsed) && parsed.length === 6) decks = parsed;
-        }
+        BUFF_BLOCKS.forEach(b => {
+          const saved = localStorage.getItem(STORAGE_PREFIX + b.id);
+          if (saved) {
+            const parsed = JSON.parse(saved);
+            if (Array.isArray(parsed) && parsed.length === 6) {
+              allBuffDecks[b.id] = parsed;
+            }
+          }
+        });
 
         const savedBase = localStorage.getItem(BASE_STORAGE_KEY);
         if (savedBase) {
@@ -462,11 +546,11 @@
       }
     }
 
-    function saveDecks() {
+    function saveBuffDecks(buffId) {
       try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(decks));
+        localStorage.setItem(STORAGE_PREFIX + buffId, JSON.stringify(allBuffDecks[buffId]));
       } catch (e) {
-        console.error("Erro ao salvar decks:", e);
+        console.error("Erro ao salvar:", e);
       }
     }
 
@@ -517,37 +601,32 @@
           else if (r === "especifico") levels[idx] = Math.max(20, base - 30);
           else if (r === "buff") levels[idx] = Math.max(0, base + 10);
         });
-      }
-      else if (counts.dano === 1 && counts.buff === 1 && counts.efeito === 1) {
+      } else if (counts.dano === 1 && counts.buff === 1 && counts.efeito === 1) {
         ruleName = "Regra 1";
         roles.forEach((r, idx) => {
           if (r === "dano") levels[idx] = Math.max(0, base + 10);
           else if (r === "buff") levels[idx] = Math.max(0, base);
           else if (r === "efeito") levels[idx] = Math.max(0, base - 20);
         });
-      }
-      else if (counts.dano === 2 && counts.buff === 1) {
+      } else if (counts.dano === 2 && counts.buff === 1) {
         ruleName = "Regra 2";
         roles.forEach((r, idx) => {
           if (r === "dano") levels[idx] = Math.max(0, base - 10);
           else if (r === "buff") levels[idx] = Math.max(0, base + 10);
         });
-      }
-      else if (counts.dano === 1 && counts.buff === 2) {
+      } else if (counts.dano === 1 && counts.buff === 2) {
         ruleName = "Regra 3";
         roles.forEach((r, idx) => {
           if (r === "dano") levels[idx] = Math.max(0, base + 10);
           else if (r === "buff") levels[idx] = Math.max(0, base - 10);
         });
-      }
-      else if (counts.dano === 1 && counts.efeito === 2) {
+      } else if (counts.dano === 1 && counts.efeito === 2) {
         ruleName = "Regra 4";
         roles.forEach((r, idx) => {
           if (r === "dano") levels[idx] = Math.max(0, base + 10);
           else if (r === "efeito") levels[idx] = Math.max(0, base - 10);
         });
-      }
-      else {
+      } else {
         ruleName = "Misto";
         roles.forEach((r, idx) => {
           if (r === "dano") levels[idx] = Math.max(0, base + 10);
@@ -557,7 +636,6 @@
         });
       }
 
-      // AJUSTE AMPLIFY ('am')
       const amIndex = deck.indexOf("am");
       if (amIndex !== -1) {
         levels[amIndex] = levels[amIndex] + 1;
@@ -579,90 +657,107 @@
       };
     }
 
-    function renderDecks() {
-      const container = document.getElementById("decksGrid");
-      container.innerHTML = "";
+    function renderAll() {
+      const mainContainer = document.getElementById("buffSectionsContainer");
+      mainContainer.innerHTML = "";
 
-      decks.forEach((deck, dIdx) => {
-        const deckDiv = document.createElement("div");
-        deckDiv.className = "deck-row-card";
+      BUFF_BLOCKS.forEach(buff => {
+        const groupCard = document.createElement("div");
+        groupCard.className = "buff-group-card";
 
-        const deckCalc = calculateDeckLevels(deck);
-
-        deckDiv.innerHTML = `
-          <div class="deck-side-info">
-            <span class="deck-num">#${dIdx + 1}</span>
-            <span class="deck-rule-tag ${deckCalc.statusClass}">${deckCalc.statusText}</span>
+        groupCard.innerHTML = `
+          <div class="buff-group-header">
+            <span class="buff-badge-title" style="color: ${buff.color};">
+              <span>✦</span> ${buff.name}
+            </span>
+            <button class="btn-reset-group" onclick="resetBuffGroup('${buff.id}')">Limpar</button>
           </div>
-          <div class="deck-slots-row" id="slots-deck-${dIdx}"></div>
+          <div class="decks-container" id="decks-container-${buff.id}"></div>
         `;
 
-        const slotsContainer = deckDiv.querySelector(`#slots-deck-${dIdx}`);
+        const decksListDiv = groupCard.querySelector(`#decks-container-${buff.id}`);
+        const currentGroupDecks = allBuffDecks[buff.id];
 
-        deck.forEach((cardId, sIdx) => {
-          const slot = document.createElement("div");
-          const isCurrent = currentSelecting && currentSelecting.deckIndex === dIdx && currentSelecting.slotIndex === sIdx;
-          slot.className = `slot-box ${cardId ? "filled" : ""} ${isCurrent ? "active-selecting" : ""}`;
+        currentGroupDecks.forEach((deck, dIdx) => {
+          const deckCalc = calculateDeckLevels(deck);
+          const deckRow = document.createElement("div");
+          deckRow.className = "deck-row-card";
 
-          if (cardId) {
-            const cardData = CARDS.find(c => c.id === cardId) || { name: cardId, role: "dano", roleLabel: "Dano", img: "Cards/wc.png" };
-            const sugLvl = deckCalc.levels[sIdx];
-            const currentRole = deckCalc.effectiveRoles[sIdx] || cardData.role;
-            const currentRoleLabel = deckCalc.effectiveLabels[sIdx] || cardData.roleLabel;
-            const lvlBadge = sugLvl !== null ? `<span class="slot-sug-lvl">${sugLvl}</span>` : "";
+          deckRow.innerHTML = `
+            <div class="deck-side-info">
+              <span class="deck-num">#${dIdx + 1}</span>
+              <span class="deck-rule-tag ${deckCalc.statusClass}">${deckCalc.statusText}</span>
+            </div>
+            <div class="deck-slots-row" id="slots-${buff.id}-${dIdx}"></div>
+          `;
 
-            slot.innerHTML = `
-              <img src="${cardData.img}" class="slot-img" alt="${cardData.name}" onerror="this.src='Cards/wc.png'">
-              <span class="slot-badge-role role-${currentRole}">${currentRoleLabel}</span>
-              ${lvlBadge}
-              <button class="btn-remove-card" title="Remover">&times;</button>
-            `;
+          const slotsRow = deckRow.querySelector(`#slots-${buff.id}-${dIdx}`);
 
-            slot.querySelector(".btn-remove-card").onclick = (e) => {
-              e.stopPropagation();
-              removeCard(dIdx, sIdx);
-            };
+          deck.forEach((cardId, sIdx) => {
+            const slot = document.createElement("div");
+            const isCurrent = currentSelecting &&
+                              currentSelecting.buffId === buff.id &&
+                              currentSelecting.deckIndex === dIdx &&
+                              currentSelecting.slotIndex === sIdx;
 
-            slot.onclick = () => openPicker(dIdx, sIdx);
-          } else {
-            slot.innerHTML = `
-              <span class="slot-empty-icon">+</span>
-              <span class="slot-empty-text">Carta ${sIdx + 1}</span>
-            `;
-            slot.onclick = () => openPicker(dIdx, sIdx);
-          }
+            slot.className = `slot-box ${cardId ? "filled" : ""} ${isCurrent ? "active-selecting" : ""}`;
 
-          slotsContainer.appendChild(slot);
+            if (cardId) {
+              const cardData = CARDS.find(c => c.id === cardId) || { name: cardId, role: "dano", roleLabel: "Dano", img: "Cards/wc.png" };
+              const sugLvl = deckCalc.levels[sIdx];
+              const currentRole = deckCalc.effectiveRoles[sIdx] || cardData.role;
+              const currentRoleLabel = deckCalc.effectiveLabels[sIdx] || cardData.roleLabel;
+              const lvlBadge = sugLvl !== null ? `<span class="slot-sug-lvl">${sugLvl}</span>` : "";
+
+              slot.innerHTML = `
+                <img src="${cardData.img}" class="slot-img" alt="${cardData.name}" onerror="this.src='Cards/wc.png'">
+                <span class="slot-badge-role role-${currentRole}">${currentRoleLabel}</span>
+                ${lvlBadge}
+                <button class="btn-remove-card" title="Remover">&times;</button>
+              `;
+
+              slot.querySelector(".btn-remove-card").onclick = (e) => {
+                e.stopPropagation();
+                removeCard(buff.id, dIdx, sIdx);
+              };
+
+              slot.onclick = () => openPicker(buff.id, dIdx, sIdx);
+            } else {
+              slot.innerHTML = `
+                <span class="slot-empty-icon">+</span>
+                <span class="slot-empty-text">Slot ${sIdx + 1}</span>
+              `;
+              slot.onclick = () => openPicker(buff.id, dIdx, sIdx);
+            }
+
+            slotsRow.appendChild(slot);
+          });
+
+          decksListDiv.appendChild(deckRow);
         });
 
-        container.appendChild(deckDiv);
+        mainContainer.appendChild(groupCard);
       });
     }
 
-    function removeCard(dIdx, sIdx) {
-      decks[dIdx][sIdx] = null;
-      saveDecks();
-      renderDecks();
+    function removeCard(buffId, dIdx, sIdx) {
+      allBuffDecks[buffId][dIdx][sIdx] = null;
+      saveBuffDecks(buffId);
+      renderAll();
     }
 
-    function resetAllDecks() {
-      if (confirm("Limpar todos os decks?")) {
-        decks = [
-          [null, null, null],
-          [null, null, null],
-          [null, null, null],
-          [null, null, null],
-          [null, null, null],
-          [null, null, null]
-        ];
-        saveDecks();
-        renderDecks();
+    function resetBuffGroup(buffId) {
+      const buffObj = BUFF_BLOCKS.find(b => b.id === buffId);
+      if (confirm(`Limpar os 6 decks do buff "${buffObj.name}"?`)) {
+        allBuffDecks[buffId] = createEmptyDecks();
+        saveBuffDecks(buffId);
+        renderAll();
       }
     }
 
-    function getUsedCardIds(excludeDeckIdx, excludeSlotIdx) {
+    function getUsedCardIds(buffId, excludeDeckIdx, excludeSlotIdx) {
       const used = new Set();
-      decks.forEach((deck, dIdx) => {
+      allBuffDecks[buffId].forEach((deck, dIdx) => {
         deck.forEach((cardId, sIdx) => {
           if (cardId && !(dIdx === excludeDeckIdx && sIdx === excludeSlotIdx)) {
             used.add(cardId);
@@ -672,13 +767,14 @@
       return used;
     }
 
-    function openPicker(dIdx, sIdx) {
-      currentSelecting = { deckIndex: dIdx, slotIndex: sIdx };
-      renderDecks();
+    function openPicker(buffId, dIdx, sIdx) {
+      currentSelecting = { buffId, deckIndex: dIdx, slotIndex: sIdx };
+      renderAll();
 
-      document.getElementById("modalPickerTitle").textContent = `Deck #${dIdx + 1} - Carta ${sIdx + 1}`;
+      const buffObj = BUFF_BLOCKS.find(b => b.id === buffId);
+      document.getElementById("modalPickerTitle").textContent = `${buffObj.name} | Deck #${dIdx + 1} (Carta ${sIdx + 1})`;
 
-      const usedCards = getUsedCardIds(dIdx, sIdx);
+      const usedCards = getUsedCardIds(buffId, dIdx, sIdx);
       const modalBody = document.getElementById("modalBody");
       modalBody.innerHTML = "";
 
@@ -707,7 +803,7 @@
           const isUsed = usedCards.has(card.id);
           const item = document.createElement("div");
           item.className = `modal-card-item ${isUsed ? "disabled" : ""}`;
-          item.title = isUsed ? `${card.name} (Em uso)` : card.name;
+          item.title = isUsed ? `${card.name} (Em uso neste bloco)` : card.name;
 
           item.innerHTML = `<img src="${card.img}" alt="${card.name}" onerror="this.src='Cards/wc.png'">`;
 
@@ -726,22 +822,22 @@
 
     function selectCard(cardId) {
       if (!currentSelecting) return;
-      const { deckIndex, slotIndex } = currentSelecting;
-      decks[deckIndex][slotIndex] = cardId;
-      saveDecks();
+      const { buffId, deckIndex, slotIndex } = currentSelecting;
+      allBuffDecks[buffId][deckIndex][slotIndex] = cardId;
+      saveBuffDecks(buffId);
       closeModal();
-      renderDecks();
+      renderAll();
     }
 
     function closeModal() {
       document.getElementById("modalPicker").classList.remove("open");
       currentSelecting = null;
-      renderDecks();
+      renderAll();
     }
 
     document.getElementById("deckBaseLevel").addEventListener("input", () => {
       saveBaseLevel();
-      renderDecks();
+      renderAll();
     });
 
     document.getElementById("modalPicker").addEventListener("click", (e) => {
@@ -751,7 +847,7 @@
     });
 
     loadSavedData();
-    renderDecks();
+    renderAll();
   </script>
 </body>
 </html>

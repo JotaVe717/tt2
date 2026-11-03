@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Anatomia do Titã — Tap Titans 2</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    body {
+      background-color: #0f141c;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px 12px 40px 12px;
+      overflow-x: hidden;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+      background: rgba(25, 34, 45, 0.92);
+      backdrop-filter: blur(10px);
+      padding: 16px 20px;
+      border-radius: 12px;
+      border: 1px solid #2b394a;
+      max-width: 750px;
+      width: 100%;
+    }
+    .header h1 {
+      font-size: 20px;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: #f5a623;
+    }
+    .header p {
+      color: #8fa0b5;
+      font-size: 12px;
+      margin-top: 4px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 750px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* BARRA DE VIDA GLOBAL DO TITÃ */
+    .card-global {
+      background: rgba(25, 34, 45, 0.92);
+      border: 1px solid #2b394a;
+      border-radius: 12px;
+      padding: 16px;
+    }
+    .card-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #8fa0b5;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .progress-bar-bg {
+      width: 100%;
+      height: 10px;
+      background: #121921;
+      border-radius: 5px;
+      overflow: hidden;
+      margin-top: 6px;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: #4cd964;
+      width: 0%;
+      transition: width 0.4s ease;
+    }
+
+    /* DESEMPENHO E INFO DO TIER */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .stat-box {
+      background: rgba(18, 25, 33, 0.8);
+      border: 1px solid #2b394a;
+      border-radius: 10px;
+      padding: 12px;
+      text-align: center;
+    }
+    .stat-label {
+      font-size: 10px;
+      color: #8fa0b5;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    .stat-value {
+      font-size: 14px;
+      font-weight: 800;
+      color: #ffffff;
+      margin-top: 4px;
+    }
+
+    /* DEBUFFS DE ÁREA */
+    .debuff-box {
+      background: rgba(255, 82, 82, 0.1);
+      border: 1px solid rgba(255, 82, 82, 0.3);
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 12px;
+      color: #ff8080;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* LAYOUT ANATÔMICO DO TITÃ (3 COLUNAS) */
+    .titam-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .part-card {
+      background: rgba(18, 25, 33, 0.9);
+      border: 1px solid #2b394a;
+      border-radius: 10px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    /* Posicionamento exato das 3 linhas (Ombros e Cabeça no topo, Mãos e Peito no meio, Pernas unidas embaixo) */
+    .slot-ombro-dir { grid-column: 1; grid-row: 1; }
+    .slot-cabeca    { grid-column: 2; grid-row: 1; }
+    .slot-ombro-esq { grid-column: 3; grid-row: 1; }
+
+    .slot-mao-dir   { grid-column: 1; grid-row: 2; }
+    .slot-peito     { grid-column: 2; grid-row: 2; }
+    .slot-mao-esq   { grid-column: 3; grid-row: 2; }
+
+    .pernas-container {
+      grid-column: span 3;
+      grid-row: 3;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+    .pernas-container .part-card {
+      width: calc(33.333% - 7px);
+    }
+
+    .part-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .part-name {
+      font-size: 11px;
+      font-weight: 700;
+      color: #c4d1de;
+    }
+    .part-percentage {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: #f5a623;
+    }
+    .part-hp-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12.5px;
+      font-weight: 800;
+      color: #ffffff;
+    }
+
+    .part-bar-bg {
+      width: 100%;
+      height: 5px;
+      background: #121921;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .part-bar-fill {
+      height: 100%;
+      width: 0%;
+      transition: width 0.4s ease;
+    }
+
+    .voltar-link {
+      display: inline-block;
+      text-align: center;
+      margin-top: 16px;
+      color: #5865F2;
+      font-size: 12px;
+      text-decoration: none;
+      font-weight: 700;
+    }
+    .voltar-link:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 600px) {
+      .titam-grid {
+        grid-template-columns: 1fr;
+      }
+      .slot-ombro-dir, .slot-cabeca, .slot-ombro-esq,
+      .slot-mao-dir, .slot-peito, .slot-mao-esq,
+      .pernas-container {
+        grid-column: span 1;
+        grid-row: auto;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+      }
+      .pernas-container .part-card {
+        width: 100%;
+      }
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h1 id="titulo-tita">Anatomia do Titã</h1>
+    <p>Monitoramento avançado com dados de HP Total e Atual da Raid</p>
+  </div>
+
+  <div class="container">
+    <!-- Info de Tier, Nível e Titã -->
+    <div class="stats-grid">
+      <div class="stat-box">
+        <div class="stat-label">Tier / Nível</div>
+        <div id="txt-tier-nivel" class="stat-value" style="color: #50e3c2;">--</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Titã Atual</div>
+        <div id="txt-nome-tita" class="stat-value" style="color: #f5a623;">A carregar...</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Clã</div>
+        <div id="txt-clan-code" class="stat-value" style="color: #4cd964;">---</div>
+      </div>
+    </div>
+
+    <!-- Debuff de Área (se houver) -->
+    <div id="box-debuff" class="debuff-box" style="display: none;">
+      <span>⚠️ Debuff de Área:</span>
+      <strong id="txt-debuff">Nenhum</strong>
+    </div>
+
+    <!-- Vida Global -->
+    <div class="card-global">
+      <div class="card-title">
+        <span>Vida Global do Titã Ativo</span>
+        <span id="txt-vida-global">0 / 0 (0%)</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div id="bar-vida-global" class="progress-bar-fill"></div>
+      </div>
+    </div>
+
+    <!-- Layout Anatômico em Bloco -->
+    <div style="font-size: 13px; font-weight: 700; color: #f5a623; margin-top: 4px;">Esquema Corporal (Armadura / Corpo)</div>
+    <div id="grid-titam" class="titam-grid">
+      <div style="color: #8fa0b5; font-size: 12px; grid-column: span 3; text-align: center; padding: 20px;">A aguardar dados da Raid (`sub_cycle`)...</div>
+    </div>
+
+    <a href="painel_raid.html" class="voltar-link">← Voltar para o Painel de Ataques Ao Vivo</a>
+  </div>
+
+  <script>
+    const SUPABASE_URL = "https://hqhirsnowapylfwhvduf.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhxaGlyc25vd2FweWxmd2h2ZHVmIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc5MjkzNTkxOCwiZXhwIjoyMTA4NTExOTE4fQ.sAZeXN1XFKDh0gVGBomanuHM6GkcEto8AmxZzNRehpI";
+    const cofre = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    function formatarNumero(num) {
+      if (num >= 1e9) return (num / 1e9).toFixed(2) + 'B';
+      if (num >= 1e6) return (num / 1e6).toFixed(2) + 'M';
+      return Number(num || 0).toLocaleString("pt-PT");
+    }
+
+    const mapaChavesAnatomicas = {
+      "ArmUpperRight": { slot: "slot-ombro-dir", nome: "Ombro Direito" },
+      "Head": { slot: "slot-cabeca", nome: "Cabeça" },
+      "ArmUpperLeft": { slot: "slot-ombro-esq", nome: "Ombro Esquerdo" },
+      "HandRight": { slot: "slot-mao-dir", nome: "Mão Direita" },
+      "ChestUpper": { slot: "slot-peito", nome: "Peito Superior" },
+      "HandLeft": { slot: "slot-mao-esq", nome: "Mão Esquerda" },
+      "LegUpperRight": { slot: "slot-perna-dir", nome: "Perna Direita" },
+      "LegUpperLeft": { slot: "slot-perna-esq", nome: "Perna Esquerda" }
+    };
+
+    async function carregarEstadoTita() {
+      try {
+        const { data: eventos } = await cofre
+          .from("eventos_raid")
+          .select("*")
+          .order("criado_em", { ascending: false })
+          .limit(20);
+
+        if (!eventos || eventos.length === 0) return;
+
+        // Procura pelo evento sub_cycle ou qualquer um que contenha a estrutura de raid completa
+        const eventoRecente = eventos.find(e => 
+          (e.tipo_evento === "sub_cycle" && e.dados && e.dados.raid) ||
+          (e.dados && e.dados.raid && e.dados.raid.titans)
+        );
+
+        if (!eventoRecente) return;
+
+        const raidData = eventoRecente.dados.raid || eventoRecente.dados;
+        const clanCode = raidData.clan_code || "975xx";
+        const tier = raidData.tier || "-";
+        const level = raidData.level || "-";
+
+        document.getElementById("txt-tier-nivel").innerText = `T${tier} / Nv.${level}`;
+        document.getElementById("txt-clan-code").innerText = clanCode;
+
+        const titans = raidData.titans || [];
+        if (titans.length === 0) return;
+
+        // Pega o primeiro titã ativo da lista (ou o atual)
+        const titanAtual = titans[0];
+        const nomeTita = titanAtual.enemy_name || titanAtual.enemy_id || "Titã";
+        document.getElementById("txt-nome-tita").innerText = nomeTita;
+        document.getElementById("titulo-tita").innerText = `Anatomia do Titã: ${nomeTita}`;
+
+        // Debuffs de área
+        const debuffs = titanAtual.area_debuffs || [];
+        const boxDebuff = document.getElementById("box-debuff");
+        if (debuffs.length > 0) {
+          boxDebuff.style.display = "flex";
+          document.getElementById("txt-debuff").innerText = debuffs.map(d => `${d.bonus_type} (${d.bonus_amount * 100}%)`).join(", ");
+        } else {
+          boxDebuff.style.display = "none";
+        }
+
+        // Vida Global do Titã Atual
+        const hpGlobalAtual = Number(titanAtual.current_hp || 0);
+        const hpGlobalTotal = Number(titanAtual.total_hp || 1);
+        const pctGlobal = ((hpGlobalAtual / hpGlobalTotal) * 100).toFixed(1);
+        
+        document.getElementById("txt-vida-global").innerText = `${formatarNumero(hpGlobalAtual)} / ${formatarNumero(hpGlobalTotal)} (${pctGlobal}%)`;
+        document.getElementById("bar-vida-global").style.width = `${Math.max(0, Math.min(100, pctGlobal))}%`;
+
+        // Processa as partes (Armor vs Body) com os dados reais de total_hp e current_hp
+        const partes = titanAtual.parts || [];
+        const partesMapeadas = {};
+
+        partes.forEach(p => {
+          let tipo = p.part_id.startsWith("Armor") ? "Armor" : "Body";
+          let baseName = p.part_id.replace("Armor", "").replace("Body", "");
+          
+          if (!partesMapeadas[baseName]) partesMapeadas[baseName] = {};
+          partesMapeadas[baseName][tipo] = p;
+        });
+
+        let htmlOmbrosCabeca = "";
+        let htmlMaosPeito = "";
+        let htmlPernas = "";
+
+        Object.keys(mapaChavesAnatomicas).forEach(baseName => {
+          const par = partesMapeadas[baseName];
+          const infoAnatomica = mapaChavesAnatomicas[baseName];
+          if (!par || !infoAnatomica) return;
+
+          let targetParte = null;
+          let tipoExibicao = "";
+
+          // Regra inteligente: Mostra armadura se viva, senão mostra o corpo
+          if (par.Armor && Number(par.Armor.current_hp) > 0) {
+            targetParte = par.Armor;
+            tipoExibicao = "🛡️ Armadura";
+          } else if (par.Body) {
+            targetParte = par.Body;
+            tipoExibicao = "❤️ Corpo";
+          } else if (par.Armor) {
+            targetParte = par.Armor;
+            tipoExibicao = "🛡️ Destruída";
+          }
+
+          if (targetParte) {
+            const currentHp = Number(targetParte.current_hp || 0);
+            const totalHp = Number(targetParte.total_hp || 1);
+            const isDestruida = currentHp <= 0;
+            const pctParte = isDestruida ? 0 : ((currentHp / totalHp) * 100).toFixed(0);
+
+            const cardHtml = `
+              <div class="part-card ${infoAnatomica.slot}" style="${isDestruida ? 'opacity: 0.35; border-color: #ff5252;' : ''}">
+                <div class="part-header">
+                  <span class="part-name">${infoAnatomica.nome}</span>
+                  <span class="part-percentage">${tipoExibicao} (${isDestruida ? '0%' : pctParte + '%'})</span>
+                </div>
+                <div class="part-hp-info">
+                  <span>${isDestruida ? '0 HP' : formatarNumero(currentHp)}</span>
+                  <span style="font-size: 10px; color: ${isDestruida ? '#ff5252' : '#4cd964'}">${isDestruida ? 'QUEBRADA' : 'ATIVO'}</span>
+                </div>
+                <div class="part-bar-bg">
+                  <div class="part-bar-fill" style="width: ${isDestruida ? '0%' : pctParte + '%'}; background: ${tipoExibicao.includes('Armadura') ? '#50e3c2' : '#ff5252'};"></div>
+                </div>
+              </div>
+            `;
+
+            if (baseName.includes("ArmUpper") || baseName === "Head") {
+              htmlOmbrosCabeca += cardHtml;
+            } else if (baseName.includes("Hand") || baseName === "ChestUpper") {
+              htmlMaosPeito += cardHtml;
+            } else if (baseName.includes("Leg")) {
+              htmlPernas += cardHtml;
+            }
+          }
+        });
+
+        const gridTitam = document.getElementById("grid-titam");
+        gridTitam.innerHTML = htmlOmbrosCabeca + htmlMaosPeito + `
+          <div class="pernas-container">
+            ${htmlPernas}
+          </div>
+        `;
+
+      } catch (erro) {
+        console.error("Erro ao carregar anatomia do titã:", erro);
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      carregarEstadoTita();
+    });
+
+    cofre
+      .channel("atualizacao-tita")
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "eventos_raid" }, () => {
+        carregarEstadoTita();
+      })
+      .subscribe();
+  </script>
+</body>
+</html>

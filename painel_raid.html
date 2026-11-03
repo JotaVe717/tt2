@@ -305,7 +305,6 @@
       if (d.titan && d.titan.enemy_name) return d.titan.enemy_name;
       if (d.enemy_name) return d.enemy_name;
 
-      // Identifica o ID do inimigo no payload (ex: raid_state.current.enemy_id ou enemy_id direto)
       const enemyId = d.enemy_id || (d.raid_state && d.raid_state.current && d.raid_state.current.enemy_id);
       
       if (enemyId) {
@@ -350,11 +349,23 @@
       
       if (!Array.isArray(cardsLevel) || cardsLevel.length === 0) return "-";
       
-      return cardsLevel.map(c => {
-        const nome = c.id || c.card || c.name || "Carta";
-        const nivel = c.value || c.level || "";
-        return nivel ? `${nome} (Nv.${nivel})` : nome;
-      }).join(", ");
+      let htmlCartas = '<div style="display: flex; gap: 6px; align-items: center;">';
+      
+      cardsLevel.forEach(c => {
+        const nomeCarta = c.id || c.card || c.name || "Carta";
+        const nivelCarta = c.value || c.level || "";
+        const caminhoImg = `Cards/${nomeCarta}.png`;
+        
+        htmlCartas += `
+          <div style="text-align: center;" title="${nomeCarta} (Nv.${nivelCarta})">
+            <img src="${caminhoImg}" alt="${nomeCarta}" style="width: 28px; height: 28px; border-radius: 6px; border: 1px solid #3a4b60; background: #121921; object-fit: cover;" onerror="this.src='Cards/wc.png'">
+            <div style="font-size: 9.5px; color: #50e3c2; margin-top: 2px;">Nv.${nivelCarta}</div>
+          </div>
+        `;
+      });
+      
+      htmlCartas += '</div>';
+      return htmlCartas;
     }
 
     async function carregarPainel() {
@@ -382,7 +393,8 @@
           return;
         }
 
-        const ataques = eventos.filter(e => e.tipo_evento === "attack" || e.tipo_evento === "start_attack");
+        // Tabela da Esquerda: EXCLUSIVAMENTE ataques concluídos ("attack")
+        const ataques = eventos.filter(e => e.tipo_evento === "attack");
         const tabela = document.getElementById("tabela-ataques");
 
         if (ataques.length > 0) {
@@ -405,9 +417,10 @@
             `;
           }).join("");
         } else {
-          tabela.innerHTML = `<tr><td colspan="5" style="color: #8fa0b5; text-align: center; padding: 20px;">Nenhum ataque registrado ainda. Faça um ataque no jogo para testar!</td></tr>`;
+          tabela.innerHTML = `<tr><td colspan="5" style="color: #8fa0b5; text-align: center; padding: 20px;">Nenhum ataque concluído registrado ainda.</td></tr>`;
         }
 
+        // Tabela da Direita: Radar de Eventos (Mostra tudo, incluindo start_attack, sub_cycle, etc.)
         const radar = document.getElementById("lista-eventos");
         radar.innerHTML = eventos.slice(0, 15).map(item => {
           const hora = new Date(item.criado_em).toLocaleTimeString("pt-BR");
@@ -450,38 +463,6 @@
         btn.href = 'perfil.html';
       }
     }
-
-    // Extrai as cartas e monta as imagens PNG com os níveis
-    function lerCartasUsadas(d) {
-      const logs = d.attack_log || d;
-      const cardsLevel = logs.cards_level || d.cards_level || d.cards;
-      
-      if (!Array.isArray(cardsLevel) || cardsLevel.length === 0) return "-";
-      
-      // Cria um container flexível para alinhar as 3 miniaturas das cartas em linha
-      let htmlCartas = '<div style="display: flex; gap: 6px; align-items: center;">';
-      
-      cardsLevel.forEach(c => {
-        const nomeCarta = c.id || c.card || c.name || "Carta";
-        const nivelCarta = c.value || c.level || "";
-        
-        // Caminho da imagem PNG (ajuste a pasta 'Cards/' se o seu site usar outro diretório)
-        const caminhoImg = `Cards/${nomeCarta}.png`;
-        
-        htmlCartas += `
-          <div style="text-align: center;" title="${nomeCarta} (Nv.${nivelCarta})">
-            <img src="${caminhoImg}" alt="${nomeCarta}" style="width: 28px; height: 28px; border-radius: 6px; border: 1px solid #3a4b60; background: #121921; object-fit: cover;" onerror="this.src='Cards/wc.png'">
-            <div style="font-size: 9.5px; color: #50e3c2; margin-top: 2px;">Nv.${nivelCarta}</div>
-          </div>
-        `;
-      });
-      
-      htmlCartas += '</div>';
-      return htmlCartas;
-    }
-    
-    // Filtra estritamente apenas o evento de ataque concluído ("attack") para a tabela da esquerda
-        const ataques = eventos.filter(e => e.tipo_evento === "attack");
 
     window.addEventListener('DOMContentLoaded', () => {
       atualizarBotaoPerfil();

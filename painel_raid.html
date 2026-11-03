@@ -2,126 +2,304 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Painel de Raid Ao Vivo - TT2</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Painel de Raid Ao Vivo - Tap Titans 2</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #121212;
-      color: #f0f0f0;
+    * {
+      box-sizing: border-box;
       margin: 0;
-      padding: 20px;
+      padding: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
     }
-    h1, h2 { color: #ff9800; margin-bottom: 10px; }
-    .topo {
+    body {
+      background-color: #0f141c;
+      background-image: 
+        url('Cards/triade.png'),
+        url('Cards/triade.jpg'),
+        url('Cards/triade.webp'),
+        url('triade.png'),
+        url('triade.jpg'),
+        url('triade.webp');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 32px 14px 40px 14px;
+      overflow-x: hidden;
+    }
+    .header {
+      position: relative;
+      text-align: center;
+      margin-bottom: 24px;
+      background: rgba(15, 20, 28, 0.78);
+      backdrop-filter: blur(8px);
+      padding: 20px 20px 16px 20px;
+      border-radius: 12px;
+      border: 1px solid rgba(43, 57, 74, 0.6);
+      max-width: 900px;
+      width: 100%;
+    }
+    
+    /* BOTÃO DINÂMICO DE PERFIL / DISCORD */
+    .top-profile-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      background: #5865F2;
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 12.5px;
+      font-weight: 700;
+      padding: 7px 16px;
+      border-radius: 20px;
+      margin-bottom: 14px;
+      border: 1px solid rgba(255,255,255,0.2);
+      box-shadow: 0 4px 14px rgba(88, 101, 242, 0.35);
+      transition: all 0.2s ease;
+    }
+    .top-profile-btn:hover {
+      background: #4752c4;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(88, 101, 242, 0.55);
+    }
+    .top-profile-btn.logged-in {
+      background: rgba(80, 227, 194, 0.12);
+      border-color: #50e3c2;
+      color: #50e3c2;
+      box-shadow: 0 0 12px rgba(80, 227, 194, 0.25);
+    }
+    .top-profile-btn.logged-in:hover {
+      background: rgba(80, 227, 194, 0.2);
+      box-shadow: 0 0 16px rgba(80, 227, 194, 0.4);
+    }
+    .top-profile-btn svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #50e3c2;
+      box-shadow: 0 0 8px #50e3c2;
+      display: inline-block;
+    }
+
+    .header h1 {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+    }
+    .header h1 span {
+      color: #f5a623;
+    }
+    .header p {
+      color: #b0c0d0;
+      font-size: 13.5px;
+      margin-top: 6px;
+      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+    }
+
+    /* PAINEL DE CONTEÚDO AO VIVO */
+    .live-container {
+      width: 100%;
+      max-width: 900px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .live-status-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: #1e1e1e;
-      padding: 15px 20px;
-      border-radius: 8px;
-      border-left: 5px solid #ff9800;
-      margin-bottom: 20px;
+      background: rgba(25, 34, 45, 0.92);
+      backdrop-filter: blur(10px);
+      padding: 14px 18px;
+      border-radius: 12px;
+      border: 1px solid #2b394a;
     }
-    .status-ao-vivo {
-      background: #2e7d32;
-      color: #fff;
-      padding: 6px 12px;
+
+    .live-badge {
+      background: rgba(255, 82, 82, 0.15);
+      color: #ff5252;
+      border: 1px solid rgba(255, 82, 82, 0.4);
+      padding: 4px 10px;
       border-radius: 20px;
-      font-size: 14px;
-      font-weight: bold;
+      font-size: 12px;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
     }
-    .grade {
+
+    .grid-painel {
       display: grid;
       grid-template-columns: 2fr 1fr;
       gap: 20px;
+      width: 100%;
     }
+
     .caixa {
-      background: #1e1e1e;
-      padding: 15px;
-      border-radius: 8px;
+      background: rgba(25, 34, 45, 0.92);
+      backdrop-filter: blur(10px);
+      border: 1px solid #2b394a;
+      border-radius: 12px;
+      padding: 18px;
     }
+
+    .caixa h2 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #f5a623;
+      margin-bottom: 12px;
+      border-bottom: 1px solid #2b394a;
+      padding-bottom: 8px;
+    }
+
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 10px;
+      margin-top: 4px;
     }
     th, td {
-      padding: 10px;
+      padding: 10px 8px;
       text-align: left;
-      border-bottom: 1px solid #333;
-      font-size: 14px;
+      border-bottom: 1px solid #2b394a;
+      font-size: 13px;
     }
-    th { background-color: #252525; color: #ff9800; }
-    .dano { color: #4caf50; font-weight: bold; }
-    .cartas { color: #90caf9; font-size: 13px; }
+    th { color: #8fa0b5; font-weight: 600; font-size: 11px; text-transform: uppercase; }
+    .dano { color: #4cd964; font-weight: 700; }
+    .cartas { color: #50e3c2; font-size: 12px; }
+
     .evento-item {
-      padding: 10px;
-      border-bottom: 1px solid #333;
-      font-size: 14px;
+      padding: 8px 10px;
+      border-bottom: 1px solid #2b394a;
+      font-size: 12.5px;
+      color: #c4d1de;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
     .tag {
-      display: inline-block;
-      padding: 2px 8px;
+      background: rgba(88, 101, 242, 0.15);
+      border: 1px solid rgba(88, 101, 242, 0.4);
+      color: #5865F2;
+      padding: 2px 6px;
       border-radius: 4px;
-      font-size: 12px;
-      font-weight: bold;
-      margin-right: 6px;
-      background: #333;
-      color: #ff9800;
+      font-size: 10.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    footer {
+      margin-top: 24px;
+      color: #d1dbe5;
+      font-size: 11.5px;
+      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
+      text-align: center;
+    }
+
+    @media (max-width: 768px) {
+      .grid-painel {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 20px 10px 30px 10px;
+      }
+      .header {
+        padding: 14px 12px;
+        margin-bottom: 16px;
+      }
+      .header h1 {
+        font-size: 20px;
+      }
     }
   </style>
 </head>
 <body>
 
-  <div class="topo">
-    <div>
-      <h1 id="nome-cla" style="margin:0;">Carregando Clã...</h1>
-      <small id="ultima-atualizacao">Conectando ao Cofre...</small>
-    </div>
-    <div class="status-ao-vivo">● Monitoramento 24h Ativo</div>
+  <div class="header">
+    <a href="perfil.html" id="btnPerfilTop" class="top-profile-btn">
+      <svg viewBox="0 0 127.14 96.36">
+        <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,45.91,53.91,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,45.91,96.12,53,91.08,65.69,84.69,65.69Z"/>
+      </svg>
+      <span id="labelPerfilTop">Entrar com Discord</span>
+    </a>
+
+    <h1>Painel de Raid <span>Ao Vivo</span></h1>
+    <p id="subtitulo-topo">Monitoramento em tempo real dos ataques e eventos do clã.</p>
   </div>
 
-  <div class="grade">
-    <!-- Coluna da Esquerda: Ataques e Dano -->
-    <div class="caixa">
-      <h2>Últimos Ataques na Raid</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Horário</th>
-            <th>Jogador</th>
-            <th>Titã</th>
-            <th>Dano Total</th>
-            <th>Cartas Usadas</th>
-          </tr>
-        </thead>
-        <tbody id="tabela-ataques">
-          <tr><td colspan="5">Aguardando ataques da Raid...</td></tr>
-        </tbody>
-      </table>
+  <div class="live-container">
+    <div class="live-status-bar">
+      <div>
+        <h2 id="nome-cla" style="font-size: 16px; color: #ffffff; font-weight: 700;">Conectando ao Clã...</h2>
+        <small id="ultima-atualizacao" style="color: #8fa0b5; font-size: 11px;">Aguardando sincronização com o Cofre...</small>
+      </div>
+      <div class="live-badge"><span>●</span> AO VIVO 24H</div>
     </div>
 
-    <!-- Coluna da Direita: Avisos em Tempo Real (Alvos, Ciclos, Início) -->
-    <div class="caixa">
-      <h2>Radar de Eventos da Raid</h2>
-      <div id="lista-eventos">Carregando histórico...</div>
+    <div class="grid-painel">
+      <!-- Coluna da Esquerda: Ataques -->
+      <div class="caixa">
+        <h2>Últimos Ataques na Raid</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Horário</th>
+              <th>Jogador</th>
+              <th>Titã</th>
+              <th>Dano</th>
+              <th>Cartas</th>
+            </tr>
+          </thead>
+          <tbody id="tabela-ataques">
+            <tr><td colspan="5" style="color: #8fa0b5; text-align: center; padding: 20px;">Aguardando ataques da Raid...</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Coluna da Direita: Radar de Eventos -->
+      <div class="caixa">
+        <h2>Radar de Eventos</h2>
+        <div id="lista-eventos" style="display: flex; flex-direction: column; gap: 8px;">
+          <span style="color: #8fa0b5; font-size: 12px;">Carregando histórico...</span>
+        </div>
+      </div>
     </div>
   </div>
+
+  <footer>
+    Guia tático de raids — Tap Titans 2 • Criado por JotaVe
+  </footer>
 
   <script>
-    // 1. Configuração do seu Cofre Supabase
+    // Configuração do seu Cofre Supabase (substitua apenas pela sua chave anon public)
     const SUPABASE_URL = "https://hqhirsnowapylfwhvduf.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhxaGlyc25vd2FweWxmd2h2ZHVmIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc5MjkzNTkxOCwiZXhwIjoyMTA4NTExOTE4fQ.sAZeXN1XFKDh0gVGBomanuHM6GkcEto8AmxZzNRehpI"; 
+    const SUPABASE_ANON_KEY = "COLE_AQUI_SUA_CHAVE_ANON_PUBLIC"; 
     const cofre = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // Funções simples para extrair os dados do pacote da GameHive
     function formatarNumero(num) {
       return Number(num || 0).toLocaleString("pt-BR");
     }
 
     function calcularDanoTotal(dados) {
-      // Se já vier o total direto ou se vier separado por partes do corpo (damage_log)
       if (dados.total_damage) return dados.total_damage;
       if (Array.isArray(dados.damage_log)) {
         return dados.damage_log.reduce((soma, item) => soma + Number(item.damage || item.value || 0), 0);
@@ -136,77 +314,105 @@
     }
 
     async function carregarPainel() {
-      // Busca o nome do Clã na ficha geral
-      const { data: ficha } = await cofre.from("dados_cla").select("*").eq("id", 1).single();
-      if (ficha && ficha.dados) {
-        console.log("Conteúdo salvo na ficha do clã:", ficha.dados);
-        const d = Array.isArray(ficha.dados) ? ficha.dados[0] : (ficha.dados.data || ficha.dados);
-        const nomeCla = d.clan_name || d.name || "Clã Conectado";
-        const codigoCla = d.clan_code || d.code || (d.message ? d.message : "Aguardando dados");
+      try {
+        const { data: ficha } = await cofre.from("dados_cla").select("*").eq("id", 1).single();
+        if (ficha && ficha.dados) {
+          const d = Array.isArray(ficha.dados) ? ficha.dados[0] : (ficha.dados.data || ficha.dados);
+          const nomeCla = d.clan_name || "2nd Mafia BR";
+          const codigoCla = d.clan_code || "975xx";
 
-        document.getElementById("nome-cla").innerText = `${nomeCla} (${codigoCla})`;
-        document.getElementById("ultima-atualizacao").innerText = 
-          "Ficha sincronizada em: " + new Date(ficha.atualizado_em).toLocaleString("pt-BR");
-      }
+          document.getElementById("nome-cla").innerText = `${nomeCla} (${codigoCla})`;
+          document.getElementById("ultima-atualizacao").innerText = 
+            "Ficha sincronizada em: " + new Date(ficha.atualizado_em).toLocaleString("pt-BR");
+        }
 
-      // Busca os últimos 50 eventos gravados pela Ponte
-      const { data: eventos } = await cofre
-        .from("eventos_raid")
-        .select("*")
-        .order("criado_em", { ascending: false })
-        .limit(50);
+        const { data: eventos } = await cofre
+          .from("eventos_raid")
+          .select("*")
+          .order("criado_em", { ascending: false })
+          .limit(50);
 
-      if (!eventos || eventos.length === 0) {
-        document.getElementById("lista-eventos").innerHTML = 
-          "<p>Nenhum evento aconteceu ainda desde que o robô ligou. Assim que alguém atacar ou mudar um alvo na Raid, aparecerá aqui!</p>";
-        return;
-      }
+        if (!eventos || eventos.length === 0) {
+          document.getElementById("lista-eventos").innerHTML = 
+            "<span style='color: #8fa0b5; font-size: 12px;'>Aguardando eventos ao vivo...</span>";
+          return;
+        }
 
-      // Separa o que é ataque concluído ("attack") do restante dos avisos
-      const ataques = eventos.filter(e => e.tipo_evento === "attack");
-      const tabela = document.getElementById("tabela-ataques");
+        const ataques = eventos.filter(e => e.tipo_evento === "attack");
+        const tabela = document.getElementById("tabela-ataques");
 
-      if (ataques.length > 0) {
-        tabela.innerHTML = ataques.map(item => {
-          const d = item.dados || {};
-          const jogador = d.player?.name || d.player_name || d.name || "Membro";
-          const tita = d.titan?.enemy_name || d.enemy_name || d.enemy_id || "Titã";
-          const dano = formatarNumero(calcularDanoTotal(d));
-          const cartas = lerCartasUsadas(d);
+        if (ataques.length > 0) {
+          tabela.innerHTML = ataques.map(item => {
+            const d = item.dados || {};
+            const jogador = d.player?.name || d.player_name || d.name || "Membro";
+            const tita = d.titan?.enemy_name || d.enemy_name || d.enemy_id || "Titã";
+            const dano = formatarNumero(calcularDanoTotal(d));
+            const cartas = lerCartasUsadas(d);
+            const hora = new Date(item.criado_em).toLocaleTimeString("pt-BR");
+
+            return `
+              <tr>
+                <td>${hora}</td>
+                <td><strong>${jogador}</strong></td>
+                <td>${tita}</td>
+                <td class="dano">${dano}</td>
+                <td class="cartas">${cartas}</td>
+              </tr>
+            `;
+          }).join("");
+        }
+
+        const radar = document.getElementById("lista-eventos");
+        radar.innerHTML = eventos.slice(0, 15).map(item => {
           const hora = new Date(item.criado_em).toLocaleTimeString("pt-BR");
-
+          const nomeJogador = item.dados?.player?.name || item.dados?.name || "";
           return `
-            <tr>
-              <td>${hora}</td>
-              <td><strong>${jogador}</strong></td>
-              <td>${tita}</td>
-              <td class="dano">${dano}</td>
-              <td class="cartas">${cartas}</td>
-            </tr>
+            <div class="evento-item">
+              <div>
+                <span class="tag">${item.tipo_evento}</span>
+                <span style="margin-left: 6px;">${nomeJogador}</span>
+              </div>
+              <span style="color: #8fa0b5; font-size: 11px;">${hora}</span>
+            </div>
           `;
         }).join("");
-      }
 
-      // Preenche o radar lateral com todos os avisos (start_attack, target, start, cycle_reset)
-      const radar = document.getElementById("lista-eventos");
-      radar.innerHTML = eventos.slice(0, 15).map(item => {
-        const hora = new Date(item.criado_em).toLocaleTimeString("pt-BR");
-        const nomeJogador = item.dados?.player?.name || item.dados?.name || "";
-        return `
-          <div class="evento-item">
-            <span class="tag">${item.tipo_evento.toUpperCase()}</span>
-            <strong>${hora}</strong> ${nomeJogador ? "- " + nomeJogador : ""}
-          </div>
-        `;
-      }).join("");
+      } catch (erro) {
+        console.error("Erro ao carregar dados do painel:", erro);
+      }
     }
 
-    // Carrega os dados assim que abre a página
-    carregarPainel();
+    // Gestão de sessão do Discord no topo
+    function atualizarBotaoPerfil() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const uidDaUrl = urlParams.get('uid');
 
-    // Escuta em tempo real: atualiza a tela sozinho no segundo em que um ataque novo cair no Cofre!
+      if (uidDaUrl) {
+        localStorage.setItem('tt2_discord_uid', uidDaUrl);
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
+
+      const uidSalvo = localStorage.getItem('tt2_discord_uid');
+      const btn = document.getElementById('btnPerfilTop');
+
+      if (uidSalvo) {
+        btn.classList.add('logged-in');
+        btn.innerHTML = `<span class="status-dot"></span> Meu Perfil`;
+        btn.href = `perfil.html?uid=${uidSalvo}`;
+      } else {
+        btn.classList.remove('logged-in');
+        btn.href = 'perfil.html';
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      atualizarBotaoPerfil();
+      carregarPainel();
+    });
+
+    // Atualiza automaticamente em tempo real via Supabase
     cofre
-      .channel("atualizacao-ao-vivo")
+      .channel("atualizacao-painel-raid")
       .on("postgres_changes", { event: "INSERT", schema: "public", table: "eventos_raid" }, () => {
         carregarPainel();
       })

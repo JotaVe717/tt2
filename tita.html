@@ -99,7 +99,7 @@
       color: #f5a623;
     }
 
-    /* BARRA DE VIDA GLOBAL DO TITÃ (COM COR DINÂMICA) */
+    /* BARRA DE VIDA GLOBAL DO TITÃ (VERDE FORTE FIXO) */
     .card-global {
       background: rgba(25, 34, 45, 0.92);
       border: 1px solid #2b394a;
@@ -124,7 +124,9 @@
     .progress-bar-fill {
       height: 100%;
       width: 0%;
-      transition: width 0.4s ease, background-color 0.4s ease;
+      background-color: #2ecc71;
+      box-shadow: 0 0 8px rgba(46, 204, 113, 0.4);
+      transition: width 0.4s ease;
     }
 
     /* DESEMPENHO E INFO DO TIER */
@@ -316,15 +318,17 @@
       left: 0;
       width: 100%;
       height: 2px;
-      background: rgba(255, 255, 255, 0.45);
-      box-shadow: 0 0 6px rgba(255, 255, 255, 0.5);
+      background: rgba(255, 255, 255, 0.55);
+      box-shadow: 0 0 6px rgba(255, 255, 255, 0.6);
     }
 
+    /* Armadura: Azul profundo mais escuro */
     .liquid-armor {
-      background: linear-gradient(180deg, rgba(0, 210, 255, 0.55) 0%, rgba(0, 114, 255, 0.22) 100%);
+      background: linear-gradient(180deg, rgba(0, 140, 255, 0.55) 0%, rgba(0, 75, 180, 0.25) 100%);
     }
+    /* Corpo: Azul cristalino bem claro e limpo (água de rio fresca) */
     .liquid-body {
-      background: linear-gradient(180deg, rgba(46, 204, 113, 0.55) 0%, rgba(29, 131, 72, 0.22) 100%);
+      background: linear-gradient(180deg, rgba(165, 243, 252, 0.68) 0%, rgba(56, 189, 248, 0.32) 100%);
     }
     .liquid-decay {
       background: linear-gradient(180deg, rgba(165, 94, 234, 0.65) 0%, rgba(108, 42, 173, 0.25) 100%);
@@ -444,7 +448,6 @@
       </div>
     </div>
 
-    <!-- Vida Global com cor espectral dinâmica -->
     <div class="card-global">
       <div class="card-title">
         <span>Vida do Titã</span>
@@ -495,26 +498,6 @@
       if (n >= 1e6) return (n / 1e6).toFixed(0) + 'M';
       if (n >= 1e3) return (n / 1e3).toFixed(0) + 'K';
       return n.toLocaleString("pt-BR");
-    }
-
-    // Retorna a cor exata do espectro (do verde ao vermelho via amarelo/laranja) baseada na porcentagem
-    function obterCorEspectral(pct) {
-      const p = Math.max(0, Math.min(100, pct));
-      let r, g, b;
-      if (p > 50) {
-        // De Verde (100%) para Amarelo (50%)
-        const t = (p - 50) / 50;
-        r = Math.round(230 * (1 - t) + 120 * t);
-        g = Math.round(190 * (1 - t) + 200 * t);
-        b = Math.round(50 * (1 - t) + 60 * t);
-      } else {
-        // De Amarelo (50%) para Vermelho (0%)
-        const t = p / 50;
-        r = Math.round(235 * (1 - t) + 230 * t);
-        g = Math.round(80 * (1 - t) + 190 * t);
-        b = Math.round(50 * (1 - t) + 60 * t);
-      }
-      return `rgb(${r}, ${g}, ${b})`;
     }
 
     function extrairObjeto(dadosBrutos) {
@@ -711,9 +694,7 @@
       
       const barFill = document.getElementById("bar-vida-global");
       barFill.style.width = `${Math.max(0, Math.min(100, pctGlobal))}%`;
-      barFill.style.backgroundColor = obterCorEspectral(pctGlobal);
 
-      // Mapa de Alvos (state "1" = Não Atacar, state "2" = Spinal Tap)
       const mapaAlvos = {};
       const listaTargets = dadosSub.titan_target || [];
       const targetDesteTita = listaTargets.find(t => t.enemy_id === titanBase.enemy_id);
@@ -780,7 +761,6 @@
           const isDecay = !isDestruida && pctExata <= 30;
           const estadoAlvo = mapaAlvos[baseName] || "0";
 
-          // Ajustado: "Smash" virou "Livre"
           let textoTag = "LIVRE";
           let classeTagRect = "";
           let classeTankExtra = "";

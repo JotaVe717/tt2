@@ -299,41 +299,61 @@
       return Number(num || 0).toLocaleString("pt-BR");
     }
 
-    // Traduz IDs de titãs ou inimigos caso venha em formato técnico
+    // Tradução completa dos IDs de Enemy1 até Enemy8 para os nomes reais dos titãs
     function traduzirTitã(d) {
       if (d.titan_name) return d.titan_name;
       if (d.titan && d.titan.enemy_name) return d.titan.enemy_name;
       if (d.enemy_name) return d.enemy_name;
-      if (d.enemy_id) {
-        // Se vier como Enemy1, Enemy2, etc., mapeia para nomes legíveis ou exibe amigável
-        const mapa = { "Enemy1": "Lojak", "Enemy2": "Takedar", "Enemy3": "Jukk", "Enemy4": "Sterl", "Enemy5": "Mohaca", "Enemy6": "Terro", "Enemy7": "Klonk", "Enemy8": "Priker" };
-        return mapa[d.enemy_id] || d.enemy_id;
+
+      // Identifica o ID do inimigo no payload (ex: raid_state.current.enemy_id ou enemy_id direto)
+      const enemyId = d.enemy_id || (d.raid_state && d.raid_state.current && d.raid_state.current.enemy_id);
+      
+      if (enemyId) {
+        const mapaTitans = {
+          "Enemy1": "Lojak",
+          "Enemy2": "Takedar",
+          "Enemy3": "Jukk",
+          "Enemy4": "Sterl",
+          "Enemy5": "Mohaca",
+          "Enemy6": "Terro",
+          "Enemy7": "Klonk",
+          "Enemy8": "Priker"
+        };
+        return mapaTitans[enemyId] || enemyId;
       }
       return "Titã da Raid";
     }
 
-    // Soma o dano total de todas as partes atingidas no ataque
+    // Soma exata: Tap Damage (null) + Dano de todas as cartas usadas
     function calcularDanoTotal(d) {
-      if (d.total_damage) return Number(d.total_damage);
-      if (d.damage) return Number(d.damage);
+      const logs = d.attack_log || d;
+      const cardsDamage = logs.cards_damage || d.cards_damage;
       
-      // Se vier em lista de partes (damage_log ou parts_damage)
-      const listaDano = d.damage_log || d.parts_damage || d.damage_list || [];
-      if (Array.isArray(listaDano) && listaDano.length > 0) {
-        return listaDano.reduce((soma, item) => soma + Number(item.damage || item.value || item.amount || 0), 0);
-      }
-      return 0;
+      if (!Array.isArray(cardsDamage)) return Number(d.total_damage || d.damage || 0);
+      
+      let somaTotal = 0;
+      cardsDamage.forEach(bloco => {
+        if (bloco.damage_log && Array.isArray(bloco.damage_log)) {
+          bloco.damage_log.forEach(parte => {
+            somaTotal += Number(parte.value || parte.damage || 0);
+          });
+        }
+      });
+      
+      return somaTotal;
     }
 
-    // Extrai as cartas e níveis utilizados no ataque
+    // Extrai o nome e o nível das cartas usadas no ataque
     function lerCartasUsadas(d) {
-      const listaCartas = d.cards_level || d.cards || d.deck || d.used_cards || [];
-      if (!Array.isArray(listaCartas) || listaCartas.length === 0) return "Ataque padrão / Info Oculta";
+      const logs = d.attack_log || d;
+      const cardsLevel = logs.cards_level || d.cards_level || d.cards;
       
-      return listaCartas.map(c => {
-        const nomeCarta = c.id || c.card || c.name || c.card_name || "Carta";
-        const nivelCarta = c.level || c.card_level || c.value || "";
-        return nivelCarta ? `${nomeCarta} (Nv.${nivelCarta})` : nomeCarta;
+      if (!Array.isArray(cardsLevel) || cardsLevel.length === 0) return "-";
+      
+      return cardsLevel.map(c => {
+        const nome = c.id || c.card || c.name || "Carta";
+        const nivel = c.value || c.level || "";
+        return nivel ? `${nome} (Nv.${nivel})` : nome;
       }).join(", ");
     }
 
@@ -362,7 +382,6 @@
           return;
         }
 
-        // Filtra eventos do tipo ataque (aceita variações de nome que a GameHive possa enviar)
         const ataques = eventos.filter(e => e.tipo_evento === "attack" || e.tipo_evento === "start_attack");
         const tabela = document.getElementById("tabela-ataques");
 
@@ -430,6 +449,35 @@
         btn.classList.remove('logged-in');
         btn.href = 'perfil.html';
       }
+    }
+    
+    // Extrai as cartas e monta as imagens PNG com os níveis
+    function lerCartasUsadas(d) {
+      const logs = d.attack_log || d;
+      const cardsLevel = logs.cards_level || d.cards_level || d.cards;
+      
+      if (!Array.isArray(cardsLevel) || cardsLevel.length === 0) return "-";
+      
+      // Cria um container flexível para alinhar as 3 miniaturas das cartas em linha
+      let htmlCartas = '<div style="display: flex; gap: 6px; align-items: center;">';
+      
+      cardsLevel.forEach(c => {
+        const nomeCarta = c.id || c.card || c.name || "Carta";
+        const nivelCarta = c.value || c.level || "";
+        
+        // Caminho da imagem PNG (ajuste a pasta 'Cards/' se o seu site usar outro diretório)
+        const caminhoImg = `Cards/${nomeCarta}.png`;
+        
+        htmlCartas += `
+          <div style="text-align: center;" title="${nomeCarta} (Nv.${nivelCarta})">
+            <img src="${caminhoImg}" alt="${nomeCarta}" style="width: 28px; height: 28px; border-radius: 6px; border: 1px solid #3a4b60; background: #121921; object-fit: cover;" onerror="this.src='Cards/wc.png'">
+            <div style="font-size: 9.5px; color: #50e3c2; margin-top: 2px;">Nv.${nivelCarta}</div>
+          </div>
+        `;
+      });
+      
+      htmlCartas += '</div>';
+      return htmlCartas;
     }
 
     window.addEventListener('DOMContentLoaded', () => {

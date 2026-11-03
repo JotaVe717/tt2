@@ -14,176 +14,182 @@
       -webkit-tap-highlight-color: transparent;
     }
     body {
-      background-color: #0f141c;
+      background-color: #0b0f16;
       color: #ffffff;
       display: flex;
       flex-direction: column;
       align-items: center;
       min-height: 100vh;
-      padding: 20px 12px 40px 12px;
+      padding: 16px 10px 32px 10px;
       overflow-x: hidden;
     }
     .header {
       text-align: center;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
       background: rgba(25, 34, 45, 0.92);
       backdrop-filter: blur(10px);
-      padding: 16px 20px;
+      padding: 12px 16px;
       border-radius: 12px;
       border: 1px solid #2b394a;
-      max-width: 750px;
+      max-width: 440px;
       width: 100%;
     }
     .header h1 {
-      font-size: 20px;
+      font-size: 17px;
       font-weight: 800;
       text-transform: uppercase;
       color: #f5a623;
     }
     .header p {
       color: #8fa0b5;
-      font-size: 12px;
-      margin-top: 4px;
+      font-size: 11px;
+      margin-top: 3px;
     }
 
     .container {
       width: 100%;
-      max-width: 750px;
+      max-width: 440px;
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 10px;
     }
 
-    /* SELETOR DE TITÃS */
-    .titan-tabs {
-      display: flex;
-      gap: 8px;
-      overflow-x: auto;
-      padding-bottom: 4px;
+    /* FILA DOS 7 TITÃS (SPAWN SEQUENCE) */
+    .spawn-queue {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+      width: 100%;
     }
-    .titan-tab {
-      flex: 1;
-      min-width: 110px;
-      background: #121921;
+    .spawn-block {
+      background: #161f2c;
       border: 1px solid #2b394a;
-      color: #8fa0b5;
-      padding: 10px;
-      border-radius: 10px;
+      color: #c4d1de;
+      padding: 5px 2px;
+      border-radius: 7px;
       text-align: center;
-      font-size: 12px;
+      font-size: 9.5px;
       font-weight: 700;
-      cursor: pointer;
-      transition: all 0.2s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1px;
+      user-select: none;
     }
-    .titan-tab.active {
-      background: rgba(245, 166, 35, 0.15);
-      border-color: #f5a623;
+    .spawn-num {
+      font-size: 8px;
+      color: #6c7e93;
+      font-weight: 800;
+    }
+    .spawn-block.dead {
+      background: #0d1117;
+      border-color: #1c2530;
+      color: #4a5568;
+      opacity: 0.5;
+      text-decoration: line-through;
+    }
+    .spawn-block.current {
+      background: rgba(245, 166, 35, 0.16);
+      border: 1.5px solid #f5a623;
+      color: #f5a623;
+      box-shadow: 0 0 10px rgba(245, 166, 35, 0.2);
+    }
+    .spawn-block.current .spawn-num {
       color: #f5a623;
     }
 
-    /* BARRA DE VIDA GLOBAL DO TITÃ */
+    /* BARRA DE VIDA GLOBAL DO TITÃ (COM COR DINÂMICA) */
     .card-global {
       background: rgba(25, 34, 45, 0.92);
       border: 1px solid #2b394a;
-      border-radius: 12px;
-      padding: 16px;
+      border-radius: 10px;
+      padding: 11px 14px;
     }
     .card-title {
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 700;
       color: #ffffff;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       display: flex;
       justify-content: space-between;
     }
     .progress-bar-bg {
       width: 100%;
-      height: 12px;
+      height: 8px;
       background: #121921;
-      border-radius: 6px;
+      border-radius: 4px;
       overflow: hidden;
-      margin-top: 6px;
     }
     .progress-bar-fill {
       height: 100%;
-      background: linear-gradient(90deg, #ff5e3a, #4cd964);
       width: 0%;
-      transition: width 0.4s ease;
+      transition: width 0.4s ease, background-color 0.4s ease;
     }
 
     /* DESEMPENHO E INFO DO TIER */
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
+      gap: 6px;
     }
     .stat-box {
-      background: rgba(18, 25, 33, 0.8);
+      background: rgba(18, 25, 33, 0.85);
       border: 1px solid #2b394a;
-      border-radius: 10px;
-      padding: 10px;
+      border-radius: 8px;
+      padding: 7px 4px;
       text-align: center;
     }
     .stat-label {
-      font-size: 10px;
+      font-size: 8.5px;
       color: #8fa0b5;
       text-transform: uppercase;
       font-weight: 600;
     }
     .stat-value {
-      font-size: 13.5px;
+      font-size: 12px;
       font-weight: 800;
       color: #ffffff;
-      margin-top: 4px;
+      margin-top: 2px;
     }
 
     /* BUFF E DEBUFFS */
     .buffs-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px;
+      gap: 6px;
     }
     .badge-info {
       background: rgba(25, 34, 45, 0.9);
       border: 1px solid #2b394a;
-      border-radius: 10px;
-      padding: 10px 12px;
-      font-size: 11.5px;
+      border-radius: 8px;
+      padding: 7px 10px;
+      font-size: 10.5px;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
-    /* LAYOUT ANATÔMICO DO TITÃ (3 COLUNAS) */
+    /* LAYOUT ANATÔMICO COMPACTO (3 COLUNAS DE BLOCOS 1:1 MENORES) */
     .titam-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
+      gap: 10px 8px;
+      background: rgba(16, 22, 31, 0.75);
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid #1f2a38;
+      max-width: 350px;
+      width: 100%;
+      margin: 0 auto;
     }
 
-    .part-card {
-      background: rgba(18, 25, 33, 0.95);
-      border: 1px solid #2b394a;
-      border-radius: 10px;
-      padding: 12px;
+    .part-unit {
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
-      gap: 10px;
-      position: relative;
+      gap: 4px;
     }
 
-    /* Destaque para alvos marcados pelo líder no jogo (state 1 = Alvo, state 2 = Não Atacar) */
-    .alvo-foco {
-      border-color: #4cd964;
-      box-shadow: 0 0 10px rgba(76, 217, 100, 0.15);
-    }
-    .alvo-proibido {
-      border-color: #ff5252;
-      background: rgba(255, 82, 82, 0.06);
-    }
-
-    /* Posicionamento exato das 3 linhas */
     .slot-ombro-dir { grid-column: 1; grid-row: 1; }
     .slot-cabeca    { grid-column: 2; grid-row: 1; }
     .slot-ombro-esq { grid-column: 3; grid-row: 1; }
@@ -197,77 +203,164 @@
       grid-row: 3;
       display: flex;
       justify-content: center;
-      gap: 10px;
+      gap: 8px;
     }
-    .pernas-container .part-card {
-      width: calc(33.333% - 7px);
+    .pernas-container .part-unit {
+      width: calc((100% - 16px) / 3);
     }
 
-    .part-top-row {
+    .unit-top-bar {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 4px;
+      height: 20px;
+    }
+
+    .tag-rect {
+      background: #141c26;
+      border: 1px solid #263344;
+      border-radius: 5px;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-    }
-    .part-name {
-      font-size: 11px;
-      font-weight: 700;
-      color: #8fa0b5;
+      justify-content: center;
+      padding: 0 4px;
+      font-size: 8.5px;
+      font-weight: 800;
       text-transform: uppercase;
+      letter-spacing: 0.2px;
+      color: #6c7e93;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
-    .badge-target {
+
+    .tag-rect.decay {
+      background: rgba(136, 84, 208, 0.28);
+      border-color: #a55eea;
+      color: #e2c6ff;
+      box-shadow: 0 0 6px rgba(165, 94, 234, 0.3);
+    }
+    .tag-rect.no-attack {
+      background: rgba(235, 77, 75, 0.2);
+      border-color: #ff5252;
+      color: #ff8080;
+    }
+    .tag-rect.spinal {
+      background: rgba(245, 166, 35, 0.22);
+      border-color: #f5a623;
+      color: #ffc048;
+    }
+    .tag-rect.dead {
+      background: #0f141c;
+      border-color: #1f2937;
+      color: #4b5563;
+    }
+
+    .pct-box {
+      background: #182230;
+      border: 1px solid #2e3d52;
+      border-radius: 5px;
+      padding: 0 5px;
+      min-width: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-size: 9.5px;
       font-weight: 800;
-      padding: 2px 6px;
-      border-radius: 4px;
-      text-transform: uppercase;
-    }
-    .badge-pct {
-      background: #1f2a38;
       color: #ffffff;
-      font-size: 11px;
-      font-weight: 800;
-      padding: 2px 7px;
-      border-radius: 6px;
-      border: 1px solid #2b394a;
     }
 
-    .part-hp-info {
+    /* TANQUE 1:1 */
+    .part-tank {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      background: #101620;
+      border: 1.5px solid #263344;
+      border-radius: 10px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: inset 0 0 14px rgba(0, 0, 0, 0.65);
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .part-tank.tank-decay {
+      border-color: #a55eea;
+      box-shadow: 0 0 10px rgba(165, 94, 234, 0.35), inset 0 0 12px rgba(165, 94, 234, 0.2);
+    }
+    .part-tank.tank-no-attack {
+      border-color: rgba(255, 82, 82, 0.75);
+    }
+    .part-tank.tank-spinal {
+      border-color: rgba(245, 166, 35, 0.85);
+      box-shadow: 0 0 10px rgba(245, 166, 35, 0.2);
+    }
+    .part-tank.tank-dead {
+      opacity: 0.38;
+      border-color: #1c2530;
+    }
+
+    .liquid-level {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 0%;
+      transition: height 0.6s cubic-bezier(0.22, 1, 0.36, 1), background 0.3s ease;
+      z-index: 1;
+    }
+
+    .liquid-level::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.45);
+      box-shadow: 0 0 6px rgba(255, 255, 255, 0.5);
+    }
+
+    .liquid-armor {
+      background: linear-gradient(180deg, rgba(0, 210, 255, 0.55) 0%, rgba(0, 114, 255, 0.22) 100%);
+    }
+    .liquid-body {
+      background: linear-gradient(180deg, rgba(46, 204, 113, 0.55) 0%, rgba(29, 131, 72, 0.22) 100%);
+    }
+    .liquid-decay {
+      background: linear-gradient(180deg, rgba(165, 94, 234, 0.65) 0%, rgba(108, 42, 173, 0.25) 100%);
+    }
+
+    .tank-overlay-top {
+      position: relative;
+      z-index: 2;
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      font-size: 13px;
-      font-weight: 800;
-      color: #ffffff;
-    }
-
-    .part-bar-bg {
+      align-items: flex-start;
+      padding: 7px 8px;
       width: 100%;
-      height: 6px;
-      background: #121921;
-      border-radius: 3px;
-      overflow: hidden;
-    }
-    .part-bar-fill {
-      height: 100%;
-      width: 0%;
-      transition: width 0.4s ease;
     }
 
-    .seq-box {
-      background: rgba(18, 25, 33, 0.8);
-      border: 1px solid #2b394a;
-      border-radius: 10px;
-      padding: 10px 14px;
-      font-size: 11.5px;
-      color: #8fa0b5;
+    .tank-icon {
+      font-size: 13px;
+      line-height: 1;
+      filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.7));
+    }
+
+    .tank-hp {
+      font-size: 12px;
+      font-weight: 900;
+      color: #ffffff;
+      line-height: 1.1;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
+      letter-spacing: -0.3px;
     }
 
     .voltar-link {
       display: inline-block;
       text-align: center;
-      margin-top: 10px;
+      margin-top: 6px;
       color: #5865F2;
-      font-size: 12px;
+      font-size: 11.5px;
       text-decoration: none;
       font-weight: 700;
     }
@@ -275,24 +368,38 @@
       text-decoration: underline;
     }
 
-    @media (max-width: 600px) {
+    @media (max-width: 380px) {
       .titam-grid {
-        grid-template-columns: 1fr;
+        gap: 8px 6px;
+        padding: 9px;
       }
-      .slot-ombro-dir, .slot-cabeca, .slot-ombro-esq,
-      .slot-mao-dir, .slot-peito, .slot-mao-esq,
       .pernas-container {
-        grid-column: span 1;
-        grid-row: auto;
-        display: flex;
-        flex-direction: column;
-        width: 100%;
+        gap: 6px;
       }
-      .pernas-container .part-card {
-        width: 100%;
+      .pernas-container .part-unit {
+        width: calc((100% - 12px) / 3);
       }
-      .stats-grid, .buffs-row {
-        grid-template-columns: 1fr 1fr;
+      .unit-top-bar {
+        height: 18px;
+        gap: 3px;
+      }
+      .tag-rect {
+        font-size: 7.5px;
+        padding: 0 2px;
+      }
+      .pct-box {
+        font-size: 8.5px;
+        min-width: 26px;
+        padding: 0 3px;
+      }
+      .tank-overlay-top {
+        padding: 5px 6px;
+      }
+      .tank-icon {
+        font-size: 11px;
+      }
+      .tank-hp {
+        font-size: 10.5px;
       }
     }
   </style>
@@ -301,18 +408,17 @@
 
   <div class="header">
     <h1 id="titulo-tita">Anatomia do Titã</h1>
-    <p id="subtitulo-status">Sincronizando `sub_cycle` e ataques em tempo real...</p>
+    <p id="subtitulo-status">Sincronizando dados da Raid em tempo real...</p>
   </div>
 
   <div class="container">
-    <!-- Info Geral da Raid -->
     <div class="stats-grid">
       <div class="stat-box">
         <div class="stat-label">Tier / Nível</div>
         <div id="txt-tier-nivel" class="stat-value" style="color: #50e3c2;">--</div>
       </div>
       <div class="stat-box">
-        <div class="stat-label">Titã em Foco</div>
+        <div class="stat-label">Titã Atual</div>
         <div id="txt-nome-tita" class="stat-value" style="color: #f5a623;">--</div>
       </div>
       <div class="stat-box">
@@ -320,27 +426,25 @@
         <div id="txt-moral" class="stat-value" style="color: #4cd964;">--</div>
       </div>
       <div class="stat-box">
-        <div class="stat-label">Código Clã</div>
-        <div id="txt-clan-code" class="stat-value" style="color: #c4d1de;">--</div>
+        <div class="stat-label">Progresso</div>
+        <div id="txt-progresso-fila" class="stat-value" style="color: #c4d1de;">-- / 7</div>
       </div>
     </div>
 
-    <!-- Buff da Área e Debuff do Titã -->
+    <div id="fila-titans" class="spawn-queue"></div>
+
     <div class="buffs-row">
       <div class="badge-info">
-        <span style="color: #8fa0b5;">✨ Buff da Raid:</span>
+        <span style="color: #8fa0b5;">✨ Buff:</span>
         <strong id="txt-buff-area" style="color: #4cd964;">Nenhum</strong>
       </div>
       <div class="badge-info">
-        <span style="color: #8fa0b5;">⚠️ Maldição / Debuff:</span>
+        <span style="color: #8fa0b5;">⚠️ Debuff:</span>
         <strong id="txt-debuff-tita" style="color: #ff8080;">Nenhum</strong>
       </div>
     </div>
 
-    <!-- Abas para trocar entre os Titãs do Sub_Cycle -->
-    <div id="abas-titans" class="titan-tabs" style="display: none;"></div>
-
-    <!-- Vida Global -->
+    <!-- Vida Global com cor espectral dinâmica -->
     <div class="card-global">
       <div class="card-title">
         <span>Vida do Titã</span>
@@ -351,14 +455,8 @@
       </div>
     </div>
 
-    <!-- Layout Anatômico em Bloco -->
     <div id="grid-titam" class="titam-grid">
-      <div style="color: #8fa0b5; font-size: 12px; grid-column: span 3; text-align: center; padding: 20px;">Buscando último sub_cycle no banco de dados...</div>
-    </div>
-
-    <!-- Sequência de Spawn -->
-    <div id="box-sequencia" class="seq-box" style="display: none;">
-      <strong>Ordem de Aparição (Fila):</strong> <span id="txt-sequencia"></span>
+      <div style="color: #8fa0b5; font-size: 11px; grid-column: span 3; text-align: center; padding: 16px;">Carregando tanques de HP do Titã...</div>
     </div>
 
     <a href="painel_raid.html" class="voltar-link">← Voltar para o Painel de Ataques Ao Vivo</a>
@@ -369,19 +467,56 @@
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhxaGlyc25vd2FweWxmd2h2ZHVmIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc5MjkzNTkxOCwiZXhwIjoyMTA4NTExOTE4fQ.sAZeXN1XFKDh0gVGBomanuHM6GkcEto8AmxZzNRehpI";
     const cofre = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    let cacheSubCycle = null;
-    let cacheUltimoRaidState = null;
-    let indiceTitaSelecionado = 0;
+    const mapaTitansPorId = {
+      "Enemy1": "Lojak",
+      "Enemy2": "Takedar",
+      "Enemy3": "Jukk",
+      "Enemy4": "Sterl",
+      "Enemy5": "Mohaca",
+      "Enemy6": "Terro",
+      "Enemy7": "Klonk",
+      "Enemy8": "Priker"
+    };
+
+    const mapaSlotsAnatomicos = {
+      "ArmUpperRight": "slot-ombro-dir",
+      "Head":          "slot-cabeca",
+      "ArmUpperLeft":  "slot-ombro-esq",
+      "HandRight":     "slot-mao-dir",
+      "ChestUpper":    "slot-peito",
+      "HandLeft":      "slot-mao-esq",
+      "LegUpperRight": "slot-perna-dir",
+      "LegUpperLeft":  "slot-perna-esq"
+    };
 
     function formatarNumero(num) {
       const n = Number(num || 0);
       if (n >= 1e9) return (n / 1e9).toFixed(2) + 'B';
-      if (n >= 1e6) return (n / 1e6).toFixed(1) + 'M';
+      if (n >= 1e6) return (n / 1e6).toFixed(0) + 'M';
       if (n >= 1e3) return (n / 1e3).toFixed(0) + 'K';
       return n.toLocaleString("pt-BR");
     }
 
-    // Garante leitura correta mesmo que o JSON venha como string ou dentro de Array
+    // Retorna a cor exata do espectro (do verde ao vermelho via amarelo/laranja) baseada na porcentagem
+    function obterCorEspectral(pct) {
+      const p = Math.max(0, Math.min(100, pct));
+      let r, g, b;
+      if (p > 50) {
+        // De Verde (100%) para Amarelo (50%)
+        const t = (p - 50) / 50;
+        r = Math.round(230 * (1 - t) + 120 * t);
+        g = Math.round(190 * (1 - t) + 200 * t);
+        b = Math.round(50 * (1 - t) + 60 * t);
+      } else {
+        // De Amarelo (50%) para Vermelho (0%)
+        const t = p / 50;
+        r = Math.round(235 * (1 - t) + 230 * t);
+        g = Math.round(80 * (1 - t) + 190 * t);
+        b = Math.round(50 * (1 - t) + 60 * t);
+      }
+      return `rgb(${r}, ${g}, ${b})`;
+    }
+
     function extrairObjeto(dadosBrutos) {
       if (!dadosBrutos) return null;
       let obj = dadosBrutos;
@@ -394,173 +529,203 @@
       return obj;
     }
 
-    const mapaChavesAnatomicas = {
-      "ArmUpperRight": { slot: "slot-ombro-dir", nome: "Ombro Dir." },
-      "Head":          { slot: "slot-cabeca",    nome: "Cabeça" },
-      "ArmUpperLeft":  { slot: "slot-ombro-esq", nome: "Ombro Esq." },
-      "HandRight":     { slot: "slot-mao-dir",   nome: "Mão Dir." },
-      "ChestUpper":    { slot: "slot-peito",     nome: "Peito" },
-      "HandLeft":      { slot: "slot-mao-esq",   nome: "Mão Esq." },
-      "LegUpperRight": { slot: "slot-perna-dir", nome: "Perna Dir." },
-      "LegUpperLeft":  { slot: "slot-perna-esq", nome: "Perna Esq." }
-    };
+    function descobrirIndiceNaFila(spawnSeq, dadosSub, raidStateAoVivo, historicoEventos) {
+      if (!spawnSeq || spawnSeq.length === 0) return 0;
+
+      const raidObj = dadosSub.raid || dadosSub;
+      const idxExplicito = raidStateAoVivo?.titan_index ?? raidObj?.titan_index ?? dadosSub?.titan_index;
+      if (typeof idxExplicito === "number" && idxExplicito >= 0 && idxExplicito < spawnSeq.length) {
+        return idxExplicito;
+      }
+
+      let cursor = 0;
+      const eventosOrdenados = [...(historicoEventos || [])].reverse();
+      let ultimoEnemyVisto = null;
+
+      for (const ev of eventosOrdenados) {
+        const d = extrairObjeto(ev.dados);
+        const rs = d?.raid_state?.current || d?.raid_state;
+        if (rs && rs.enemy_id) {
+          const nomeChefe = rs.enemy_name || mapaTitansPorId[rs.enemy_id] || rs.enemy_id;
+          if (!ultimoEnemyVisto) {
+            const primeiroMatch = spawnSeq.indexOf(nomeChefe);
+            if (primeiroMatch !== -1) cursor = primeiroMatch;
+            ultimoEnemyVisto = nomeChefe;
+          } else if (nomeChefe !== ultimoEnemyVisto) {
+            const proximoMatch = spawnSeq.indexOf(nomeChefe, cursor + 1);
+            if (proximoMatch !== -1) {
+              cursor = proximoMatch;
+            }
+            ultimoEnemyVisto = nomeChefe;
+          }
+          if (Number(rs.current_hp) <= 0 && cursor + 1 < spawnSeq.length) {
+            cursor++;
+            ultimoEnemyVisto = spawnSeq[cursor];
+          }
+        }
+      }
+
+      if (raidStateAoVivo && raidStateAoVivo.enemy_id) {
+        const nomeVivo = raidStateAoVivo.enemy_name || mapaTitansPorId[raidStateAoVivo.enemy_id];
+        if (nomeVivo && spawnSeq[cursor] !== nomeVivo) {
+          const indicesPossiveis = [];
+          spawnSeq.forEach((nome, idx) => {
+            if (nome === nomeVivo) indicesPossiveis.push(idx);
+          });
+          if (indicesPossiveis.length > 0) {
+            cursor = indicesPossiveis[indicesPossiveis.length - 1];
+          }
+        }
+      }
+
+      return Math.min(Math.max(0, cursor), spawnSeq.length - 1);
+    }
 
     async function carregarEstadoTita() {
       try {
-        // 1. Busca especificamente o último sub_cycle (sem ser soterrado por ataques)
-        const { data: listaSub, error: errSub } = await cofre
+        const { data: listaSub } = await cofre
           .from("eventos_raid")
           .select("*")
           .ilike("tipo_evento", "%sub_cycle%")
           .order("id", { ascending: false })
           .limit(1);
 
-        // 2. Busca também os últimos 15 eventos gerais para pegar ataques ao vivo (raid_state)
         const { data: listaGeral } = await cofre
           .from("eventos_raid")
           .select("*")
           .order("id", { ascending: false })
-          .limit(15);
+          .limit(100);
 
-        let dadosSub = null;
-        if (listaSub && listaSub.length > 0) {
-          dadosSub = extrairObjeto(listaSub[0].dados);
-        } else if (listaGeral && listaGeral.length > 0) {
-          // Fallback: procura em listaGeral se o nome do evento foi salvo diferente
-          for (const ev of listaGeral) {
-            const extraido = extrairObjeto(ev.dados);
-            if (extraido && (extraido.raid?.titans || extraido.titans)) {
-              dadosSub = extraido;
-              break;
-            }
-          }
-        }
+        let registroSub = listaSub && listaSub.length > 0 ? listaSub[0] : null;
+        let dadosSub = registroSub ? extrairObjeto(registroSub.dados) : null;
 
-        // Procura o evento de ataque mais recente que tenha raid_state em tempo real
-        let raidStateAoVivo = null;
-        if (listaGeral && listaGeral.length > 0) {
+        if (!dadosSub && listaGeral) {
           for (const ev of listaGeral) {
-            const extraido = extrairObjeto(ev.dados);
-            if (extraido && extraido.raid_state) {
-              raidStateAoVivo = extraido.raid_state.current || extraido.raid_state;
+            const ext = extrairObjeto(ev.dados);
+            if (ext && (ext.raid?.titans || ext.titans)) {
+              dadosSub = ext;
+              registroSub = ev;
               break;
             }
           }
         }
 
         if (!dadosSub) {
-          document.getElementById("subtitulo-status").innerText = "Nenhum pacote sub_cycle encontrado na tabela eventos_raid.";
+          document.getElementById("subtitulo-status").innerText = "Aguardando pacote sub_cycle no Supabase...";
           return;
         }
 
-        cacheSubCycle = dadosSub;
-        cacheUltimoRaidState = raidStateAoVivo;
-
-        // Se existe um ataque ao vivo, seleciona automaticamente a aba do titã que está apanhando agora
-        const raidObj = cacheSubCycle.raid || cacheSubCycle;
-        const listaTitans = raidObj.titans || [];
-        if (raidStateAoVivo && raidStateAoVivo.enemy_id && listaTitans.length > 0) {
-          const idxAtivo = listaTitans.findIndex(t => t.enemy_id === raidStateAoVivo.enemy_id);
-          if (idxAtivo !== -1) indiceTitaSelecionado = idxAtivo;
+        let raidStateAoVivo = null;
+        if (listaGeral && listaGeral.length > 0) {
+          for (const ev of listaGeral) {
+            const ext = extrairObjeto(ev.dados);
+            if (ext && ext.raid_state) {
+              raidStateAoVivo = ext.raid_state.current || ext.raid_state;
+              break;
+            }
+          }
         }
 
-        renderizarInterface();
+        renderizarPainel(dadosSub, raidStateAoVivo, listaGeral || []);
 
       } catch (erro) {
         console.error("Erro ao carregar anatomia do titã:", erro);
-        document.getElementById("subtitulo-status").innerText = "Erro ao ler dados: " + erro.message;
+        document.getElementById("subtitulo-status").innerText = "Erro ao sincronizar: " + erro.message;
       }
     }
 
-    function renderizarInterface() {
-      if (!cacheSubCycle) return;
-
-      const raidData = cacheSubCycle.raid || cacheSubCycle;
-      const clanCode = cacheSubCycle.clan_code || raidData.clan_code || "---";
+    function renderizarPainel(dadosSub, raidStateAoVivo, historicoEventos) {
+      const raidData = dadosSub.raid || dadosSub;
       const tier = raidData.tier ?? "-";
       const level = raidData.level ?? "-";
-      const moraleBonus = cacheSubCycle.morale?.bonus_amount
-        ? `+${Math.round(cacheSubCycle.morale.bonus_amount * 100)}%`
+      const moraleBonus = dadosSub.morale?.bonus_amount
+        ? `+${Math.round(dadosSub.morale.bonus_amount * 100)}%`
         : "0%";
 
       document.getElementById("txt-tier-nivel").innerText = `T${tier} - Nv.${level}`;
-      document.getElementById("txt-clan-code").innerText = clanCode;
       document.getElementById("txt-moral").innerText = moraleBonus;
-      document.getElementById("subtitulo-status").innerText = `Raid ID: ${cacheSubCycle.raid_id || 'Ativa'} • Atualizado em tempo real`;
 
-      // Buff de Área
       const areaBuffs = raidData.area_buffs || [];
       document.getElementById("txt-buff-area").innerText = areaBuffs.length > 0
-        ? areaBuffs.map(b => `${b.bonus_type} (${b.bonus_amount > 0 ? '+' : ''}${Math.round(b.bonus_amount * 100)}%)`).join(", ")
+        ? areaBuffs.map(b => `${b.bonus_type} (+${Math.round(b.bonus_amount * 100)}%)`).join(", ")
         : "Nenhum";
 
-      // Sequência de Spawn
-      const seq = raidData.spawn_sequence || [];
-      const boxSeq = document.getElementById("box-sequencia");
-      if (seq.length > 0) {
-        boxSeq.style.display = "block";
-        document.getElementById("txt-sequencia").innerText = seq.join(" ➔ ");
-      } else {
-        boxSeq.style.display = "none";
-      }
+      const spawnSeq = raidData.spawn_sequence || [];
+      const titansCatalogo = raidData.titans || [];
 
-      const titans = raidData.titans || [];
-      if (titans.length === 0) return;
+      const indiceFilaAtual = descobrirIndiceNaFila(spawnSeq, dadosSub, raidStateAoVivo, historicoEventos);
+      const totalFila = spawnSeq.length || 7;
 
-      // Renderiza abas dos Titãs disponíveis no sub_cycle
-      const divAbas = document.getElementById("abas-titans");
-      if (titans.length > 1) {
-        divAbas.style.display = "flex";
-        divAbas.innerHTML = titans.map((t, idx) => {
-          const isAtivoAoVivo = cacheUltimoRaidState && cacheUltimoRaidState.enemy_id === t.enemy_id;
+      document.getElementById("txt-progresso-fila").innerText = `${indiceFilaAtual + 1}º de ${totalFila}`;
+
+      const divFila = document.getElementById("fila-titans");
+      if (spawnSeq.length > 0) {
+        divFila.innerHTML = spawnSeq.map((nomeTitaFila, idx) => {
+          let classeEstado = "";
+          if (idx < indiceFilaAtual) {
+            classeEstado = "dead";
+          } else if (idx === indiceFilaAtual) {
+            classeEstado = "current";
+          }
           return `
-            <div class="titan-tab ${idx === indiceTitaSelecionado ? 'active' : ''}" onclick="trocarTita(${idx})">
-              ${isAtivoAoVivo ? '⚔️ ' : ''}${t.enemy_name || t.enemy_id}
+            <div class="spawn-block ${classeEstado}">
+              <span class="spawn-num">${idx + 1}º</span>
+              <span>${nomeTitaFila}</span>
             </div>
           `;
         }).join("");
-      } else {
-        divAbas.style.display = "none";
       }
 
-      const titanBase = titans[indiceTitaSelecionado] || titans[0];
-      const nomeTita = titanBase.enemy_name || titanBase.enemy_id || "Titã";
+      let titanBase = null;
+      if (raidStateAoVivo && raidStateAoVivo.enemy_id) {
+        titanBase = titansCatalogo.find(t => t.enemy_id === raidStateAoVivo.enemy_id);
+      }
+      if (!titanBase && spawnSeq[indiceFilaAtual]) {
+        const nomeAlvo = spawnSeq[indiceFilaAtual];
+        titanBase = titansCatalogo.find(t => t.enemy_name === nomeAlvo);
+      }
+      if (!titanBase) {
+        titanBase = titansCatalogo[0];
+      }
+      if (!titanBase) return;
 
-      document.getElementById("txt-nome-tita").innerText = nomeTita;
-      document.getElementById("titulo-tita").innerText = `Anatomia: ${nomeTita}`;
+      const nomeTitaAtivo = titanBase.enemy_name || mapaTitansPorId[titanBase.enemy_id] || "Titã";
+      document.getElementById("txt-nome-tita").innerText = nomeTitaAtivo;
+      document.getElementById("titulo-tita").innerText = `Titã Atual: ${nomeTitaAtivo} (${indiceFilaAtual + 1}/${totalFila})`;
+      document.getElementById("subtitulo-status").innerText = `Clã ${dadosSub.clan_code || '975xx'} • Atualizado automaticamente em tempo real`;
 
-      // Debuff específico deste Titã
       const debuffs = titanBase.area_debuffs || [];
       document.getElementById("txt-debuff-tita").innerText = debuffs.length > 0
         ? debuffs.map(d => `${d.bonus_type} (${Math.round(d.bonus_amount * 100)}%)`).join(", ")
         : "Nenhum";
 
-      // Verifica se o último ataque ao vivo pertence a este Titã para usar o HP mais fresco possível
-      const usarAoVivo = cacheUltimoRaidState && cacheUltimoRaidState.enemy_id === titanBase.enemy_id;
+      const usarAoVivo = raidStateAoVivo && raidStateAoVivo.enemy_id === titanBase.enemy_id;
 
       const hpGlobalTotal = Number(titanBase.total_hp || 1);
-      const hpGlobalAtual = usarAoVivo && cacheUltimoRaidState.current_hp !== undefined
-        ? Number(cacheUltimoRaidState.current_hp)
+      const hpGlobalAtual = usarAoVivo && raidStateAoVivo.current_hp !== undefined
+        ? Number(raidStateAoVivo.current_hp)
         : Number(titanBase.current_hp || 0);
 
-      const pctGlobal = ((hpGlobalAtual / hpGlobalTotal) * 100).toFixed(1);
+      const pctGlobal = Number(((hpGlobalAtual / hpGlobalTotal) * 100).toFixed(1));
       document.getElementById("txt-vida-global").innerText = `${formatarNumero(hpGlobalAtual)} / ${formatarNumero(hpGlobalTotal)} (${pctGlobal}%)`;
-      document.getElementById("bar-vida-global").style.width = `${Math.max(0, Math.min(100, pctGlobal))}%`;
+      
+      const barFill = document.getElementById("bar-vida-global");
+      barFill.style.width = `${Math.max(0, Math.min(100, pctGlobal))}%`;
+      barFill.style.backgroundColor = obterCorEspectral(pctGlobal);
 
-      // Mapa de Alvos marcados pelo Clã (titan_target)
+      // Mapa de Alvos (state "1" = Não Atacar, state "2" = Spinal Tap)
       const mapaAlvos = {};
-      const listaTargets = cacheSubCycle.titan_target || [];
+      const listaTargets = dadosSub.titan_target || [];
       const targetDesteTita = listaTargets.find(t => t.enemy_id === titanBase.enemy_id);
       if (targetDesteTita && Array.isArray(targetDesteTita.state)) {
         targetDesteTita.state.forEach(item => {
-          mapaAlvos[item.id] = String(item.state); // "1" = Focar, "2" = Não atacar
+          mapaAlvos[item.id] = String(item.state);
         });
       }
 
-      // Mapeia as partes juntando o total_hp do sub_cycle com o current_hp ao vivo (se houver)
       const partesAoVivoMap = {};
-      if (usarAoVivo && Array.isArray(cacheUltimoRaidState.parts)) {
-        cacheUltimoRaidState.parts.forEach(p => {
+      if (usarAoVivo && Array.isArray(raidStateAoVivo.parts)) {
+        raidStateAoVivo.parts.forEach(p => {
           partesAoVivoMap[p.part_id] = Number(p.current_hp);
         });
       }
@@ -586,15 +751,14 @@
       let htmlMaosPeito = "";
       let htmlPernas = "";
 
-      Object.keys(mapaChavesAnatomicas).forEach(baseName => {
+      Object.keys(mapaSlotsAnatomicos).forEach(baseName => {
         const par = partesMapeadas[baseName];
-        const infoAnatomica = mapaChavesAnatomicas[baseName];
-        if (!par || !infoAnatomica) return;
+        const classeSlot = mapaSlotsAnatomicos[baseName];
+        if (!par || !classeSlot) return;
 
         let targetParte = null;
         let isArmadura = false;
 
-        // Regra: Mostra armadura enquanto current_hp > 0; quando zera, passa para o Corpo
         if (par.Armor && par.Armor.current_hp > 0) {
           targetParte = par.Armor;
           isArmadura = true;
@@ -610,53 +774,67 @@
           const currentHp = Number(targetParte.current_hp || 0);
           const totalHp = Number(targetParte.total_hp || 1);
           const isDestruida = currentHp <= 0;
-          const pctParte = isDestruida ? 0 : Math.round((currentHp / totalHp) * 100);
+          const pctExata = isDestruida ? 0 : Math.max(0, Math.min(100, (currentHp / totalHp) * 100));
+          const pctArredondada = isDestruida ? 0 : Math.round(pctExata);
 
-          // Verifica marcação de alvo (1 = Atacar, 2 = Não Atacar)
+          const isDecay = !isDestruida && pctExata <= 30;
           const estadoAlvo = mapaAlvos[baseName] || "0";
-          let classeAlvo = "";
-          let seloAlvo = `<span class="part-name">${infoAnatomica.nome}</span>`;
 
-          if (!isDestruida && estadoAlvo === "1") {
-            classeAlvo = "alvo-foco";
-            seloAlvo = `<span class="badge-target" style="background: rgba(76,217,100,0.2); color: #4cd964; border: 1px solid #4cd964;">🎯 ATACAR • ${infoAnatomica.nome}</span>`;
-          } else if (!isDestruida && estadoAlvo === "2") {
-            classeAlvo = "alvo-proibido";
-            seloAlvo = `<span class="badge-target" style="background: rgba(255,82,82,0.2); color: #ff5252; border: 1px solid #ff5252;">🚫 NÃO ATACAR</span>`;
+          // Ajustado: "Smash" virou "Livre"
+          let textoTag = "LIVRE";
+          let classeTagRect = "";
+          let classeTankExtra = "";
+
+          if (isDestruida) {
+            textoTag = "DESTRUÍDA";
+            classeTagRect = "dead";
+            classeTankExtra = "tank-dead";
+          } else if (estadoAlvo === "1") {
+            textoTag = isDecay ? "NÃO • DECAY" : "NÃO ATACAR";
+            classeTagRect = "no-attack";
+            classeTankExtra = isDecay ? "tank-decay" : "tank-no-attack";
+          } else if (estadoAlvo === "2") {
+            textoTag = isDecay ? "SPINAL • DECAY" : "SPINAL TAP";
+            classeTagRect = isDecay ? "decay" : "spinal";
+            classeTankExtra = isDecay ? "tank-decay" : "tank-spinal";
+          } else if (isDecay) {
+            textoTag = "DECAY";
+            classeTagRect = "decay";
+            classeTankExtra = "tank-decay";
           }
 
-          const rotuloTipo = isDestruida
-            ? "💀 Esqueleto"
-            : (isArmadura ? "🛡️ Armadura" : "❤️ Corpo");
+          const iconeCanto = isDestruida
+            ? "💀"
+            : (isArmadura ? "🛡️" : "❤️");
 
-          const corTextoTipo = isDestruida
-            ? "#8fa0b5"
-            : (isArmadura ? "#50e3c2" : "#ff6b6b");
+          let classeLiquido = isArmadura ? "liquid-armor" : "liquid-body";
+          if (isDecay) {
+            classeLiquido = "liquid-decay";
+          }
 
-          const corBarra = isArmadura ? "#00d2ff" : "#4cd964";
-
-          const cardHtml = `
-            <div class="part-card ${infoAnatomica.slot} ${classeAlvo}" style="${isDestruida ? 'opacity: 0.38;' : ''}">
-              <div class="part-top-row">
-                ${seloAlvo}
-                <span class="badge-pct">${isDestruida ? 'DESTRUÍDA' : pctParte + '%'}</span>
+          const unitHtml = `
+            <div class="part-unit ${classeSlot}">
+              <div class="unit-top-bar">
+                <div class="tag-rect ${classeTagRect}">${textoTag}</div>
+                <div class="pct-box">${isDestruida ? '-' : pctArredondada + '%'}</div>
               </div>
-              <div class="part-hp-info">
-                <span style="color: ${corTextoTipo}; font-size: 12px;">${rotuloTipo}</span>
-                <span>${isDestruida ? '0' : formatarNumero(currentHp)}</span>
-              </div>
-              <div class="part-bar-bg">
-                <div class="part-bar-fill" style="width: ${isDestruida ? '0%' : pctParte + '%'}; background: ${corBarra};"></div>
+
+              <div class="part-tank ${classeTankExtra}">
+                <div class="liquid-level ${classeLiquido}" style="height: ${isDestruida ? 0 : pctExata}%;"></div>
+                <div class="tank-overlay-top">
+                  <span class="tank-icon">${iconeCanto}</span>
+                  <span class="tank-hp">${isDestruida ? '0' : formatarNumero(currentHp)}</span>
+                </div>
               </div>
             </div>
           `;
 
           if (baseName.includes("ArmUpper") || baseName === "Head") {
-            htmlOmbrosCabeca += cardHtml;
+            htmlOmbrosCabeca += unitHtml;
           } else if (baseName.includes("Hand") || baseName === "ChestUpper") {
-            htmlMaosPeito += cardHtml;
+            htmlMaosPeito += unitHtml;
           } else if (baseName.includes("Leg")) {
-            htmlPernas += cardHtml;
+            htmlPernas += unitHtml;
           }
         }
       });
@@ -668,11 +846,6 @@
         </div>
       `;
     }
-
-    window.trocarTita = function(idx) {
-      indiceTitaSelecionado = idx;
-      renderizarInterface();
-    };
 
     window.addEventListener('DOMContentLoaded', () => {
       carregarEstadoTita();

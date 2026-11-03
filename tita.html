@@ -129,7 +129,7 @@
       transition: width 0.4s ease;
     }
 
-    /* DESEMPENHO E INFO DO TIER */
+    /* INFO DE TIER E BUFFS (TOP GRID) */
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -141,38 +141,26 @@
       border-radius: 8px;
       padding: 7px 4px;
       text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
     .stat-label {
-      font-size: 8.5px;
+      font-size: 8px;
       color: #8fa0b5;
       text-transform: uppercase;
       font-weight: 600;
+      white-space: nowrap;
     }
     .stat-value {
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 800;
       color: #ffffff;
       margin-top: 2px;
+      line-height: 1.1;
     }
 
-    /* BUFF E DEBUFFS */
-    .buffs-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 6px;
-    }
-    .badge-info {
-      background: rgba(25, 34, 45, 0.9);
-      border: 1px solid #2b394a;
-      border-radius: 8px;
-      padding: 7px 10px;
-      font-size: 10.5px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    /* LAYOUT ANATÔMICO COMPACTO (3 COLUNAS DE BLOCOS 1:1 MENORES) */
+    /* LAYOUT ANATÔMICO COMPACTO */
     .titam-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -322,11 +310,9 @@
       box-shadow: 0 0 6px rgba(255, 255, 255, 0.6);
     }
 
-    /* Armadura: Azul profundo mais escuro */
     .liquid-armor {
       background: linear-gradient(180deg, rgba(0, 140, 255, 0.55) 0%, rgba(0, 75, 180, 0.25) 100%);
     }
-    /* Corpo: Azul cristalino bem claro e limpo (água de rio fresca) */
     .liquid-body {
       background: linear-gradient(180deg, rgba(165, 243, 252, 0.68) 0%, rgba(56, 189, 248, 0.32) 100%);
     }
@@ -411,7 +397,7 @@
 <body>
 
   <div class="header">
-    <h1 id="titulo-tita">Anatomia do Titã</h1>
+    <h1 id="titulo-tita">Anatomia da Raid</h1>
     <p id="subtitulo-status">Sincronizando dados da Raid em tempo real...</p>
   </div>
 
@@ -422,35 +408,24 @@
         <div id="txt-tier-nivel" class="stat-value" style="color: #50e3c2;">--</div>
       </div>
       <div class="stat-box">
-        <div class="stat-label">Titã Atual</div>
-        <div id="txt-nome-tita" class="stat-value" style="color: #f5a623;">--</div>
+        <div class="stat-label">Buff Raid</div>
+        <div id="txt-buff-area" class="stat-value" style="color: #4cd964;">--</div>
       </div>
       <div class="stat-box">
-        <div class="stat-label">Moral do Clã</div>
-        <div id="txt-moral" class="stat-value" style="color: #4cd964;">--</div>
+        <div class="stat-label">Moral Clã</div>
+        <div id="txt-moral" class="stat-value" style="color: #f5a623;">--</div>
       </div>
       <div class="stat-box">
-        <div class="stat-label">Progresso</div>
-        <div id="txt-progresso-fila" class="stat-value" style="color: #c4d1de;">-- / 7</div>
+        <div class="stat-label">Debuff Titã</div>
+        <div id="txt-debuff-tita" class="stat-value" style="color: #ff8080;">--</div>
       </div>
     </div>
 
     <div id="fila-titans" class="spawn-queue"></div>
 
-    <div class="buffs-row">
-      <div class="badge-info">
-        <span style="color: #8fa0b5;">✨ Buff:</span>
-        <strong id="txt-buff-area" style="color: #4cd964;">Nenhum</strong>
-      </div>
-      <div class="badge-info">
-        <span style="color: #8fa0b5;">⚠️ Debuff:</span>
-        <strong id="txt-debuff-tita" style="color: #ff8080;">Nenhum</strong>
-      </div>
-    </div>
-
     <div class="card-global">
       <div class="card-title">
-        <span>Vida do Titã</span>
+        <span id="txt-nome-titaglobal">Vida do Titã</span>
         <span id="txt-vida-global">0 / 0 (0%)</span>
       </div>
       <div class="progress-bar-bg">
@@ -470,26 +445,33 @@
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhxaGlyc25vd2FweWxmd2h2ZHVmIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc5MjkzNTkxOCwiZXhwIjoyMTA4NTExOTE4fQ.sAZeXN1XFKDh0gVGBomanuHM6GkcEto8AmxZzNRehpI";
     const cofre = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+    // Dicionários para traduzir variáveis técnicas para texto de tela
     const mapaTitansPorId = {
-      "Enemy1": "Lojak",
-      "Enemy2": "Takedar",
-      "Enemy3": "Jukk",
-      "Enemy4": "Sterl",
-      "Enemy5": "Mohaca",
-      "Enemy6": "Terro",
-      "Enemy7": "Klonk",
-      "Enemy8": "Priker"
+      "Enemy1": "Lojak", "Enemy2": "Takedar", "Enemy3": "Jukk", "Enemy4": "Sterl",
+      "Enemy5": "Mohaca", "Enemy6": "Terro", "Enemy7": "Klonk", "Enemy8": "Priker"
     };
 
     const mapaSlotsAnatomicos = {
-      "ArmUpperRight": "slot-ombro-dir",
-      "Head":          "slot-cabeca",
-      "ArmUpperLeft":  "slot-ombro-esq",
-      "HandRight":     "slot-mao-dir",
-      "ChestUpper":    "slot-peito",
-      "HandLeft":      "slot-mao-esq",
-      "LegUpperRight": "slot-perna-dir",
-      "LegUpperLeft":  "slot-perna-esq"
+      "ArmUpperRight": "slot-ombro-dir", "Head": "slot-cabeca", "ArmUpperLeft": "slot-ombro-esq",
+      "HandRight": "slot-mao-dir", "ChestUpper": "slot-peito", "HandLeft": "slot-mao-esq",
+      "LegUpperRight": "slot-perna-dir", "LegUpperLeft": "slot-perna-esq"
+    };
+
+    const mapaBuffs = {
+      "AfflictedDamage": "Dano Aflição",
+      "BurstDamage": "Dano Explosão",
+      "AllDamage": "Dano Raid",
+      "TapDamage": "Dano de Toque",
+      "SupportEffect": "Efeito Suporte"
+    };
+
+    const mapaDebuffs = {
+      "AllTorsoHPMult": "HP Peito",
+      "AllArmsHPMult": "HP Braços",
+      "AllHeadHPMult": "HP Cabeça",
+      "AllLegsHPMult": "HP Pernas",
+      "AllArmorHPMult": "HP Armadura",
+      "AllBodyHPMult": "HP Corpo"
     };
 
     function formatarNumero(num) {
@@ -621,25 +603,31 @@
       const raidData = dadosSub.raid || dadosSub;
       const tier = raidData.tier ?? "-";
       const level = raidData.level ?? "-";
+      
+      const txtTier = (tier === 9999 || tier === "9999") ? "Tier Master" : `T${tier}`;
+      const txtNivel = level !== "-" ? `Zona ${level}` : "-";
+      
+      document.getElementById("txt-tier-nivel").innerText = `${txtTier} | ${txtNivel}`;
+      
       const moraleBonus = dadosSub.morale?.bonus_amount
         ? `+${Math.round(dadosSub.morale.bonus_amount * 100)}%`
         : "0%";
-
-      document.getElementById("txt-tier-nivel").innerText = `T${tier} - Nv.${level}`;
       document.getElementById("txt-moral").innerText = moraleBonus;
 
       const areaBuffs = raidData.area_buffs || [];
-      document.getElementById("txt-buff-area").innerText = areaBuffs.length > 0
-        ? areaBuffs.map(b => `${b.bonus_type} (+${Math.round(b.bonus_amount * 100)}%)`).join(", ")
-        : "Nenhum";
+      if (areaBuffs.length > 0) {
+        const b = areaBuffs[0];
+        const nomeBuff = mapaBuffs[b.bonus_type] || b.bonus_type;
+        document.getElementById("txt-buff-area").innerText = `+${Math.round(b.bonus_amount * 100)}% ${nomeBuff}`;
+      } else {
+        document.getElementById("txt-buff-area").innerText = "Nenhum";
+      }
 
       const spawnSeq = raidData.spawn_sequence || [];
       const titansCatalogo = raidData.titans || [];
 
       const indiceFilaAtual = descobrirIndiceNaFila(spawnSeq, dadosSub, raidStateAoVivo, historicoEventos);
       const totalFila = spawnSeq.length || 7;
-
-      document.getElementById("txt-progresso-fila").innerText = `${indiceFilaAtual + 1}º de ${totalFila}`;
 
       const divFila = document.getElementById("fila-titans");
       if (spawnSeq.length > 0) {
@@ -673,14 +661,17 @@
       if (!titanBase) return;
 
       const nomeTitaAtivo = titanBase.enemy_name || mapaTitansPorId[titanBase.enemy_id] || "Titã";
-      document.getElementById("txt-nome-tita").innerText = nomeTitaAtivo;
-      document.getElementById("titulo-tita").innerText = `Titã Atual: ${nomeTitaAtivo} (${indiceFilaAtual + 1}/${totalFila})`;
-      document.getElementById("subtitulo-status").innerText = `Clã ${dadosSub.clan_code || '975xx'} • Atualizado automaticamente em tempo real`;
+      document.getElementById("txt-nome-titaglobal").innerText = `Vida de ${nomeTitaAtivo}`;
+      document.getElementById("subtitulo-status").innerText = `Clã ${dadosSub.clan_code || '975xx'} • Atualizado em tempo real`;
 
       const debuffs = titanBase.area_debuffs || [];
-      document.getElementById("txt-debuff-tita").innerText = debuffs.length > 0
-        ? debuffs.map(d => `${d.bonus_type} (${Math.round(d.bonus_amount * 100)}%)`).join(", ")
-        : "Nenhum";
+      if (debuffs.length > 0) {
+        const d = debuffs[0];
+        const nomeDebuff = mapaDebuffs[d.bonus_type] || d.bonus_type;
+        document.getElementById("txt-debuff-tita").innerText = `+${Math.round(d.bonus_amount * 100)}% ${nomeDebuff}`;
+      } else {
+        document.getElementById("txt-debuff-tita").innerText = "Nenhum";
+      }
 
       const usarAoVivo = raidStateAoVivo && raidStateAoVivo.enemy_id === titanBase.enemy_id;
 

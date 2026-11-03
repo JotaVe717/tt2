@@ -2,7 +2,6 @@ const { io } = require("socket.io-client");
 const { createClient } = require("@supabase/supabase-js");
 const http = require("http");
 
-// Chaves que você vai colar lá no painel do servidor (Passo 3)
 const GAMEHIVE_TOKEN = process.env.GAMEHIVE_TOKEN;
 const PLAYER_TOKEN = process.env.PLAYER_TOKEN;
 const SUPABASE_URL = process.env.SUPABASE_URL;
@@ -10,21 +9,22 @@ const SUPABASE_KEY = process.env.SUPABASE_KEY;
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// Conecta ao Canal Ao Vivo (/raid) exigido pela GameHive
 const socket = io("wss://tt2-public.gamehivegames.com/raid", {
   path: "/api",
   transports: ["websocket"],
-  reconnectionAttempts: 3,
+  reconnectionAttempts: 5,
   extraHeaders: {
     "API-Authenticate": GAMEHIVE_TOKEN
   }
 });
 
-// Função que avisa a GameHive para vigiar o seu clã e puxa a ficha completa
 async function assinarEPuxarDados() {
   try {
-    // 1. Assina os avisos da Raid do clã
-    await fetch("https://tt2-public.gamehivegames.com/raid/subscribe", {
+    // Espera 2 segundos após conectar ao vivo para garantir que a GameHive registrou a sessão
+    await new Promise(r => setTimeout(r, 2000));
+
+    // 1. Assina os avisos da Raid do clã e LÊ a resposta real
+    const resSub = await fetch("https://tt2-public.gamehivegames.com/raid/subscribe", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -33,9 +33,17 @@ async function assinarEPuxarDados() {
       },
       body: JSON.stringify({ player_tokens: [PLAYER_TOKEN] })
     });
-    console.log("Clã assinado com sucesso para receber ataques ao vivo!");
 
-    // 2. Pede a ficha completa do clã (cartas, níveis, moral)
+    const dadosSub = await resSub.json();
+    console.log("RESPOSTA DO SUBSCRIBE:", JSON.stringify(dadosSub));
+
+    // Salva a resposta do subscribe no Cofre para você ver no site também
+    await supabase.from("eventos_raid").insert({
+      tipo_evento: "status_assinatura",
+      dados: dadosSub
+    });
+
+    // 2. Pede a ficha completa do clã
     await atualizarFichaDoCla();
   } catch (erro) {
     console.error("Erro ao assinar ou buscar dados:", erro);
@@ -61,12 +69,14 @@ async function atualizarFichaDoCla() {
       })
     });
 
-    if (resposta.ok) {
-      const dadosCla = await resposta.json();
+    const textoOuJson = await resposta.json();
+    console.log("RESPOSTA DO CLAN_DATA:", JSON.stringify(textoOuJson).slice(0, 300));
+
+    if (resposta.ok && textoOuJson.clan_name) {
       await supabase.from("dados_cla").upsert({
         id: 1,
         atualizado_em: new Date().toISOString(),
-        dados: dadosCla
+        dados: textoOuJson
       });
       console.log("Ficha completa do clã salva no Cofre!");
     }
@@ -75,31 +85,34 @@ async function atualizarFichaDoCla() {
   }
 }
 
-// Quando conectar ao vivo, assina o clã
 socket.on("connected", () => {
   console.log("Conectado ao canal ao vivo da GameHive!");
   assinarEPuxarDados();
 });
 
-// Registra automaticamente todos os eventos ao vivo da Raid no Cofre
-const eventosParaVigiar = [
-  "start_attack", "attack", "start", "sub_start", "end",
-  "retire", "cycle_reset", "sub_cycle", "target",
-  "join", "leave", "kick", "morale", "clan_sync"
-];
-
-eventosParaVigiar.forEach((nomeEvento) => {
-  socket.on(nomeEvento, async (pacoteDeDados) => {
-    console.log("Novo evento recebido ao vivo:", nomeEvento);
-    await supabase.from("eventos_raid").insert({
-      tipo_evento: nomeEvento,
-      dados: pacoteDeDados
-    });
-  });
+socket.on("disconnect", (motivo) => {
+  console.log("Desconectado da GameHive. Motivo:", motivo);
 });
 
-// Repete a consulta da ficha completa a cada 12 horas (regra da GameHive)
+socket.on("error", (erro) => {
+  console.log("Erro no canal ao vivo:", erro);
+});
+
+socket.on("connect_error", (erro) => {
+  console.log("Erro ao conectar no canal ao vivo:", erro.message || erro);
+});
+
+// Captura QUALQUER evento que vier da GameHive (mesmo que tenha nome diferente)
+socket.onAny(async (nomeEvento, pacoteDeDados) => {
+  console.log("Evento recebido ao vivo:", nomeEvento);
+  if (nomeEvento !== "connected") {
+    await supabase.from("eventos_raid").insert({
+      tipo_evento: nomeEvento,
+      dados: pacoteDeDados || {}
+    });
+  }
+});
+
 setInterval(atualizarFichaDoCla, 12 * 60 * 60 * 1000);
 
-// Mantém uma porta aberta para o servidor na nuvem saber que o robô está vivo
 http.createServer((req, res) => res.end("Ponte TT2 Online!")).listen(process.env.PORT || 3000);

@@ -479,6 +479,9 @@
       htmlCartas += '</div>';
       return htmlCartas;
     }
+    
+    // Filtra estritamente apenas o evento de ataque concluído ("attack") para a tabela da esquerda
+        const ataques = eventos.filter(e => e.tipo_evento === "attack");
 
     window.addEventListener('DOMContentLoaded', () => {
       atualizarBotaoPerfil();

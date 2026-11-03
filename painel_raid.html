@@ -290,27 +290,51 @@
   </footer>
 
   <script>
-    // Configuração do seu Cofre Supabase (substitua apenas pela sua chave anon public)
+    // Configuração do seu Cofre Supabase
     const SUPABASE_URL = "https://hqhirsnowapylfwhvduf.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhxaGlyc25vd2FweWxmd2h2ZHVmIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc5MjkzNTkxOCwiZXhwIjoyMTA4NTExOTE4fQ.sAZeXN1XFKDh0gVGBomanuHM6GkcEto8AmxZzNRehpI"; 
+    const SUPABASE_ANON_KEY = "COLE_AQUI_SUA_CHAVE_ANON_PUBLIC"; 
     const cofre = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     function formatarNumero(num) {
       return Number(num || 0).toLocaleString("pt-BR");
     }
 
-    function calcularDanoTotal(dados) {
-      if (dados.total_damage) return dados.total_damage;
-      if (Array.isArray(dados.damage_log)) {
-        return dados.damage_log.reduce((soma, item) => soma + Number(item.damage || item.value || 0), 0);
+    // Traduz IDs de titãs ou inimigos caso venha em formato técnico
+    function traduzirTitã(d) {
+      if (d.titan_name) return d.titan_name;
+      if (d.titan && d.titan.enemy_name) return d.titan.enemy_name;
+      if (d.enemy_name) return d.enemy_name;
+      if (d.enemy_id) {
+        // Se vier como Enemy1, Enemy2, etc., mapeia para nomes legíveis ou exibe amigável
+        const mapa = { "Enemy1": "Lojak", "Enemy2": "Takedar", "Enemy3": "Jukk", "Enemy4": "Sterl", "Enemy5": "Mohaca", "Enemy6": "Terro", "Enemy7": "Klonk", "Enemy8": "Priker" };
+        return mapa[d.enemy_id] || d.enemy_id;
+      }
+      return "Titã da Raid";
+    }
+
+    // Soma o dano total de todas as partes atingidas no ataque
+    function calcularDanoTotal(d) {
+      if (d.total_damage) return Number(d.total_damage);
+      if (d.damage) return Number(d.damage);
+      
+      // Se vier em lista de partes (damage_log ou parts_damage)
+      const listaDano = d.damage_log || d.parts_damage || d.damage_list || [];
+      if (Array.isArray(listaDano) && listaDano.length > 0) {
+        return listaDano.reduce((soma, item) => soma + Number(item.damage || item.value || item.amount || 0), 0);
       }
       return 0;
     }
 
-    function lerCartasUsadas(dados) {
-      const lista = dados.cards_level || dados.cards || [];
-      if (!Array.isArray(lista) || lista.length === 0) return "-";
-      return lista.map(c => `${c.id || c.card || c} (Nv.${c.level || c.value || "?"})`).join(", ");
+    // Extrai as cartas e níveis utilizados no ataque
+    function lerCartasUsadas(d) {
+      const listaCartas = d.cards_level || d.cards || d.deck || d.used_cards || [];
+      if (!Array.isArray(listaCartas) || listaCartas.length === 0) return "Ataque padrão / Info Oculta";
+      
+      return listaCartas.map(c => {
+        const nomeCarta = c.id || c.card || c.name || c.card_name || "Carta";
+        const nivelCarta = c.level || c.card_level || c.value || "";
+        return nivelCarta ? `${nomeCarta} (Nv.${nivelCarta})` : nomeCarta;
+      }).join(", ");
     }
 
     async function carregarPainel() {
@@ -338,14 +362,15 @@
           return;
         }
 
-        const ataques = eventos.filter(e => e.tipo_evento === "attack");
+        // Filtra eventos do tipo ataque (aceita variações de nome que a GameHive possa enviar)
+        const ataques = eventos.filter(e => e.tipo_evento === "attack" || e.tipo_evento === "start_attack");
         const tabela = document.getElementById("tabela-ataques");
 
         if (ataques.length > 0) {
           tabela.innerHTML = ataques.map(item => {
             const d = item.dados || {};
             const jogador = d.player?.name || d.player_name || d.name || "Membro";
-            const tita = d.titan?.enemy_name || d.enemy_name || d.enemy_id || "Titã";
+            const tita = traduzirTitã(d);
             const dano = formatarNumero(calcularDanoTotal(d));
             const cartas = lerCartasUsadas(d);
             const hora = new Date(item.criado_em).toLocaleTimeString("pt-BR");
@@ -360,6 +385,8 @@
               </tr>
             `;
           }).join("");
+        } else {
+          tabela.innerHTML = `<tr><td colspan="5" style="color: #8fa0b5; text-align: center; padding: 20px;">Nenhum ataque registrado ainda. Faça um ataque no jogo para testar!</td></tr>`;
         }
 
         const radar = document.getElementById("lista-eventos");

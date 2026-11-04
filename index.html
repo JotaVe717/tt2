@@ -431,7 +431,7 @@
 
     <!-- 1. RAID EM TEMPO REAL -->
     <a href="painel_raid.html" class="deck-card live-highlight">
-      <img src="Cards/tt.png" alt="Raid em Tempo Real" class="deck-thumb" onerror="this.src='Cards/wc.png'">
+      <img src="Cards/TeamTactics.png" alt="Raid em Tempo Real" class="deck-thumb" onerror="this.src='Cards/wc.png'">
       <div class="deck-info">
         <span class="deck-badge live">🔴 Ao Vivo</span>
         <h2>Raid em Tempo Real</h2>
@@ -461,7 +461,7 @@
 
     <!-- 4. COMBINAÇÕES DE DECKS -->
     <a href="combinacoes.html" class="deck-card highlight">
-      <img src="Cards/fb.png" alt="Combinações de Decks" class="deck-thumb" onerror="this.src='Cards/wc.png'">
+      <img src="Cards/Fuse.png" alt="Combinações de Decks" class="deck-thumb" onerror="this.src='Cards/wc.png'">
       <div class="deck-info">
         <span class="deck-badge cyan">Guia de Montagem</span>
         <h2>Combinações de Decks</h2>
@@ -471,7 +471,7 @@
 
     <!-- 5. FLUXOGRAMAS DE DECKS -->
     <a href="fluxogramas.html" class="deck-card">
-      <img src="Cards/tp.png" alt="Fluxogramas de Decks" class="deck-thumb" onerror="this.src='Cards/wc.png'">
+      <img src="Cards/PlagueAttack.png" alt="Fluxogramas de Decks" class="deck-thumb" onerror="this.src='Cards/wc.png'">
       <div class="deck-info">
         <span class="deck-badge green">Montagem Tática</span>
         <h2>Fluxogramas de Decks</h2>
@@ -551,20 +551,17 @@
     const CHAVE_PIX = "eec03fbb-828a-42be-a53a-1fa6814c7d4e";
     const TAG_DISCORD = "jotave717";
 
-    // Checa se o usuário veio de um redirecionamento ou se já tem sessão salva
     function atualizarBotaoPerfil() {
       const urlParams = new URLSearchParams(window.location.search);
       const uidDaUrl = urlParams.get('uid');
 
       if (uidDaUrl) {
         localStorage.setItem('tt2_discord_uid', uidDaUrl);
-        // Limpa a URL para remover o parâmetro visualmente
         window.history.replaceState({}, document.title, window.location.pathname);
       }
 
       const uidSalvo = localStorage.getItem('tt2_discord_uid');
       const btn = document.getElementById('btnPerfilTop');
-      const label = document.getElementById('labelPerfilTop');
 
       if (uidSalvo) {
         btn.classList.add('logged-in');

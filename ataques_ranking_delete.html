@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Ataques & Ranking - Tap Titans 2</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+    body {
+      background-color: #0f141c;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 10px 8px calc(45px + env(safe-area-inset-bottom, 0px)) 8px;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    .back-btn {
+      align-self: flex-start;
+      max-width: 1750px;
+      margin: 0 auto 8px auto;
+      width: 100%;
+      text-decoration: none;
+      color: #8fa0b5;
+      font-size: 13px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 8px;
+      background: #141c26;
+      border: 1px solid #233142;
+      transition: color 0.2s, background 0.2s;
+    }
+    .back-btn:hover, .back-btn:active {
+      color: #f5a623;
+      background: #192330;
+    }
+    
+    .container {
+      width: 100%;
+      max-width: 1750px;
+      background: #18202a;
+      border: 1px solid #283545;
+      border-radius: 16px;
+      padding: 14px 14px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    /* TOPO: TÍTULO */
+    .top-header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+      gap: 10px;
+    }
+    .title {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      margin: 0;
+      text-align: left;
+    }
+    .title span { color: #f5a623; }
+    
+    .subtitle {
+      text-align: left;
+      font-size: 11.5px;
+      color: #8fa0b5;
+      margin-bottom: 14px;
+    }
+
+    /* GRID DE DUAS COLUNAS */
+    .widescreen-main-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .ws-col {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    /* SEÇÕES E BOTÕES RETRÁTEIS */
+    .section-block { margin-bottom: 0; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 8px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #283545;
+    }
+    .section-header-clickable {
+      cursor: pointer;
+      user-select: none;
+    }
+    .section-title {
+      font-size: 12.5px;
+      font-weight: 800;
+      color: #f5a623;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .section-collapse-toggle-btn {
+      width: 26px;
+      height: 26px;
+      background: #121922;
+      border: 1px solid #2d3e52;
+      border-radius: 6px;
+      color: #f5a623;
+      font-size: 15px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      line-height: 1;
+      transition: all 0.2s;
+    }
+    .section-collapse-toggle-btn:hover {
+      background: #1c2736;
+      border-color: #f5a623;
+    }
+
+    /* FILTROS */
+    .filters-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+      background: #141c26;
+      border: 1px solid #283748;
+      border-radius: 10px;
+      padding: 8px 10px;
+      margin-bottom: 8px;
+    }
+    .filter-input {
+      flex: 1;
+      min-width: 130px;
+      background: #0d131a;
+      border: 1px solid #2d3e52;
+      border-radius: 6px;
+      color: #ffffff;
+      padding: 6px 9px;
+      font-size: 11.5px;
+      outline: none;
+    }
+    .filter-input:focus { border-color: #f5a623; }
+    .filter-select {
+      background: #0d131a;
+      border: 1px solid #2d3e52;
+      border-radius: 6px;
+      color: #ffffff;
+      padding: 6px 8px;
+      font-size: 11px;
+      outline: none;
+      cursor: pointer;
+    }
+    .filter-select:focus { border-color: #f5a623; }
+
+    .sort-direction-btn {
+      background: #1e2a3a;
+      border: 1px solid #3d4f66;
+      border-radius: 6px;
+      color: #50e3c2;
+      padding: 5px 8px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s ease;
+      user-select: none;
+      height: 29px;
+    }
+    .sort-direction-btn:hover {
+      background: #27364b;
+      border-color: #50e3c2;
+    }
+
+    /* TABELAS */
+    .table-container {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border: 1px solid #2b394a;
+      border-radius: 10px;
+      background: #121922;
+      margin-bottom: 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      text-align: left;
+      font-size: 12px;
+      min-width: 500px;
+    }
+    thead { 
+      background: #1e2836; 
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    th {
+      padding: 8px 9px;
+      font-size: 10px;
+      font-weight: 800;
+      color: #8fa0b5;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      white-space: nowrap;
+      vertical-align: middle;
+      border-bottom: 1px solid #2b394a;
+      background: #1e2836;
+    }
+    td {
+      padding: 7px 9px;
+      border-bottom: 1px solid rgba(43, 57, 74, 0.4);
+      color: #d1dbe5;
+      white-space: nowrap;
+      background: #121922;
+    }
+    tr:hover td { background: #192330 !important; }
+    .td-rank { font-weight: 800; color: #f5a623; width: 34px; text-align: center; }
+    
+    .player-link {
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 700;
+    }
+    .player-link:hover {
+      text-decoration: underline;
+    }
+
+    .td-dmg { font-weight: 700; color: #50e3c2; }
+
+    .th-card-only {
+      text-align: center;
+      width: 42px;
+      padding: 4px 5px;
+    }
+    .card-th-icon {
+      width: 24px;
+      height: 24px;
+      min-width: 24px;
+      min-height: 24px;
+      border-radius: 4px;
+      object-fit: contain;
+      display: block;
+      margin: 0 auto;
+      background: #0d131a;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .tag-status {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.2px;
+      text-align: center;
+    }
+    .tag-status.ok {
+      background: rgba(76, 217, 100, 0.18);
+      border: 1px solid rgba(76, 217, 100, 0.55);
+      color: #4cd964;
+    }
+    .tag-status.fail {
+      background: rgba(255, 82, 82, 0.18);
+      border: 1px solid rgba(255, 82, 82, 0.55);
+      color: #ff5252;
+    }
+
+    /* COLUNAS CONGELADAS (STICKY) */
+    #playersTable th:nth-child(1),
+    #playersTable td:nth-child(1) {
+      position: sticky;
+      left: 0;
+      z-index: 4;
+      background: #141d27;
+      border-right: 1px solid rgba(43, 57, 74, 0.6);
+    }
+    #playersTable thead th:nth-child(1) { z-index: 12; background: #1e2836; }
+
+    #playersTable th:nth-child(2),
+    #playersTable td:nth-child(2) {
+      position: sticky;
+      left: 34px;
+      z-index: 4;
+      background: #141d27;
+      border-right: 2px solid #2b394a;
+      box-shadow: 4px 0 8px rgba(0,0,0,0.35);
+    }
+    #playersTable thead th:nth-child(2) { z-index: 12; background: #1e2836; }
+
+    #liveAttacksTable th:nth-child(1),
+    #liveAttacksTable td:nth-child(1) {
+      position: sticky;
+      left: 0;
+      z-index: 4;
+      background: #141d27;
+      border-right: 1px solid rgba(43, 57, 74, 0.6);
+    }
+    #liveAttacksTable thead th:nth-child(1) { z-index: 12; background: #1e2836; }
+
+    #liveAttacksTable th:nth-child(2),
+    #liveAttacksTable td:nth-child(2) {
+      position: sticky;
+      left: 62px;
+      z-index: 4;
+      background: #141d27;
+      border-right: 2px solid #2b394a;
+      box-shadow: 4px 0 8px rgba(0,0,0,0.35);
+    }
+    #liveAttacksTable thead th:nth-child(2) { z-index: 12; background: #1e2836; }
+
+    /* CARDS DE MINIATURA DOS ATAQUES */
+    .deck-display-clean {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .card-mini-img {
+      width: 24px;
+      height: 24px;
+      border-radius: 4px;
+      object-fit: cover;
+      background: #0d131a;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    }
+
+    .loading-state {
+      text-align: center;
+      padding: 25px;
+      color: #8fa0b5;
+      font-size: 12.5px;
+    }
+
+    /* RESPONSIVIDADE MOBILE */
+    @media (max-width: 1080px) {
+      body {
+        padding: 8px 6px calc(35px + env(safe-area-inset-bottom, 0px)) 6px;
+      }
+      .container {
+        padding: 10px 10px;
+        border-radius: 12px;
+      }
+      .title {
+        font-size: 17px;
+      }
+      .widescreen-main-layout {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+      .filters-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 6px;
+      }
+      .filter-input {
+        width: 100%;
+      }
+      .filter-select, .sort-direction-btn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <a href="index.html" class="back-btn">&larr; Voltar ao Menu</a>
+
+  <div class="container">
+    
+    <div class="top-header-bar">
+      <div class="title">Raid: <span id="mRaidName">...</span></div>
+    </div>
+
+    <div class="subtitle" id="lastUpdateText">Sincronizando com as planilhas...</div>
+
+    <div class="widescreen-main-layout">
+      
+      <!-- COLUNA 1: ATAQUES EM TEMPO REAL -->
+      <div class="ws-col">
+        <div class="section-block" id="secLiveAttacks">
+          <div class="section-header section-header-clickable" onclick="toggleSecao('bodyLiveAttacks', 'btnToggleAttacks')">
+            <span class="section-title">⚡ Ataques em Tempo Real</span>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 11px; color: #50e3c2;" id="liveAttacksCount">Carregando...</span>
+              <button class="section-collapse-toggle-btn" id="btnToggleAttacks">−</button>
+            </div>
+          </div>
+
+          <div id="bodyLiveAttacks">
+            <div class="filters-bar">
+              <input type="text" id="searchAttackInput" class="filter-input" placeholder="🔍 Filtrar por jogador ou carta..." oninput="filtrarAtaquesAoVivo()">
+            </div>
+
+            <div class="table-container">
+              <div id="loadingAttacks" class="loading-state">Aguardando registros de ataques...</div>
+              <table id="liveAttacksTable" style="display: none;">
+                <thead>
+                  <tr>
+                    <th style="min-width: 60px;">Horário</th>
+                    <th style="min-width: 120px;">Jogador</th>
+                    <th style="text-align: right; min-width: 80px;">Dano</th>
+                    <th style="min-width: 95px;">Deck</th>
+                    <th style="min-width: 55px;">Ciclo</th>
+                    <th style="min-width: 100px;">Titã</th>
+                  </tr>
+                </thead>
+                <tbody id="liveAttacksBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COLUNA 2: RANKING DE ATAQUES -->
+      <div class="ws-col">
+        <div class="section-block">
+          <div class="section-header section-header-clickable" onclick="toggleSecao('bodyPlayersRanking', 'btnTogglePlayers')">
+            <span class="section-title">🏆 Ranking de Ataques</span>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 11px; color: #8fa0b5;" id="playersCount">Carregando...</span>
+              <button class="section-collapse-toggle-btn" id="btnTogglePlayers">−</button>
+            </div>
+          </div>
+
+          <div id="bodyPlayersRanking">
+            <div class="filters-bar">
+              <input type="text" id="searchInput" class="filter-input" placeholder="🔍 Buscar jogador..." oninput="filtrarTabela()">
+              
+              <select id="filterTTMF" class="filter-select" onchange="filtrarTabela()">
+                <option value="todos">Status: Todos</option>
+                <option value="atk_ok">✔️ Fez todos Ataques</option>
+                <option value="atk_fail">❌ Faltou Ataques</option>
+                <option value="tt_ok">✔️ Usou TT em todos</option>
+                <option value="tt_fail">❌ Faltou TT</option>
+                <option value="mf_ok">✔️ Usou MF em todos</option>
+                <option value="mf_fail">❌ Faltou MF</option>
+              </select>
+
+              <select id="sortFieldSelect" class="filter-select" onchange="filtrarTabela()">
+                <option value="dano">Dano Total</option>
+                <option value="media">Média / Atk</option>
+                <option value="ataques">Qtd. Ataques</option>
+                <option value="tt">Contagem TT</option>
+                <option value="mf">Contagem MF</option>
+              </select>
+
+              <button id="sortDirectionBtn" class="sort-direction-btn" onclick="alternarDirecaoOrdenacao()" title="Alternar direção">
+                <span id="sortDirectionIcon">↓</span> <span id="sortDirectionText">Maior &rarr; Menor</span>
+              </button>
+            </div>
+
+            <div class="table-container">
+              <div id="loading" class="loading-state">Conectando e carregando dados...</div>
+              <table id="playersTable" style="display: none;">
+                <thead>
+                  <tr>
+                    <th class="td-rank">#</th>
+                    <th style="min-width: 120px;">Jogador</th>
+                    <th style="text-align: center; min-width: 70px;">Atks</th>
+                    <th class="th-card-only">
+                      <img src="cards/tt.png" alt="TT" title="Team Tactics" class="card-th-icon" loading="lazy" onerror="tratarErroImagemTT(this)">
+                    </th>
+                    <th class="th-card-only">
+                      <img src="cards/mf.png" alt="MF" title="Mirror Force" class="card-th-icon" loading="lazy" onerror="tratarErroImagemMF(this)">
+                    </th>
+                    <th style="min-width: 80px;">Dano Total</th>
+                    <th style="min-width: 80px;">Média / Atk</th>
+                    <th style="min-width: 65px;">% Raid</th>
+                  </tr>
+                </thead>
+                <tbody id="playersBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    const SPREADSHEET_ID_PRINCIPAL = '1xo8zcjYt2Kiytq-D9vF9oO3wamCcBKbvH1fn7fqtsSM';
+
+    let todosJogadores = [];
+    let todosAtaquesAoVivo = [];
+    let totalCiclosDaRaid = 4;
+    let limiteAtaquesAtual = 24;
+    let ordemDecrescente = true;
+
+    function toggleSecao(bodyId, btnId) {
+      const body = document.getElementById(bodyId);
+      const btn = document.getElementById(btnId);
+      if (!body || !btn) return;
+
+      const estaOculto = body.style.display === 'none';
+      if (estaOculto) {
+        body.style.display = 'block';
+        btn.textContent = '−';
+      } else {
+        body.style.display = 'none';
+        btn.textContent = '+';
+      }
+    }
+
+    function formatarUrlImagem(url) {
+      if (!url) return '';
+      let limpa = String(url).trim();
+      if (limpa.includes('github.com')) {
+        limpa = limpa.replace('github.com', 'raw.githubusercontent.com')
+                     .replace('/tree/main/', '/main/')
+                     .replace('/blob/main/', '/main/');
+      }
+      return limpa;
+    }
+
+    function tratarErroImagemTT(img) {
+      if (!img.dataset.step) {
+        img.dataset.step = '1';
+        img.src = 'cards/TT.png';
+      } else if (img.dataset.step === '1') {
+        img.dataset.step = '2';
+        img.src = 'tt.png';
+      } else if (img.dataset.step === '2') {
+        img.dataset.step = '3';
+        img.src = 'https://raw.githubusercontent.com/JotaVe717/tt2-jotave/main/Cards/tt.png';
+      }
+    }
+
+    function tratarErroImagemMF(img) {
+      if (!img.dataset.step) {
+        img.dataset.step = '1';
+        img.src = 'cards/MF.png';
+      } else if (img.dataset.step === '1') {
+        img.dataset.step = '2';
+        img.src = 'mf.png';
+      } else if (img.dataset.step === '2') {
+        img.dataset.step = '3';
+        img.src = 'https://raw.githubusercontent.com/JotaVe717/tt2-jotave/main/Cards/mf.png';
+      }
+    }
+
+    function carregarAbaJSONP(nomeAba, idSpreadsheet = SPREADSHEET_ID_PRINCIPAL) {
+      return new Promise((resolve, reject) => {
+        const callbackName = 'googleQueryCallback_' + Math.floor(Math.random() * 100000);
+        window[callbackName] = function(data) {
+          delete window[callbackName];
+          document.body.removeChild(script);
+          if (data && data.table) resolve(data.table);
+          else reject(new Error('Formato inválido'));
+        };
+
+        const script = document.createElement('script');
+        script.src = `https://docs.google.com/spreadsheets/d/${idSpreadsheet}/gviz/tq?tqx=responseHandler:${callbackName}&sheet=${encodeURIComponent(nomeAba)}`;
+        script.onerror = () => {
+          delete window[callbackName];
+          document.body.removeChild(script);
+          reject(new Error('Erro ao carregar ' + nomeAba));
+        };
+        document.body.appendChild(script);
+      });
+    }
+
+    function parseDataPlanilha(strData) {
+      if (!strData) return null;
+      if (typeof strData === 'string' && strData.includes('Date(')) {
+        const p = strData.match(/\d+/g);
+        if (p) return new Date(p[0], p[1], p[2], p[3] || 0, p[4] || 0, p[5] || 0);
+      }
+      const partes = String(strData).trim().split(/[\sT]+/);
+      if (partes.length < 2) return new Date(strData);
+      const [ano, mes, dia] = partes[0].split('-').map(Number);
+      const [hora, min, seg] = partes[1].split(':').map(Number);
+      return new Date(ano, mes - 1, dia, hora, min, seg || 0);
+    }
+
+    async function carregarDados() {
+      try {
+        const [tabelaRaids, tabelaJogadores] = await Promise.all([
+          carregarAbaJSONP('TT_Raids', SPREADSHEET_ID_PRINCIPAL),
+          carregarAbaJSONP('TT_Jogadores', SPREADSHEET_ID_PRINCIPAL)
+        ]);
+
+        const linhasRaids = tabelaRaids.rows;
+        let nomeRaidAtual = '';
+
+        if (linhasRaids.length > 0) {
+          const ultimaRaid = linhasRaids[linhasRaids.length - 1].c;
+          nomeRaidAtual = String(ultimaRaid[0]?.v || '').trim();
+          totalCiclosDaRaid = Number(ultimaRaid[9]?.v || 4);
+          limiteAtaquesAtual = totalCiclosDaRaid * 6;
+
+          document.getElementById('mRaidName').textContent = nomeRaidAtual || 'MT1';
+          document.getElementById('lastUpdateText').textContent = 'Dados sincronizados com sucesso.';
+        }
+
+        const linhasJog = tabelaJogadores.rows;
+        todosJogadores = [];
+
+        linhasJog.forEach(row => {
+          const r = row.c;
+          if (r && r[0] && String(r[0].v).trim() === nomeRaidAtual) {
+            const ttVal = Number(r[11]?.v || 0);
+            const mfVal = Number(r[12]?.v || 0);
+            const totalVal = Number(r[4]?.v || 0);
+            const mediaVal = Number(r[6]?.v || 0);
+            const ataquesVal = Number(r[9]?.v || 0);
+
+            todosJogadores.push({
+              nome: r[3]?.v || '-',
+              total: totalVal,
+              totalFormatado: r[4]?.f || (totalVal ? totalVal + 'B' : '-'),
+              percRaid: r[5]?.f || (r[5]?.v ? (r[5].v * 100).toFixed(1) + '%' : '-'),
+              mediaAtk: mediaVal,
+              mediaFormatada: r[6]?.f || (mediaVal ? Math.round(mediaVal) + 'M' : '-'),
+              ataques: ataquesVal,
+              tt: ttVal,
+              mf: mfVal,
+              atkOk: ataquesVal >= limiteAtaquesAtual,
+              ttOk: ttVal >= totalCiclosDaRaid,
+              mfOk: mfVal >= totalCiclosDaRaid
+            });
+          }
+        });
+
+        filtrarTabela();
+
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('playersTable').style.display = 'table';
+
+        carregarAtaquesAoVivo(nomeRaidAtual);
+
+      } catch (err) {
+        console.error(err);
+        document.getElementById('loading').textContent = 'Erro ao sincronizar os dados.';
+      }
+    }
+
+    async function carregarAtaquesAoVivo(raidNome) {
+      try {
+        const tabelaAtaques = await carregarAbaJSONP('TT_Ataques', SPREADSHEET_ID_PRINCIPAL);
+        const linhas = tabelaAtaques.rows || [];
+        todosAtaquesAoVivo = [];
+
+        linhas.forEach(row => {
+          const r = row.c;
+          if (!r) return;
+          const rNome = String(r[0]?.v || '').trim();
+          
+          if (!raidNome || rNome === raidNome) {
+            const dtObj = parseDataPlanilha(r[1]?.v);
+            const horaFormatada = dtObj ? `${String(dtObj.getHours()).padStart(2, '0')}:${String(dtObj.getMinutes()).padStart(2, '0')}` : (r[1]?.f || '-');
+
+            todosAtaquesAoVivo.push({
+              rawDate: dtObj ? dtObj.getTime() : 0,
+              quando: horaFormatada,
+              jogador: r[2]?.v || 'Desconhecido',
+              ciclo: r[3]?.v || 1,
+              titan: r[5]?.v ? `#${r[4]?.v || ''} ${r[5].v}` : (r[4]?.v ? `#${r[4].v}` : '-'),
+              dano: Number(r[7]?.v || 0),
+              danoFormatado: r[7]?.f || (r[7]?.v ? Math.round(r[7].v) + 'M' : '-'),
+              c1: r[8]?.v || '',
+              c2: r[9]?.v || '',
+              c3: r[10]?.v || '',
+              url1: r[14]?.v || '',
+              url2: r[15]?.v || '',
+              url3: r[16]?.v || ''
+            });
+          }
+        });
+
+        todosAtaquesAoVivo.sort((a, b) => b.rawDate - a.rawDate);
+        filtrarAtaquesAoVivo();
+
+        document.getElementById('loadingAttacks').style.display = 'none';
+        document.getElementById('liveAttacksTable').style.display = 'table';
+
+      } catch (e) {
+        document.getElementById('loadingAttacks').textContent = 'Nenhum ataque registado nesta raid ainda.';
+      }
+    }
+
+    function filtrarAtaquesAoVivo() {
+      const busca = (document.getElementById('searchAttackInput')?.value || '').trim().toLowerCase();
+      const raidAtual = document.getElementById('mRaidName').textContent;
+
+      const filtrados = todosAtaquesAoVivo.filter(a => {
+        if (!busca) return true;
+        const texto = `${a.jogador} ${a.c1} ${a.c2} ${a.c3}`.toLowerCase();
+        return texto.includes(busca);
+      });
+
+      document.getElementById('liveAttacksCount').textContent = `${filtrados.length} ataques`;
+
+      const tbody = document.getElementById('liveAttacksBody');
+      tbody.innerHTML = '';
+
+      if (filtrados.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: #8fa0b5; padding: 20px;">Nenhum ataque correspondente.</td></tr>`;
+        return;
+      }
+
+      filtrados.slice(0, 50).forEach(a => {
+        const tr = document.createElement('tr');
+        
+        let deckHtml = '<div class="deck-display-clean">';
+        if (a.url1) deckHtml += `<img src="${formatarUrlImagem(a.url1)}" class="card-mini-img" title="${a.c1}" alt="${a.c1}">`;
+        if (a.url2) deckHtml += `<img src="${formatarUrlImagem(a.url2)}" class="card-mini-img" title="${a.c2}" alt="${a.c2}">`;
+        if (a.url3) deckHtml += `<img src="${formatarUrlImagem(a.url3)}" class="card-mini-img" title="${a.c3}" alt="${a.c3}">`;
+        deckHtml += `</div>`;
+
+        tr.innerHTML = `
+          <td style="color: #8fa0b5;">${a.quando}</td>
+          <td>
+            <a href="jogador.html?nome=${encodeURIComponent(a.jogador)}&raid=${encodeURIComponent(raidAtual)}" class="player-link">
+              ${a.jogador}
+            </a>
+          </td>
+          <td style="text-align: right;" class="td-dmg">${a.danoFormatado}</td>
+          <td style="text-align: center;">${deckHtml}</td>
+          <td><span class="tag-status" style="background:#1b2838; color:#ffd166;">C${a.ciclo}</span></td>
+          <td style="color: #f5a623; font-weight:700;">${a.titan}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function alternarDirecaoOrdenacao() {
+      ordemDecrescente = !ordemDecrescente;
+      const icon = document.getElementById('sortDirectionIcon');
+      const text = document.getElementById('sortDirectionText');
+      const btn = document.getElementById('sortDirectionBtn');
+
+      if (ordemDecrescente) {
+        icon.textContent = '↓';
+        text.innerHTML = 'Maior &rarr; Menor';
+        btn.style.color = '#50e3c2';
+        btn.style.borderColor = '#3d4f66';
+      } else {
+        icon.textContent = '↑';
+        text.innerHTML = 'Menor &rarr; Maior';
+        btn.style.color = '#f5a623';
+        btn.style.borderColor = '#f5a623';
+      }
+
+      filtrarTabela();
+    }
+
+    function filtrarTabela() {
+      const busca = document.getElementById('searchInput').value.trim().toLowerCase();
+      const filtroTTMF = document.getElementById('filterTTMF').value;
+      const campoSort = document.getElementById('sortFieldSelect').value;
+      const raidAtual = document.getElementById('mRaidName').textContent;
+
+      let lista = todosJogadores.filter(j => {
+        const bateNome = j.nome.toLowerCase().includes(busca);
+        if (!bateNome) return false;
+
+        if (filtroTTMF === 'atk_ok') return j.atkOk;
+        if (filtroTTMF === 'atk_fail') return !j.atkOk;
+        if (filtroTTMF === 'tt_ok') return j.ttOk;
+        if (filtroTTMF === 'tt_fail') return !j.ttOk;
+        if (filtroTTMF === 'mf_ok') return j.mfOk;
+        if (filtroTTMF === 'mf_fail') return !j.mfOk;
+        return true;
+      });
+
+      lista.sort((a, b) => {
+        let diff = 0;
+        if (campoSort === 'dano') diff = a.total - b.total;
+        else if (campoSort === 'media') diff = a.mediaAtk - b.mediaAtk;
+        else if (campoSort === 'ataques') diff = a.ataques - b.ataques;
+        else if (campoSort === 'tt') diff = (a.tt - b.tt) || (a.total - b.total);
+        else if (campoSort === 'mf') diff = (a.mf - b.mf) || (a.total - b.total);
+
+        return ordemDecrescente ? -diff : diff;
+      });
+
+      document.getElementById('playersCount').textContent = `${lista.length} jog.`;
+
+      const tbody = document.getElementById('playersBody');
+      tbody.innerHTML = '';
+
+      lista.forEach((j, idx) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="td-rank">${idx + 1}</td>
+          <td class="td-name">
+            <a href="jogador.html?nome=${encodeURIComponent(j.nome)}&raid=${encodeURIComponent(raidAtual)}" class="player-link">
+              ${j.nome} &rarr;
+            </a>
+          </td>
+          <td style="text-align: center;">
+            <span class="tag-status ${j.atkOk ? 'ok' : 'fail'}">
+              ${j.ataques}/${limiteAtaquesAtual}
+            </span>
+          </td>
+          <td style="text-align: center;">
+            <span class="tag-status ${j.ttOk ? 'ok' : 'fail'}">
+              ${j.tt}/${totalCiclosDaRaid}
+            </span>
+          </td>
+          <td style="text-align: center;">
+            <span class="tag-status ${j.mfOk ? 'ok' : 'fail'}">
+              ${j.mf}/${totalCiclosDaRaid}
+            </span>
+          </td>
+          <td class="td-dmg">${j.totalFormatado}</td>
+          <td>${j.mediaFormatada}</td>
+          <td>${j.percRaid}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    window.addEventListener('load', carregarDados);
+  </script>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Painel de Raid Ao Vivo - Tap Titans 2</title>
+  <title>Anatomia do Titã — Tap Titans 2</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     * {
@@ -14,464 +14,828 @@
       -webkit-tap-highlight-color: transparent;
     }
     body {
-      background-color: #0f141c;
-      background-image: 
-        url('Cards/triade.png'),
-        url('Cards/triade.jpg'),
-        url('Cards/triade.webp'),
-        url('triade.png'),
-        url('triade.jpg'),
-        url('triade.webp');
+      background-color: #0b0f16;
+      background-image: linear-gradient(rgba(11, 15, 22, 0.85), rgba(11, 15, 22, 0.92)), url('Cards/triade.png');
       background-size: cover;
       background-position: center;
       background-attachment: fixed;
-      background-repeat: no-repeat;
       color: #ffffff;
       display: flex;
       flex-direction: column;
       align-items: center;
       min-height: 100vh;
-      padding: 16px 10px 30px 10px;
+      padding: 16px 10px 32px 10px;
       overflow-x: hidden;
     }
     .header {
-      position: relative;
       text-align: center;
-      margin-bottom: 16px;
-      background: rgba(15, 20, 28, 0.85);
+      margin-bottom: 12px;
+      background: rgba(25, 34, 45, 0.88);
       backdrop-filter: blur(10px);
-      padding: 16px 14px;
+      padding: 12px 16px;
       border-radius: 12px;
-      border: 1px solid rgba(43, 57, 74, 0.6);
+      border: 1px solid #2b394a;
+      max-width: 440px;
       width: 100%;
-      max-width: 900px;
     }
-    
-    /* BOTÃO DINÂMICO DE PERFIL / DISCORD */
-    .top-profile-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      background: #5865F2;
-      color: #ffffff;
-      text-decoration: none;
-      font-size: 12px;
-      font-weight: 700;
-      padding: 6px 14px;
-      border-radius: 20px;
-      margin-bottom: 10px;
-      border: 1px solid rgba(255,255,255,0.2);
-      box-shadow: 0 4px 12px rgba(88, 101, 242, 0.35);
-    }
-    .top-profile-btn.logged-in {
-      background: rgba(80, 227, 194, 0.12);
-      border-color: #50e3c2;
-      color: #50e3c2;
-    }
-    .top-profile-btn svg {
-      width: 14px;
-      height: 14px;
-      fill: currentColor;
-    }
-    .status-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: #50e3c2;
-      box-shadow: 0 0 6px #50e3c2;
-      display: inline-block;
-    }
-
     .header h1 {
-      font-size: 22px;
+      font-size: 17px;
       font-weight: 800;
-      letter-spacing: 0.5px;
       text-transform: uppercase;
-      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
-    }
-    .header h1 span {
       color: #f5a623;
     }
     .header p {
-      color: #b0c0d0;
-      font-size: 12px;
-      margin-top: 4px;
+      color: #8fa0b5;
+      font-size: 11px;
+      margin-top: 3px;
     }
 
-    /* PAINEL DE CONTEÚDO AO VIVO */
-    .live-container {
+    .container {
       width: 100%;
-      max-width: 900px;
+      max-width: 440px;
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 10px;
     }
 
-    .live-status-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: rgba(25, 34, 45, 0.92);
-      backdrop-filter: blur(10px);
-      padding: 12px 14px;
-      border-radius: 12px;
-      border: 1px solid #2b394a;
-    }
-
-    .live-badge {
-      background: rgba(255, 82, 82, 0.15);
-      color: #ff5252;
-      border: 1px solid rgba(255, 82, 82, 0.4);
-      padding: 3px 8px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 800;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      white-space: nowrap;
-    }
-
-    .grid-painel {
+    /* FILA DOS 7 TITÃS (SPAWN SEQUENCE) */
+    .spawn-queue {
       display: grid;
-      grid-template-columns: 1fr;
-      gap: 14px;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
       width: 100%;
     }
-
-    @media (min-width: 850px) {
-      .grid-painel {
-        grid-template-columns: 2fr 1fr;
-      }
+    .spawn-block {
+      background: rgba(22, 31, 44, 0.9);
+      border: 1px solid #2b394a;
+      color: #c4d1de;
+      padding: 5px 2px;
+      border-radius: 7px;
+      text-align: center;
+      font-size: 9.5px;
+      font-weight: 700;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1px;
+      user-select: none;
+    }
+    .spawn-num {
+      font-size: 8px;
+      color: #6c7e93;
+      font-weight: 800;
+    }
+    .spawn-block.dead {
+      background: rgba(13, 17, 23, 0.9);
+      border-color: #1c2530;
+      color: #4a5568;
+      opacity: 0.5;
+      text-decoration: line-through;
+    }
+    .spawn-block.current {
+      background: rgba(245, 166, 35, 0.22);
+      border: 1.5px solid #f5a623;
+      color: #f5a623;
+      box-shadow: 0 0 10px rgba(245, 166, 35, 0.2);
+    }
+    .spawn-block.current .spawn-num {
+      color: #f5a623;
     }
 
-    .caixa {
-      background: rgba(25, 34, 45, 0.92);
-      backdrop-filter: blur(10px);
+    /* BARRA DE VIDA GLOBAL DO TITÃ (AZUL) */
+    .card-global {
+      background: rgba(25, 34, 45, 0.88);
+      backdrop-filter: blur(8px);
       border: 1px solid #2b394a;
-      border-radius: 12px;
-      padding: 14px;
+      border-radius: 10px;
+      padding: 11px 14px;
+    }
+    .card-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .progress-bar-bg {
+      width: 100%;
+      height: 8px;
+      background: #121921;
+      border-radius: 4px;
       overflow: hidden;
     }
-
-    .caixa h2 {
-      font-size: 15px;
-      font-weight: 700;
-      color: #f5a623;
-      margin-bottom: 10px;
-      border-bottom: 1px solid #2b394a;
-      padding-bottom: 6px;
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #00c6ff, #0072ff);
+      box-shadow: 0 0 8px rgba(0, 114, 255, 0.4);
+      transition: width 0.4s ease;
     }
 
-    /* Container para permitir rolagem lateral se a tela for muito pequena */
-    .table-responsive {
-      width: 100%;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
+    /* INFO DE TIER E BUFFS (TOP GRID) */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
     }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
+    .stat-box {
+      background: rgba(18, 25, 33, 0.88);
+      backdrop-filter: blur(8px);
+      border: 1px solid #2b394a;
+      border-radius: 8px;
+      padding: 7px 4px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .stat-label {
+      font-size: 8px;
+      color: #8fa0b5;
+      text-transform: uppercase;
+      font-weight: 600;
       white-space: nowrap;
     }
-    th, td {
-      padding: 9px 6px;
-      text-align: left;
-      border-bottom: 1px solid #2b394a;
-      font-size: 12px;
-    }
-    th { color: #8fa0b5; font-weight: 600; font-size: 10.5px; text-transform: uppercase; }
-    .dano { color: #4cd964; font-weight: 700; }
-    
-    .cartas-container {
-      display: flex;
-      gap: 4px;
-      align-items: center;
-    }
-    .carta-item {
-      text-align: center;
-    }
-    .carta-img {
-      width: 24px;
-      height: 24px;
-      border-radius: 4px;
-      border: 1px solid #3a4b60;
-      background: #121921;
-      object-fit: cover;
-      display: block;
-    }
-    .carta-nivel {
-      font-size: 8.5px;
-      color: #50e3c2;
-      margin-top: 1px;
+    .stat-value {
+      font-size: 11px;
+      font-weight: 800;
+      color: #ffffff;
+      margin-top: 2px;
+      line-height: 1.2;
     }
 
-    .evento-item {
-      padding: 7px 8px;
-      border-bottom: 1px solid #2b394a;
-      font-size: 12px;
-      color: #c4d1de;
+    /* LAYOUT ANATÔMICO COMPACTO */
+    .titam-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px 8px;
+      background: rgba(16, 22, 31, 0.82);
+      backdrop-filter: blur(10px);
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid #1f2a38;
+      max-width: 350px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .part-unit {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .slot-ombro-dir { grid-column: 1; grid-row: 1; }
+    .slot-cabeca    { grid-column: 2; grid-row: 1; }
+    .slot-ombro-esq { grid-column: 3; grid-row: 1; }
+
+    .slot-mao-dir   { grid-column: 1; grid-row: 2; }
+    .slot-peito     { grid-column: 2; grid-row: 2; }
+    .slot-mao-esq   { grid-column: 3; grid-row: 2; }
+
+    .pernas-container {
+      grid-column: span 3;
+      grid-row: 3;
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+    }
+    .pernas-container .part-unit {
+      width: calc((100% - 16px) / 3);
+    }
+
+    .unit-top-bar {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 4px;
+      height: 20px;
+    }
+
+    .tag-rect {
+      background: #141c26;
+      border: 1px solid #263344;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 4px;
+      font-size: 8px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.2px;
+      color: #6c7e93;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .tag-rect.decay {
+      background: rgba(136, 84, 208, 0.28);
+      border-color: #a55eea;
+      color: #e2c6ff;
+      box-shadow: 0 0 6px rgba(165, 94, 234, 0.3);
+    }
+    .tag-rect.no-attack {
+      background: rgba(235, 77, 75, 0.25);
+      border-color: #ff5252;
+      color: #ff8080;
+    }
+    .tag-rect.smash {
+      background: rgba(46, 204, 113, 0.25);
+      border-color: #2ecc71;
+      color: #7bed9f;
+      box-shadow: 0 0 6px rgba(46, 204, 113, 0.3);
+    }
+    .tag-rect.dead {
+      background: #0f141c;
+      border-color: #1f2937;
+      color: #4b5563;
+    }
+
+    .pct-box {
+      background: #182230;
+      border: 1px solid #2e3d52;
+      border-radius: 5px;
+      padding: 0 5px;
+      min-width: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9.5px;
+      font-weight: 800;
+      color: #ffffff;
+    }
+
+    /* TANQUE 1:1 */
+    .part-tank {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      background: #101620;
+      border: 1.5px solid #263344;
+      border-radius: 10px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: inset 0 0 14px rgba(0, 0, 0, 0.65);
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .part-tank.tank-decay {
+      border-color: #a55eea;
+      box-shadow: 0 0 10px rgba(165, 94, 234, 0.35), inset 0 0 12px rgba(165, 94, 234, 0.2);
+    }
+    .part-tank.tank-no-attack {
+      border-color: rgba(255, 82, 82, 0.85);
+      box-shadow: 0 0 10px rgba(255, 82, 82, 0.25), inset 0 0 10px rgba(255, 82, 82, 0.15);
+    }
+    .part-tank.tank-smash {
+      border-color: rgba(46, 204, 113, 0.85);
+      box-shadow: 0 0 10px rgba(46, 204, 113, 0.25), inset 0 0 10px rgba(46, 204, 113, 0.15);
+    }
+    .part-tank.tank-dead {
+      opacity: 0.38;
+      border-color: #1c2530;
+    }
+
+    .liquid-level {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 0%;
+      transition: height 0.6s cubic-bezier(0.22, 1, 0.36, 1), background 0.3s ease;
+      z-index: 1;
+    }
+
+    .liquid-level::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.55);
+      box-shadow: 0 0 6px rgba(255, 255, 255, 0.6);
+    }
+
+    .liquid-armor {
+      background: linear-gradient(180deg, rgba(0, 140, 255, 0.55) 0%, rgba(0, 75, 180, 0.25) 100%);
+    }
+    .liquid-body {
+      background: linear-gradient(180deg, rgba(165, 243, 252, 0.68) 0%, rgba(56, 189, 248, 0.32) 100%);
+    }
+    .liquid-decay {
+      background: linear-gradient(180deg, rgba(165, 94, 234, 0.65) 0%, rgba(108, 42, 173, 0.25) 100%);
+    }
+    .liquid-no-attack {
+      background: linear-gradient(180deg, rgba(255, 82, 82, 0.65) 0%, rgba(180, 40, 40, 0.25) 100%);
+    }
+    .liquid-smash {
+      background: linear-gradient(180deg, rgba(46, 204, 113, 0.65) 0%, rgba(20, 120, 65, 0.25) 100%);
+    }
+
+    .tank-overlay-top {
+      position: relative;
+      z-index: 2;
       display: flex;
       justify-content: space-between;
-      align-items: center;
-    }
-    .tag {
-      background: rgba(88, 101, 242, 0.15);
-      border: 1px solid rgba(88, 101, 242, 0.4);
-      color: #5865F2;
-      padding: 2px 5px;
-      border-radius: 4px;
-      font-size: 10px;
-      font-weight: 700;
-      text-transform: uppercase;
+      align-items: flex-start;
+      padding: 7px 8px;
+      width: 100%;
     }
 
-    footer {
-      margin-top: 20px;
-      color: #9baec0;
-      font-size: 11px;
+    .tank-icon {
+      font-size: 13px;
+      line-height: 1;
+      filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.7));
+    }
+
+    .tank-hp {
+      font-size: 12px;
+      font-weight: 900;
+      color: #ffffff;
+      line-height: 1.1;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
+      letter-spacing: -0.3px;
+    }
+
+    .voltar-link {
+      display: inline-block;
       text-align: center;
+      margin-top: 6px;
+      color: #5865F2;
+      font-size: 11.5px;
+      text-decoration: none;
+      font-weight: 700;
+    }
+    .voltar-link:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 380px) {
+      .titam-grid {
+        gap: 8px 6px;
+        padding: 9px;
+      }
+      .pernas-container {
+        gap: 6px;
+      }
+      .pernas-container .part-unit {
+        width: calc((100% - 12px) / 3);
+      }
+      .unit-top-bar {
+        height: 18px;
+        gap: 3px;
+      }
+      .tag-rect {
+        font-size: 7.5px;
+        padding: 0 2px;
+      }
+      .pct-box {
+        font-size: 8.5px;
+        min-width: 26px;
+        padding: 0 3px;
+      }
+      .tank-overlay-top {
+        padding: 5px 6px;
+      }
+      .tank-icon {
+        font-size: 11px;
+      }
+      .tank-hp {
+        font-size: 10.5px;
+      }
     }
   </style>
 </head>
 <body>
 
   <div class="header">
-    <a href="perfil.html" id="btnPerfilTop" class="top-profile-btn">
-      <svg viewBox="0 0 127.14 96.36">
-        <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,45.91,53.91,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,45.91,96.12,53,91.08,65.69,84.69,65.69Z"/>
-      </svg>
-      <span id="labelPerfilTop">Entrar com Discord</span>
-    </a>
-
-    <h1>Painel de Raid <span>Ao Vivo</span></h1>
-    <p id="subtitulo-topo">Monitoramento em tempo real dos ataques do clã.</p>
+    <h1 id="titulo-tita">Anatomia da Raid</h1>
+    <p id="subtitulo-status">Sincronizando dados da Raid em tempo real...</p>
   </div>
 
-  <div class="live-container">
-    <div class="live-status-bar">
-      <div>
-        <h2 id="nome-cla" style="font-size: 14.5px; color: #ffffff; font-weight: 700;">Conectando ao Clã...</h2>
-        <small id="ultima-atualizacao" style="color: #8fa0b5; font-size: 10px;">Aguardando sincronização...</small>
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-box">
+        <div class="stat-label">Tier / Nível</div>
+        <div id="txt-tier-nivel" class="stat-value" style="color: #50e3c2;">Tier Master<br>Zona 9</div>
       </div>
-      <div class="live-badge"><span>●</span> AO VIVO</div>
-    </div>
-
-    <div class="grid-painel">
-      <!-- Coluna da Esquerda: Ataques -->
-      <div class="caixa">
-        <h2>Últimos Ataques na Raid</h2>
-        <div class="table-responsive">
-          <table>
-            <thead>
-              <tr>
-                <th>Horário</th>
-                <th>Jogador</th>
-                <th>Titã</th>
-                <th>Dano</th>
-                <th>Cartas</th>
-              </tr>
-            </thead>
-            <tbody id="tabela-ataques">
-              <tr><td colspan="5" style="color: #8fa0b5; text-align: center; padding: 16px;">Aguardando ataques...</td></tr>
-            </tbody>
-          </table>
-        </div>
+      <div class="stat-box">
+        <div class="stat-label">Buff Raid</div>
+        <div id="txt-buff-area" class="stat-value" style="color: #4cd964;">--</div>
       </div>
-
-      <!-- Coluna da Direita: Radar de Eventos -->
-      <div class="caixa">
-        <h2>Radar de Eventos</h2>
-        <div id="lista-eventos" style="display: flex; flex-direction: column; gap: 6px;">
-          <span style="color: #8fa0b5; font-size: 11.5px;">Carregando histórico...</span>
-        </div>
+      <div class="stat-box">
+        <div class="stat-label">Moral Clã</div>
+        <div id="txt-moral" class="stat-value" style="color: #f5a623;">--</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Debuff Titã</div>
+        <div id="txt-debuff-tita" class="stat-value" style="color: #ff8080;">--</div>
       </div>
     </div>
+
+    <div id="fila-titans" class="spawn-queue"></div>
+
+    <div class="card-global">
+      <div class="card-title">
+        <span id="txt-nome-titaglobal">Vida do Titã</span>
+        <span id="txt-vida-global">0 / 0 (0%)</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div id="bar-vida-global" class="progress-bar-fill"></div>
+      </div>
+    </div>
+
+    <div id="grid-titam" class="titam-grid">
+      <div style="color: #8fa0b5; font-size: 11px; grid-column: span 3; text-align: center; padding: 16px;">Carregando tanques de HP do Titã...</div>
+    </div>
+
+    <a href="painel_raid.html" class="voltar-link">← Voltar para o Painel de Ataques Ao Vivo</a>
   </div>
-
-  <footer>
-    Guia tático de raids — Tap Titans 2 • Criado por JotaVe
-  </footer>
 
   <script>
     const SUPABASE_URL = "https://hqhirsnowapylfwhvduf.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhxaGlyc25vd2FweWxmd2h2ZHVmIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc5MjkzNTkxOCwiZXhwIjoyMTA4NTExOTE4fQ.sAZeXN1XFKDh0gVGBomanuHM6GkcEto8AmxZzNRehpI"; 
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhxaGlyc25vd2FweWxmd2h2ZHVmIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc5MjkzNTkxOCwiZXhwIjoyMTA4NTExOTE4fQ.sAZeXN1XFKDh0gVGBomanuHM6GkcEto8AmxZzNRehpI";
     const cofre = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+    const mapaTitansPorId = {
+      "Enemy1": "Lojak", "Enemy2": "Takedar", "Enemy3": "Jukk", "Enemy4": "Sterl",
+      "Enemy5": "Mohaca", "Enemy6": "Terro", "Enemy7": "Klonk", "Enemy8": "Priker"
+    };
+
+    const mapaSlotsAnatomicos = {
+      "ArmUpperRight": "slot-ombro-dir", "Head": "slot-cabeca", "ArmUpperLeft": "slot-ombro-esq",
+      "HandRight": "slot-mao-dir", "ChestUpper": "slot-peito", "HandLeft": "slot-mao-esq",
+      "LegUpperRight": "slot-perna-dir", "LegUpperLeft": "slot-perna-esq"
+    };
+
+    const mapaBuffs = {
+      "AfflictedDamage": "Dano Aflição", "BurstDamage": "Dano Explosão",
+      "AllDamage": "Dano Raid", "TapDamage": "Dano de Toque", "SupportEffect": "Efeito Suporte"
+    };
+
+    const mapaDebuffs = {
+      "AllTorsoHPMult": "HP Peito", "AllArmsHPMult": "HP Braços",
+      "AllHeadHPMult": "HP Cabeça", "AllLegsHPMult": "HP Pernas",
+      "AllArmorHPMult": "HP Armadura", "AllBodyHPMult": "HP Corpo"
+    };
+
     function formatarNumero(num) {
-      return Number(num || 0).toLocaleString("pt-BR");
+      const n = Number(num || 0);
+      if (n >= 1e9) return (n / 1e9).toFixed(2) + 'B';
+      if (n >= 1e6) return (n / 1e6).toFixed(0) + 'M';
+      if (n >= 1e3) return (n / 1e3).toFixed(0) + 'K';
+      return n.toLocaleString("pt-BR");
     }
 
-    function traduzirTitã(d) {
-      if (d.titan_name) return d.titan_name;
-      if (d.titan && d.titan.enemy_name) return d.titan.enemy_name;
-      if (d.enemy_name) return d.enemy_name;
-
-      const enemyId = d.enemy_id || (d.raid_state && d.raid_state.current && d.raid_state.current.enemy_id);
-      
-      if (enemyId) {
-        const mapaTitans = {
-          "Enemy1": "Lojak",
-          "Enemy2": "Takedar",
-          "Enemy3": "Jukk",
-          "Enemy4": "Sterl",
-          "Enemy5": "Mohaca",
-          "Enemy6": "Terro",
-          "Enemy7": "Klonk",
-          "Enemy8": "Priker"
-        };
-        return mapaTitans[enemyId] || enemyId;
+    function extrairObjeto(dadosBrutos) {
+      if (!dadosBrutos) return null;
+      let obj = dadosBrutos;
+      if (typeof obj === "string") {
+        try { obj = JSON.parse(obj); } catch (e) { return null; }
       }
-      return "Titã";
+      if (Array.isArray(obj) && obj.length > 0) {
+        obj = obj[0];
+      }
+      return obj;
     }
 
-    function calcularDanoTotal(d) {
-      const logs = d.attack_log || d;
-      const cardsDamage = logs.cards_damage || d.cards_damage;
+    function descobrirIndiceNaFila(spawnSeq, dadosSub, raidStateAoVivo, historicoEventos) {
+      if (!spawnSeq || spawnSeq.length === 0) return 0;
+
+      const raidObj = dadosSub.raid || dadosSub;
       
-      if (!Array.isArray(cardsDamage)) return Number(d.total_damage || d.damage || 0);
-      
-      let somaTotal = 0;
-      cardsDamage.forEach(bloco => {
-        if (bloco.damage_log && Array.isArray(bloco.damage_log)) {
-          bloco.damage_log.forEach(parte => {
-            somaTotal += Number(parte.value || parte.damage || 0);
+      // Se a GameHive enviar explicitamente o índice correto nos pacotes ao vivo, usamos ele diretamente
+      const idxExplicito = raidStateAoVivo?.titan_index ?? raidObj?.titan_index ?? dadosSub?.titan_index;
+      if (typeof idxExplicito === "number" && idxExplicito >= 0 && idxExplicito < spawnSeq.length) {
+        return idxExplicito;
+      }
+
+      // Varredura inteligente para lidar com nomes repetidos (como os múltiplos Prikers e Mohacas)
+      if (raidStateAoVivo && raidStateAoVivo.enemy_id) {
+        const nomeVivo = raidStateAoVivo.enemy_name || mapaTitansPorId[raidStateAoVivo.enemy_id];
+        if (nomeVivo) {
+          // Procura nas ocorrências qual bate com o estado atual de HP do chefe vivo
+          const indicesPossiveis = [];
+          spawnSeq.forEach((nome, idx) => {
+            if (nome === nomeVivo) indicesPossiveis.push(idx);
           });
+          
+          if (indicesPossiveis.length === 1) return indicesPossiveis[0];
+          
+          if (indicesPossiveis.length > 1) {
+            // Se houver repetição (ex: 3º e 6º Priker), rastreia pelo histórico qual deles está ativo
+            let cursorEstimado = indicesPossiveis[0];
+            const eventosOrdenados = [...(historicoEventos || [])].reverse();
+            let mudancasChefes = 0;
+            let ultimoNome = null;
+
+            for (const ev of eventosOrdenados) {
+              const d = extrairObjeto(ev.dados);
+              const rs = d?.raid_state?.current || d?.raid_state;
+              if (rs && rs.enemy_id) {
+                const n = rs.enemy_name || mapaTitansPorId[rs.enemy_id];
+                if (n && n !== ultimoNome) {
+                  if (ultimoNome !== null) mudancasChefes++;
+                  ultimoNome = n;
+                }
+              }
+            }
+            
+            // Retorna o índice correspondente baseado no progresso real da raid
+            for (const idxCandidate of indicesPossiveis) {
+              if (idxCandidate >= (cursorEstimado + Math.min(mudancasChefes, indicesPossiveis[indicesPossiveis.length - 1]))) {
+                return idxCandidate;
+              }
+            }
+            return indicesPossiveis[indicesPossiveis.length - 1];
+          }
         }
-      });
-      
-      return somaTotal;
+      }
+
+      return 0;
     }
 
-    function lerCartasUsadas(d) {
-      const logs = d.attack_log || d;
-      const cardsLevel = logs.cards_level || d.cards_level || d.cards;
-      
-      if (!Array.isArray(cardsLevel) || cardsLevel.length === 0) return "-";
-      
-      let htmlCartas = '<div class="cartas-container">';
-      
-      cardsLevel.forEach(c => {
-        const nomeCarta = c.id || c.card || c.name || "Carta";
-        const nivelCarta = c.value || c.level || "";
-        const caminhoImg = `Cards/${nomeCarta}.png`;
-        
-        htmlCartas += `
-          <div class="carta-item" title="${nomeCarta} (Nv.${nivelCarta})">
-            <img src="${caminhoImg}" alt="${nomeCarta}" class="carta-img" onerror="this.src='Cards/wc.png'">
-            <div class="carta-nivel">Nv.${nivelCarta}</div>
-          </div>
-        `;
-      });
-      
-      htmlCartas += '</div>';
-      return htmlCartas;
-    }
-
-    async function carregarPainel() {
+    async function carregarEstadoTita() {
       try {
-        const { data: ficha } = await cofre.from("dados_cla").select("*").eq("id", 1).single();
-        if (ficha && ficha.dados) {
-          const d = Array.isArray(ficha.dados) ? ficha.dados[0] : (ficha.dados.data || ficha.dados);
-          const nomeCla = d.clan_name || "2nd Mafia BR";
-          const codigoCla = d.clan_code || "975xx";
-
-          document.getElementById("nome-cla").innerText = `${nomeCla} (${codigoCla})`;
-          document.getElementById("ultima-atualizacao").innerText = 
-            "Sincronizado: " + new Date(ficha.atualizado_em).toLocaleTimeString("pt-BR");
-        }
-
-        const { data: eventos } = await cofre
+        const { data: listaSub } = await cofre
           .from("eventos_raid")
           .select("*")
-          .order("criado_em", { ascending: false })
-          .limit(50);
+          .ilike("tipo_evento", "%sub_cycle%")
+          .order("id", { ascending: false })
+          .limit(1);
 
-        if (!eventos || eventos.length === 0) {
-          document.getElementById("lista-eventos").innerHTML = 
-            "<span style='color: #8fa0b5; font-size: 11.5px;'>Aguardando eventos ao vivo...</span>";
+        const { data: listaGeral } = await cofre
+          .from("eventos_raid")
+          .select("*")
+          .order("id", { ascending: false })
+          .limit(100);
+
+        let registroSub = listaSub && listaSub.length > 0 ? listaSub[0] : null;
+        let dadosSub = registroSub ? extrairObjeto(registroSub.dados) : null;
+
+        if (!dadosSub && listaGeral) {
+          for (const ev of listaGeral) {
+            const ext = extrairObjeto(ev.dados);
+            if (ext && (ext.raid?.titans || ext.titans)) {
+              dadosSub = ext;
+              registroSub = ev;
+              break;
+            }
+          }
+        }
+
+        if (!dadosSub) {
+          document.getElementById("subtitulo-status").innerText = "Aguardando pacote sub_cycle no Supabase...";
           return;
         }
 
-        const ataques = eventos.filter(e => e.tipo_evento === "attack");
-        const tabela = document.getElementById("tabela-ataques");
-
-        if (ataques.length > 0) {
-          tabela.innerHTML = ataques.map(item => {
-            const d = item.dados || {};
-            const jogador = d.player?.name || d.player_name || d.name || "Membro";
-            const tita = traduzirTitã(d);
-            const dano = formatarNumero(calcularDanoTotal(d));
-            const cartas = lerCartasUsadas(d);
-            const hora = new Date(item.criado_em).toLocaleTimeString("pt-BR", {hour: '2-digit', minute:'2-digit', second:'2-digit'});
-
-            return `
-              <tr>
-                <td>${hora}</td>
-                <td><strong>${jogador}</strong></td>
-                <td>${tita}</td>
-                <td class="dano">${dano}</td>
-                <td>${cartas}</td>
-              </tr>
-            `;
-          }).join("");
-        } else {
-          tabela.innerHTML = `<tr><td colspan="5" style="color: #8fa0b5; text-align: center; padding: 16px;">Nenhum ataque concluído ainda.</td></tr>`;
+        let raidStateAoVivo = null;
+        if (listaGeral && listaGeral.length > 0) {
+          for (const ev of listaGeral) {
+            const ext = extrairObjeto(ev.dados);
+            if (ext && ext.raid_state) {
+              raidStateAoVivo = ext.raid_state.current || ext.raid_state;
+              break;
+            }
+          }
         }
 
-        const radar = document.getElementById("lista-eventos");
-        radar.innerHTML = eventos.slice(0, 15).map(item => {
-          const hora = new Date(item.criado_em).toLocaleTimeString("pt-BR", {hour: '2-digit', minute:'2-digit', second:'2-digit'});
-          const nomeJogador = item.dados?.player?.name || item.dados?.name || "";
+        renderizarPainel(dadosSub, raidStateAoVivo, listaGeral || []);
+
+      } catch (erro) {
+        console.error("Erro ao carregar anatomia do titã:", erro);
+        document.getElementById("subtitulo-status").innerText = "Erro ao sincronizar: " + erro.message;
+      }
+    }
+
+    function renderizarPainel(dadosSub, raidStateAoVivo, historicoEventos) {
+      const raidData = dadosSub.raid || dadosSub;
+      const tier = raidData.tier ?? "-";
+      const level = raidData.level ?? "-";
+      
+      const txtTier = (tier === 9999 || tier === "9999") ? "Tier Master" : `Tier ${tier}`;
+      const txtNivel = level !== "-" ? `Zona ${level}` : "Zona 9";
+      
+      document.getElementById("txt-tier-nivel").innerHTML = `${txtTier}<br>${txtNivel}`;
+      
+      const moraleBonus = dadosSub.morale?.bonus_amount
+        ? `+${Math.round(dadosSub.morale.bonus_amount * 100)}%`
+        : "0%";
+      document.getElementById("txt-moral").innerText = moraleBonus;
+
+      const areaBuffs = raidData.area_buffs || [];
+      if (areaBuffs.length > 0) {
+        const b = areaBuffs[0];
+        const nomeBuff = mapaBuffs[b.bonus_type] || b.bonus_type;
+        document.getElementById("txt-buff-area").innerText = `+${Math.round(b.bonus_amount * 100)}% ${nomeBuff}`;
+      } else {
+        document.getElementById("txt-buff-area").innerText = "Nenhum";
+      }
+
+      const spawnSeq = raidData.spawn_sequence || [];
+      const titansCatalogo = raidData.titans || [];
+
+      const indiceFilaAtual = descobrirIndiceNaFila(spawnSeq, dadosSub, raidStateAoVivo, historicoEventos);
+      const totalFila = spawnSeq.length || 7;
+
+      const divFila = document.getElementById("fila-titans");
+      if (spawnSeq.length > 0) {
+        divFila.innerHTML = spawnSeq.map((nomeTitaFila, idx) => {
+          let classeEstado = "";
+          if (idx < indiceFilaAtual) {
+            classeEstado = "dead";
+          } else if (idx === indiceFilaAtual) {
+            classeEstado = "current";
+          }
           return `
-            <div class="evento-item">
-              <div>
-                <span class="tag">${item.tipo_evento}</span>
-                <span style="margin-left: 6px;">${nomeJogador}</span>
-              </div>
-              <span style="color: #8fa0b5; font-size: 10.5px;">${hora}</span>
+            <div class="spawn-block ${classeEstado}">
+              <span class="spawn-num">${idx + 1}º</span>
+              <span>${nomeTitaFila}</span>
             </div>
           `;
         }).join("");
-
-      } catch (erro) {
-        console.error("Erro ao carregar dados do painel:", erro);
-      }
-    }
-
-    function atualizarBotaoPerfil() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const uidDaUrl = urlParams.get('uid');
-
-      if (uidDaUrl) {
-        localStorage.setItem('tt2_discord_uid', uidDaUrl);
-        window.history.replaceState({}, document.title, window.location.pathname);
       }
 
-      const uidSalvo = localStorage.getItem('tt2_discord_uid');
-      const btn = document.getElementById('btnPerfilTop');
+      // Seleciona o titã correto com base estrita no índice da fila atual (evitando conflito de nomes repetidos)
+      let nomeTitaAtivo = spawnSeq[indiceFilaAtual] || "Titã";
+      let titanBase = titansCatalogo.find(t => t.enemy_name === nomeTitaAtivo);
+      
+      if (!titanBase && raidStateAoVivo && raidStateAoVivo.enemy_id) {
+        titanBase = titansCatalogo.find(t => t.enemy_id === raidStateAoVivo.enemy_id);
+        if (titanBase) nomeTitaAtivo = titanBase.enemy_name || mapaTitansPorId[titanBase.enemy_id] || nomeTitaAtivo;
+      }
+      if (!titanBase) {
+        titanBase = titansCatalogo[0] || {};
+      }
 
-      if (uidSalvo) {
-        btn.classList.add('logged-in');
-        btn.innerHTML = `<span class="status-dot"></span> Meu Perfil`;
-        btn.href = `perfil.html?uid=${uidSalvo}`;
+      document.getElementById("txt-nome-titaglobal").innerText = `Vida de ${nomeTitaAtivo} (${indiceFilaAtual + 1}/${totalFila})`;
+      document.getElementById("subtitulo-status").innerText = `Clã ${dadosSub.clan_code || '975xx'} • Atualizado em tempo real`;
+
+      const debuffs = titanBase.area_debuffs || [];
+      if (debuffs.length > 0) {
+        const d = debuffs[0];
+        const nomeDebuff = mapaDebuffs[d.bonus_type] || d.bonus_type;
+        document.getElementById("txt-debuff-tita").innerText = `+${Math.round(d.bonus_amount * 100)}% ${nomeDebuff}`;
       } else {
-        btn.classList.remove('logged-in');
-        btn.href = 'perfil.html';
+        document.getElementById("txt-debuff-tita").innerText = "Nenhum";
       }
+
+      const usarAoVivo = raidStateAoVivo && (raidStateAoVivo.enemy_id === titanBase.enemy_id || raidStateAoVivo.enemy_name === nomeTitaAtivo);
+
+      const hpGlobalTotal = Number(titanBase.total_hp || 1);
+      const hpGlobalAtual = usarAoVivo && raidStateAoVivo.current_hp !== undefined
+        ? Number(raidStateAoVivo.current_hp)
+        : Number(titanBase.current_hp || 0);
+
+      const pctGlobal = Number(((hpGlobalAtual / hpGlobalTotal) * 100).toFixed(1));
+      document.getElementById("txt-vida-global").innerText = `${formatarNumero(hpGlobalAtual)} / ${formatarNumero(hpGlobalTotal)} (${pctGlobal}%)`;
+      
+      const barFill = document.getElementById("bar-vida-global");
+      barFill.style.width = `${Math.max(0, Math.min(100, pctGlobal))}%`;
+
+      const mapaAlvos = {};
+      const listaTargets = dadosSub.titan_target || [];
+      const targetDesteTita = listaTargets.find(t => t.enemy_id === titanBase.enemy_id || t.enemy_name === nomeTitaAtivo) || listaTargets[indiceFilaAtual];
+      
+      if (targetDesteTita && Array.isArray(targetDesteTita.state)) {
+        targetDesteTita.state.forEach(item => {
+          mapaAlvos[item.id] = String(item.state);
+        });
+      }
+
+      const partesAoVivoMap = {};
+      if (usarAoVivo && Array.isArray(raidStateAoVivo.parts)) {
+        raidStateAoVivo.parts.forEach(p => {
+          partesAoVivoMap[p.part_id] = Number(p.current_hp);
+        });
+      }
+
+      const partesMapeadas = {};
+      (titanBase.parts || []).forEach(p => {
+        const tipo = p.part_id.startsWith("Armor") ? "Armor" : "Body";
+        const baseName = p.part_id.replace("Armor", "").replace("Body", "");
+        if (!partesMapeadas[baseName]) partesMapeadas[baseName] = {};
+
+        const hpAtualReal = partesAoVivoMap[p.part_id] !== undefined
+          ? partesAoVivoMap[p.part_id]
+          : Number(p.current_hp || 0);
+
+        partesMapeadas[baseName][tipo] = {
+          part_id: p.part_id,
+          total_hp: Number(p.total_hp || 1),
+          current_hp: hpAtualReal
+        };
+      });
+
+      let htmlOmbrosCabeca = "";
+      let htmlMaosPeito = "";
+      let htmlPernas = "";
+
+      Object.keys(mapaSlotsAnatomicos).forEach(baseName => {
+        const par = partesMapeadas[baseName];
+        const classeSlot = mapaSlotsAnatomicos[baseName];
+        if (!par || !classeSlot) return;
+
+        let targetParte = null;
+        let isArmadura = false;
+
+        if (par.Armor && par.Armor.current_hp > 0) {
+          targetParte = par.Armor;
+          isArmadura = true;
+        } else if (par.Body) {
+          targetParte = par.Body;
+          isArmadura = false;
+        } else if (par.Armor) {
+          targetParte = par.Armor;
+          isArmadura = true;
+        }
+
+        if (targetParte) {
+          const currentHp = Number(targetParte.current_hp || 0);
+          const totalHp = Number(targetParte.total_hp || 1);
+          const isDestruida = currentHp <= 0;
+          const pctExata = isDestruida ? 0 : Math.max(0, Math.min(100, (currentHp / totalHp) * 100));
+          const pctArredondada = isDestruida ? 0 : Math.round(pctExata);
+
+          const isDecay = !isDestruida && pctExata <= 30;
+          const estadoAlvo = mapaAlvos[baseName] || "0";
+
+          let textoTag = "LIVRE";
+          let classeTagRect = "";
+          let classeTankExtra = "";
+          let classeLiquido = isArmadura ? "liquid-armor" : "liquid-body";
+
+          if (isDestruida) {
+            textoTag = "DESTRUÍDA";
+            classeTagRect = "dead";
+            classeTankExtra = "tank-dead";
+          } else if (estadoAlvo === "1") {
+            textoTag = isDecay ? "NÃO • DECAY" : "NÃO ATACAR";
+            classeTagRect = "no-attack";
+            classeTankExtra = isDecay ? "tank-decay" : "tank-no-attack";
+            classeLiquido = isDecay ? "liquid-decay" : "liquid-no-attack";
+          } else if (estadoAlvo === "2") {
+            textoTag = isDecay ? "SMASH • DECAY" : "SMASH";
+            classeTagRect = isDecay ? "decay" : "smash";
+            classeTankExtra = isDecay ? "tank-decay" : "tank-smash";
+            classeLiquido = isDecay ? "liquid-decay" : "liquid-smash";
+          } else if (isDecay) {
+            textoTag = "DECAY";
+            classeTagRect = "decay";
+            classeTankExtra = "tank-decay";
+            classeLiquido = "liquid-decay";
+          }
+
+          const iconeCanto = isDestruida
+            ? "💀"
+            : (isArmadura ? "🛡️" : "❤️");
+
+          const unitHtml = `
+            <div class="part-unit ${classeSlot}">
+              <div class="unit-top-bar">
+                <div class="tag-rect ${classeTagRect}">${textoTag}</div>
+                <div class="pct-box">${isDestruida ? '-' : pctArredondada + '%'}</div>
+              </div>
+
+              <div class="part-tank ${classeTankExtra}">
+                <div class="liquid-level ${classeLiquido}" style="height: ${isDestruida ? 0 : pctExata}%;"></div>
+                <div class="tank-overlay-top">
+                  <span class="tank-icon">${iconeCanto}</span>
+                  <span class="tank-hp">${isDestruida ? '0' : formatarNumero(currentHp)}</span>
+                </div>
+              </div>
+            </div>
+          `;
+
+          if (baseName.includes("ArmUpper") || baseName === "Head") {
+            htmlOmbrosCabeca += unitHtml;
+          } else if (baseName.includes("Hand") || baseName === "ChestUpper") {
+            htmlMaosPeito += unitHtml;
+          } else if (baseName.includes("Leg")) {
+            htmlPernas += unitHtml;
+          }
+        }
+      });
+
+      const gridTitam = document.getElementById("grid-titam");
+      gridTitam.innerHTML = htmlOmbrosCabeca + htmlMaosPeito + `
+        <div class="pernas-container">
+          ${htmlPernas}
+        </div>
+      `;
     }
 
     window.addEventListener('DOMContentLoaded', () => {
-      atualizarBotaoPerfil();
-      carregarPainel();
+      carregarEstadoTita();
     });
 
     cofre
-      .channel("atualizacao-painel-raid")
+      .channel("atualizacao-tita")
       .on("postgres_changes", { event: "INSERT", schema: "public", table: "eventos_raid" }, () => {
-        carregarPainel();
+        carregarEstadoTita();
       })
       .subscribe();
   </script>

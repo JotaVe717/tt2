@@ -79,7 +79,7 @@
       outline: none;
     }
 
-    /* GRADE PRINCIPAL: 4 EM CIMA E 4 EM BAIXO COM LARGURA JUSTA (SEM SOBRAS) */
+    /* GRADE PRINCIPAL: 4 EM CIMA E 4 EM BAIXO COM LARGURA JUSTA */
     .buff-sections-container {
       width: auto;
       max-width: 1040px;
@@ -154,7 +154,7 @@
       gap: 4px;
     }
 
-    /* LINHA DO DECK: 100% PREENCHIDA E ENXUTA */
+    /* LINHA DO DECK */
     .deck-row-card {
       background: #141c26;
       border: 1px solid #243344;
@@ -211,7 +211,7 @@
       color: #f5a623;
     }
 
-    /* SLOTS PERFEITAMENTE 1:1 FIXADOS EM 58px */
+    /* SLOTS 1:1 FIXADOS EM 58px */
     .deck-slots-row {
       display: flex;
       gap: 4px;
@@ -443,55 +443,56 @@
 
     const CARDS = [
       // DANO
-      { id: "mf", name: "Mirror Force", role: "dano", roleLabel: "Dano", img: "Cards/mf.png" },
-      { id: "csb", name: "Clanship Barrage", role: "dano", roleLabel: "Dano", img: "Cards/csb.png" },
-      { id: "cs", name: "Celestial Static", role: "dano", roleLabel: "Dano", img: "Cards/cs.png" },
-      { id: "wol", name: "Whip of Lightning", role: "dano", roleLabel: "Dano", img: "Cards/wol.png" },
-      { id: "cov", name: "Chain of Vengeance", role: "dano", roleLabel: "Dano", img: "Cards/cov.png" },
-      { id: "fs", name: "Flak Shot", role: "dano", roleLabel: "Dano", img: "Cards/fs.png" },
-      { id: "mb", name: "Moon Beam", role: "dano", roleLabel: "Dano", img: "Cards/mb.png" },
-      { id: "sb", name: "Skull Bash", role: "dano", roleLabel: "Dano", img: "Cards/sb.png" },
-      { id: "fr", name: "Fragmentize", role: "dano", roleLabel: "Dano", img: "Cards/fr.png" },
-      { id: "rw", name: "Razor Wind", role: "dano", roleLabel: "Dano", img: "Cards/rw.png" },
-      { id: "ps", name: "Psychic Shackles", role: "dano", roleLabel: "Dano", img: "Cards/ps.png" },
-      { id: "pb", name: "Purifying Blast", role: "dano", roleLabel: "Dano", img: "Cards/pb.png" },
-      { id: "ch", name: "Cosmic Haymaker", role: "dano", roleLabel: "Dano", img: "Cards/ch.png" },
-      { id: "bm", name: "Barbed Morningstar", role: "dano", roleLabel: "Dano", img: "Cards/bm.png" },
-      { id: "zz", name: "Electro Zap", role: "dano", roleLabel: "Dano", img: "Cards/zz.png" },
-      { id: "rr", name: "Ruinous Rain", role: "dano", roleLabel: "Dano", img: "Cards/rr.png" },
-      { id: "tp", name: "Thriving Plague", role: "dano", roleLabel: "Dano", img: "Cards/tp.png" },
-      { id: "fb", name: "Fusion Bomb", role: "dano", roleLabel: "Dano", img: "Cards/fb.png" },
-      { id: "ra", name: "Radioactivity", role: "dano", roleLabel: "Dano", img: "Cards/ra.png" },
-      { id: "bi", name: "Blazing Inferno", role: "dano", roleLabel: "Dano", img: "Cards/bi.png" },
-      { id: "ds", name: "Decaying Strike", role: "dano", roleLabel: "Dano", img: "Cards/ds.png" },
-      { id: "rs", name: "Ravenous Swarm", role: "dano", roleLabel: "Dano", img: "Cards/rs.png" },
-      { id: "bb", name: "Corrosive Bubbles", role: "dano", roleLabel: "Dano", img: "Cards/bb.png" },
-      { id: "gs", name: "Grim Shadow", role: "dano", roleLabel: "Dano", img: "Cards/gs.png" },
-      { id: "ad", name: "Acid Drench", role: "dano", roleLabel: "Dano", img: "Cards/ad.png" },
-      { id: "am", name: "Amplify", role: "dano", roleLabel: "Dano", img: "Cards/am.png" },
+      { id: "mf",  name: "Mirror Force",       role: "dano", roleLabel: "Dano", img: "Cards/MirrorForce.png" },
+      { id: "csb", name: "Clanship Barrage",   role: "dano", roleLabel: "Dano", img: "Cards/BurstCount.png" },
+      { id: "cs",  name: "Celestial Static",   role: "dano", roleLabel: "Dano", img: "Cards/CelestialStatic.png" },
+      { id: "wol", name: "Whip Of Lightning",  role: "dano", roleLabel: "Dano", img: "Cards/WhipOfLightning.png" },
+      { id: "cov", name: "Chain of Vengeance", role: "dano", roleLabel: "Dano", img: "Cards/ChainLightning.png" },
+      { id: "fs",  name: "Flak Shot",          role: "dano", roleLabel: "Dano", img: "Cards/FlakShot.png" },
+      { id: "mb",  name: "Moon Beam",          role: "dano", roleLabel: "Dano", img: "Cards/MoonBeam.png" },
+      { id: "sb",  name: "Skull Bash",         role: "dano", roleLabel: "Dano", img: "Cards/SkullBash.png" },
+      { id: "fr",  name: "Fragmentize",        role: "dano", roleLabel: "Dano", img: "Cards/Fragmentize.png" },
+      { id: "rw",  name: "Razor Wind",         role: "dano", roleLabel: "Dano", img: "Cards/RazorWind.png" },
+      { id: "ps",  name: "Psychic Shackles",   role: "dano", roleLabel: "Dano", img: "Cards/LimbBurst.png" },
+      { id: "pb",  name: "Purifying Blast",    role: "dano", roleLabel: "Dano", img: "Cards/Purify.png" },
+      { id: "ch",  name: "Cosmic Haymaker",    role: "dano", roleLabel: "Dano", img: "Cards/Haymaker.png" },
+      { id: "bm",  name: "Barbed Morningstar", role: "dano", roleLabel: "Dano", img: "Cards/BarbedMorningstar.png" },
+      { id: "zz",  name: "Cosmic Barb",        role: "dano", roleLabel: "Dano", img: "Cards/CosmicBarb.png" },
+      { id: "rr",  name: "Ruinous Rain",       role: "dano", roleLabel: "Dano", img: "Cards/RuinousRust.png" },
+      { id: "tp",  name: "Thriving Plague",    role: "dano", roleLabel: "Dano", img: "Cards/PlagueAttack.png" },
+      { id: "fb",  name: "Fusion Bomb",        role: "dano", roleLabel: "Dano", img: "Cards/Fuse.png" },
+      { id: "ra",  name: "Radioactivity",      role: "dano", roleLabel: "Dano", img: "Cards/Disease.png" },
+      { id: "bi",  name: "Blazing Inferno",    role: "dano", roleLabel: "Dano", img: "Cards/BurningAttack.png" },
+      { id: "ds",  name: "Decaying Strike",    role: "dano", roleLabel: "Dano", img: "Cards/DecayingAttack.png" },
+      { id: "rs",  name: "Ravenous Swarm",     role: "dano", roleLabel: "Dano", img: "Cards/Swarm.png" },
+      { id: "bb",  name: "Corrosive Bubbles",  role: "dano", roleLabel: "Dano", img: "Cards/PowerBubble.png" },
+      { id: "gs",  name: "Grim Shadow",        role: "dano", roleLabel: "Dano", img: "Cards/Shadow.png" },
+      { id: "ad",  name: "Acid Drench",        role: "dano", roleLabel: "Dano", img: "Cards/PoisonAttack.png" },
+      { id: "am",  name: "Amplify",            role: "dano", roleLabel: "Dano", img: "Cards/MagicPotion.png" },
 
       // BUFF
-      { id: "if", name: "Inspiring Force", role: "buff", roleLabel: "Buff", img: "Cards/if.png" },
-      { id: "pr", name: "Prismatic Rift", role: "buff", roleLabel: "Buff", img: "Cards/pr.png" },
-      { id: "ma", name: "Maelstrom", role: "buff", roleLabel: "Buff", img: "Cards/ma.png" },
-      { id: "gb", name: "Guard Break", role: "buff", roleLabel: "Buff", img: "Cards/gb.png" },
-      { id: "tot", name: "Totem of Power", role: "buff", roleLabel: "Buff", img: "Cards/tot.png" },
-      { id: "ci", name: "Crushing Instinct", role: "buff", roleLabel: "Buff", img: "Cards/ci.png" },
-      { id: "sf", name: "Soul Fire", role: "buff", roleLabel: "Buff", img: "Cards/sf.png" },
-      { id: "rk", name: "Radiant Kaleidoscope", role: "buff", roleLabel: "Buff", img: "Cards/rk.png" },
-      { id: "ss", name: "Skeletal Smash", role: "buff", roleLabel: "Buff", img: "Cards/ss.png" },
-      { id: "iv", name: "Insanity Void", role: "buff", roleLabel: "Buff", img: "Cards/iv.png" },
-      { id: "vm", name: "Victory March", role: "buff", roleLabel: "Buff", img: "Cards/vm.png" },
-      { id: "bd", name: "Battle Drums", role: "buff", roleLabel: "Buff", img: "Cards/bd.png" },
+      { id: "if",  name: "Inspiring Force",      role: "buff", roleLabel: "Buff", img: "Cards/ImpactAttack.png" },
+      { id: "pr",  name: "Prismatic Rift",       role: "buff", roleLabel: "Buff", img: "Cards/SuperheatMetal.png" },
+      { id: "ma",  name: "Maelstrom",            role: "buff", roleLabel: "Buff", img: "Cards/RuneAttack.png" },
+      { id: "gb",  name: "Guard Break",          role: "buff", roleLabel: "Buff", img: "Cards/Weaken.png" },
+      { id: "tot", name: "Totem of Power",       role: "buff", roleLabel: "Buff", img: "Cards/TotemFairySkill.png" },
+      { id: "ci",  name: "Crushing Instinct",    role: "buff", roleLabel: "Buff", img: "Cards/ExecutionersAxe.png" },
+      { id: "sf",  name: "Soul Fire",            role: "buff", roleLabel: "Buff", img: "Cards/InnerTruth.png" },
+      { id: "rk",  name: "Radiant Kaleidoscope", role: "buff", roleLabel: "Buff", img: "Cards/TriangleSupport.png" },
+      { id: "ss",  name: "Skeletal Smash",       role: "buff", roleLabel: "Buff", img: "Cards/SpinalTap.png" },
+      { id: "iv",  name: "Insanity Void",        role: "buff", roleLabel: "Buff", img: "Cards/CrushingVoid.png" },
+      { id: "vm",  name: "Victory March",        role: "buff", roleLabel: "Buff", img: "Cards/FinisherAttack.png" },
+      { id: "bd",  name: "Battle Drums",         role: "buff", roleLabel: "Buff", img: "Cards/BattleDrums.png" },
+      { id: "gv",  name: "Grasping Vines",       role: "buff", roleLabel: "Buff", img: "Cards/LimbSupport.png" },
 
       // FIXO
-      { id: "af", name: "Ancestral Favor", role: "efeito", roleLabel: "Fixo", img: "Cards/af.png" },
-      { id: "rg", name: "Rancid Gas", role: "efeito", roleLabel: "Fixo", img: "Cards/rg.png" },
-      { id: "ae", name: "Astral Echo", role: "efeito", roleLabel: "Fixo", img: "Cards/ae.png" },
-      { id: "tt", name: "Team Tactics", role: "efeito", roleLabel: "Fixo", img: "Cards/tt.png" },
+      { id: "af",  name: "Ancestral Favor", role: "efeito", roleLabel: "Fixo", img: "Cards/BurstBoost.png" },
+      { id: "rg",  name: "Rancid Gas",      role: "efeito", roleLabel: "Fixo", img: "Cards/MentalFocus.png" },
+      { id: "ae",  name: "Astral Echo",     role: "efeito", roleLabel: "Fixo", img: "Cards/AstralEcho.png" },
+      { id: "tt",  name: "Team Tactics",    role: "efeito", roleLabel: "Fixo", img: "Cards/TeamTactics.png" },
 
       // ESPECÍFICO
-      { id: "sot", name: "Sands of Time", role: "especifico", roleLabel: "Espec.", img: "Cards/sot.png" }
+      { id: "sot", name: "Sands Of Time",   role: "especifico", roleLabel: "Espec.", img: "Cards/SandsOfTime.png" }
     ];
 
     const AFFLICTION_ACTIVATORS_FOR_PB = [
@@ -564,7 +565,11 @@
 
     function calculateDeckLevels(deck) {
       const base = getBaseLevel();
-      const cardDatas = deck.map(id => id ? CARDS.find(c => c.id === id) : null);
+      const cardDatas = deck.map(dimId => {
+        if (!dimId) return null;
+        if (dimId === "cb") dimId = "bb";
+        return CARDS.find(c => c.id === dimId) || null;
+      });
 
       if (cardDatas.some(c => c === null)) {
         return {
@@ -693,7 +698,8 @@
 
           const slotsRow = deckRow.querySelector(`#slots-${buff.id}-${dIdx}`);
 
-          deck.forEach((cardId, sIdx) => {
+          deck.forEach((rawCardId, sIdx) => {
+            const cardId = rawCardId === "cb" ? "bb" : rawCardId;
             const slot = document.createElement("div");
             const isCurrent = currentSelecting &&
                               currentSelecting.buffId === buff.id &&
@@ -758,7 +764,8 @@
     function getUsedCardIds(buffId, excludeDeckIdx, excludeSlotIdx) {
       const used = new Set();
       allBuffDecks[buffId].forEach((deck, dIdx) => {
-        deck.forEach((cardId, sIdx) => {
+        deck.forEach((rawId, sIdx) => {
+          const cardId = rawId === "cb" ? "bb" : rawId;
           if (cardId && !(dIdx === excludeDeckIdx && sIdx === excludeSlotIdx)) {
             used.add(cardId);
           }

@@ -2,187 +2,200 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tabela de Aflições - Tap Titans 2</title>
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; }
-    body {
-      background-color: #0f141c;
-      color: #ffffff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 30px 15px;
-      min-height: 100vh;
-    }
-    .back-btn {
-      align-self: flex-start;
-      max-width: 900px;
-      margin: 0 auto 16px auto;
-      width: 100%;
-      text-decoration: none;
-      color: #8fa0b5;
-      font-size: 14px;
-      font-weight: 600;
-    }
-    .container {
-      width: 100%;
-      max-width: 900px;
-      background: #18202a;
-      border: 1px solid #283545;
-      border-radius: 12px;
-      padding: 24px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
-    }
-    h1 {
-      font-size: 20px;
-      font-weight: 800;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      text-align: center;
-      margin-bottom: 20px;
-      color: #f5a623;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13px;
-    }
-    th, td {
-      padding: 10px 8px;
-      text-align: center;
-      border-bottom: 1px solid #283545;
-    }
-    th {
-      background: #212c3a;
-      color: #8fa0b5;
-      font-weight: 700;
-      font-size: 12px;
-      text-transform: uppercase;
-    }
-    th.group-1 { color: #50e3c2; }
-    th.group-2 { color: #f5a623; }
-    tr:hover { background: #1f2a38; }
-    .card-col {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      text-align: left;
-    }
-    .card-img {
-      width: 32px;
-      height: 32px;
-      border-radius: 6px;
-      border: 1px solid #3b4d63;
-      object-fit: cover;
-      background: #0f141c;
-    }
-    .unchanged { color: #6c7d93; }
-    .highlight-blue { color: #4aa3ff; font-weight: 700; }
-    .highlight-red { color: #ff5e57; font-weight: 700; }
-    .note-box {
-      margin-top: 20px;
-      padding: 12px 16px;
-      background: #212c3a;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-size: 13px;
-      color: #b0c0d0;
-      border: 1px solid #324357;
-    }
+    body { font-family: 'Inter', sans-serif; }
   </style>
 </head>
-<body>
+<body class="bg-slate-950 text-slate-100 min-h-screen py-10 px-4 flex flex-col items-center">
 
-  <a href="index.html" class="back-btn">&larr; Voltar ao Menu</a>
+  <div class="w-full max-w-4xl space-y-6">
+    
+    <a href="index.html" class="text-slate-400 hover:text-slate-200 text-sm font-semibold transition-colors flex items-center gap-2">
+      &larr; Voltar ao Menu
+    </a>
 
-  <div class="container">
-    <h1>Guia de Aflições: Partes & Bónus de Dano</h1>
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+      <h1 class="text-xl font-extrabold text-amber-500 uppercase tracking-wide text-center mb-8">
+        Guia de Aflições: Partes & Bónus de Dano
+      </h1>
 
-    <table>
-      <thead>
-        <tr>
-          <th rowspan="2" style="text-align: left;">Carta</th>
-          <th rowspan="2">Dano Base</th>
-          <th colspan="3" class="group-1">Quantas partes bater?</th>
-          <th colspan="2" class="group-2">Aumento de Dano (%)</th>
-        </tr>
-        <tr>
-          <th class="group-1">Padrão</th>
-          <th class="group-1">x1.3 Chance</th>
-          <th class="group-1">+0.5 Duração</th>
-          <th class="group-2">x1.3 Chance</th>
-          <th class="group-2">+0.5 Duração</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td class="card-col"><img src="Cards/rr.png" class="card-img" alt="Ruinous Rust"> Ruinous Rain</td>
-          <td>248M</td><td>1 parte</td><td class="unchanged">inalterado</td><td class="unchanged">inalterado</td>
-          <td class="highlight-blue">48%</td><td>0%</td>
-        </tr>
-        <tr>
-          <td class="card-col"><img src="Cards/zz.jpg" class="card-img" alt="Crushing Instinct"> Electro Zap</td>
-          <td>225M</td><td>1 parte</td><td class="unchanged">inalterado</td><td class="unchanged">inalterado</td>
-          <td>27%</td><td class="highlight-blue">43%</td>
-        </tr>
-        <tr>
-          <td class="card-col"><img src="Cards/bb.png" class="card-img" alt="Corrosive Bubbles"> Corrosive Bubbles</td>
-          <td>206M</td><td>2 partes</td><td class="unchanged">inalterado</td><td class="unchanged">inalterado</td>
-          <td>28%</td><td class="highlight-red">12%</td>
-        </tr>
-        <tr>
-          <td class="card-col"><img src="Cards/ad.png" class="card-img" alt="Acid Drench"> Acid Drench</td>
-          <td>220M</td><td>2 partes</td><td>3 partes</td><td>4 partes</td>
-          <td>31%</td><td>34%</td>
-        </tr>
-        <tr>
-          <td class="card-col"><img src="Cards/gs.png" class="card-img" alt="Grim Shadow"> Grim Shadow</td>
-          <td>241M</td><td>2 partes</td><td>3 partes</td><td>3 partes</td>
-          <td>26%</td><td>32%</td>
-        </tr>
-        <tr>
-          <td class="card-col"><img src="Cards/ds.png" class="card-img" alt="Decaying Strike"> Decaying Strike</td>
-          <td>264M</td><td>2 partes</td><td>3 partes</td><td>3 partes</td>
-          <td>28%</td><td class="highlight-blue">42%</td>
-        </tr>
-        <tr>
-          <td class="card-col"><img src="Cards/ra.png" class="card-img" alt="Radioactivity"> Radioactivity</td>
-          <td>212M</td><td>4/5/6 partes</td><td>5/6/7 partes</td><td>5/6/7 partes</td>
-          <td>27%</td><td>38%</td>
-        </tr>
-        <tr>
-          <td class="card-col"><img src="Cards/am.jpg" class="card-img" alt="Prismatic Rift"> Amplify</td>
-          <td>222M</td><td>4 a 8 partes</td><td>5 a 8 partes</td><td>5 a 8 partes</td>
-          <td>27%</td><td>36%</td>
-        </tr>
-        <tr>
-          <td class="card-col"><img src="Cards/rs.png" class="card-img" alt="Ravenous Swarm"> Ravenous Swarm</td>
-          <td>214M</td><td>6/7/8 partes</td><td class="unchanged">inalterado</td><td class="unchanged">inalterado</td>
-          <td>24%</td><td>33%</td>
-        </tr>
-        <tr>
-          <td class="card-col"><img src="Cards/tp.png" class="card-img" alt="Thriving Plague"> Thriving Plague</td>
-          <td>200M</td><td>6/7/8 partes</td><td class="unchanged">inalterado</td><td class="unchanged">inalterado</td>
-          <td>31%</td><td class="highlight-blue">45%</td>
-        </tr>
-        <tr>
-          <td class="card-col"><img src="Cards/fb.png" class="card-img" alt="Whip of Lightning"> Fusion Bomb</td>
-          <td>258M</td><td>6/7/8 partes</td><td class="unchanged">inalterado</td><td class="unchanged">inalterado</td>
-          <td class="highlight-red">16%</td><td>19%</td>
-        </tr>
-        <tr>
-          <td class="card-col"><img src="Cards/bi.png" class="card-img" alt="Blazing Inferno"> Blazing Inferno</td>
-          <td>232M</td><td>6/7/8 partes</td><td class="unchanged">inalterado</td><td class="unchanged">inalterado</td>
-          <td class="highlight-red">7%</td><td class="highlight-red">5%</td>
-        </tr>
-      </tbody>
-    </table>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm text-center border-collapse">
+          <thead>
+            <tr class="bg-slate-800/50 text-slate-400 text-xs uppercase tracking-wider">
+              <th rowspan="2" class="p-3 font-bold border-b border-slate-700/50 text-left rounded-tl-lg">Carta</th>
+              <th rowspan="2" class="p-3 font-bold border-b border-slate-700/50">Dano Base</th>
+              <th colspan="3" class="p-3 font-bold border-b border-slate-700/50 text-emerald-400">Quantas partes bater?</th>
+              <th colspan="2" class="p-3 font-bold border-b border-slate-700/50 text-amber-400 rounded-tr-lg">Aumento de Dano (%)</th>
+            </tr>
+            <tr class="bg-slate-800/30 text-slate-400 text-xs uppercase tracking-wider">
+              <th class="p-3 font-bold border-b border-slate-700/50 text-emerald-400">Padrão</th>
+              <th class="p-3 font-bold border-b border-slate-700/50 text-emerald-400">x1.3 Chance</th>
+              <th class="p-3 font-bold border-b border-slate-700/50 text-emerald-400">+0.5 Duração</th>
+              <th class="p-3 font-bold border-b border-slate-700/50 text-amber-400">x1.3 Chance</th>
+              <th class="p-3 font-bold border-b border-slate-700/50 text-amber-400">+0.5 Duração</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-800/80">
+            
+            <tr class="hover:bg-slate-800/30 transition-colors">
+              <td class="p-3 flex items-center gap-3 font-medium text-left">
+                <img src="Cards/RuinousRust.png" class="w-8 h-8 rounded border border-slate-600 bg-slate-950 object-cover" alt="RuinousRust"> Ruinous Rain
+              </td>
+              <td class="p-3">248M</td>
+              <td class="p-3">1 parte</td>
+              <td class="p-3 text-slate-500">inalterado</td>
+              <td class="p-3 text-slate-500">inalterado</td>
+              <td class="p-3 text-cyan-400 font-bold">48%</td>
+              <td class="p-3">0%</td>
+            </tr>
 
-    <div class="note-box">
-      <img src="Cards/rg.png" class="card-img" alt="Rancid Gás">
-      <span><strong>Rancid Gás</strong> funciona de forma idêntica ao buff de Chance — também aumenta o número de partes que necessitam de ser atacadas.</span>
+            <tr class="hover:bg-slate-800/30 transition-colors">
+              <td class="p-3 flex items-center gap-3 font-medium text-left">
+                <img src="Cards/CosmicBarb.png" class="w-8 h-8 rounded border border-slate-600 bg-slate-950 object-cover" alt="CosmicBarb"> Cosmic Barb
+              </td>
+              <td class="p-3">225M</td>
+              <td class="p-3">1 parte</td>
+              <td class="p-3 text-slate-500">inalterado</td>
+              <td class="p-3 text-slate-500">inalterado</td>
+              <td class="p-3">27%</td>
+              <td class="p-3 text-cyan-400 font-bold">43%</td>
+            </tr>
+
+            <tr class="hover:bg-slate-800/30 transition-colors">
+              <td class="p-3 flex items-center gap-3 font-medium text-left">
+                <img src="Cards/PowerBubble.png" class="w-8 h-8 rounded border border-slate-600 bg-slate-950 object-cover" alt="PowerBubble"> Corrosive Bubbles
+              </td>
+              <td class="p-3">206M</td>
+              <td class="p-3">2 partes</td>
+              <td class="p-3 text-slate-500">inalterado</td>
+              <td class="p-3 text-slate-500">inalterado</td>
+              <td class="p-3">28%</td>
+              <td class="p-3 text-rose-400 font-bold">12%</td>
+            </tr>
+
+            <tr class="hover:bg-slate-800/30 transition-colors">
+              <td class="p-3 flex items-center gap-3 font-medium text-left">
+                <img src="Cards/PoisonAttack.png" class="w-8 h-8 rounded border border-slate-600 bg-slate-950 object-cover" alt="PoisonAttack"> Acid Drench
+              </td>
+              <td class="p-3">220M</td>
+              <td class="p-3">2 partes</td>
+              <td class="p-3">3 partes</td>
+              <td class="p-3">4 partes</td>
+              <td class="p-3">31%</td>
+              <td class="p-3">34%</td>
+            </tr>
+
+            <tr class="hover:bg-slate-800/30 transition-colors">
+              <td class="p-3 flex items-center gap-3 font-medium text-left">
+                <img src="Cards/Shadow.png" class="w-8 h-8 rounded border border-slate-600 bg-slate-950 object-cover" alt="Shadow"> Grim Shadow
+              </td>
+              <td class="p-3">241M</td>
+              <td class="p-3">2 partes</td>
+              <td class="p-3">3 partes</td>
+              <td class="p-3">3 partes</td>
+              <td class="p-3">26%</td>
+              <td class="p-3">32%</td>
+            </tr>
+
+            <tr class="hover:bg-slate-800/30 transition-colors">
+              <td class="p-3 flex items-center gap-3 font-medium text-left">
+                <img src="Cards/DecayingAttack.png" class="w-8 h-8 rounded border border-slate-600 bg-slate-950 object-cover" alt="DecayingAttack"> Decaying Strike
+              </td>
+              <td class="p-3">264M</td>
+              <td class="p-3">2 partes</td>
+              <td class="p-3">3 partes</td>
+              <td class="p-3">3 partes</td>
+              <td class="p-3">28%</td>
+              <td class="p-3 text-cyan-400 font-bold">42%</td>
+            </tr>
+
+            <tr class="hover:bg-slate-800/30 transition-colors">
+              <td class="p-3 flex items-center gap-3 font-medium text-left">
+                <img src="Cards/Disease.png" class="w-8 h-8 rounded border border-slate-600 bg-slate-950 object-cover" alt="Disease"> Radioactivity
+              </td>
+              <td class="p-3">212M</td>
+              <td class="p-3">4/5/6 partes</td>
+              <td class="p-3">5/6/7 partes</td>
+              <td class="p-3">5/6/7 partes</td>
+              <td class="p-3">27%</td>
+              <td class="p-3">38%</td>
+            </tr>
+
+            <tr class="hover:bg-slate-800/30 transition-colors">
+              <td class="p-3 flex items-center gap-3 font-medium text-left">
+                <img src="Cards/MagicPotion.png" class="w-8 h-8 rounded border border-slate-600 bg-slate-950 object-cover" alt="MagicPotion"> Amplify
+              </td>
+              <td class="p-3">222M</td>
+              <td class="p-3">4 a 8 partes</td>
+              <td class="p-3">5 a 8 partes</td>
+              <td class="p-3">5 a 8 partes</td>
+              <td class="p-3">27%</td>
+              <td class="p-3">36%</td>
+            </tr>
+
+            <tr class="hover:bg-slate-800/30 transition-colors">
+              <td class="p-3 flex items-center gap-3 font-medium text-left">
+                <img src="Cards/Swarm.png" class="w-8 h-8 rounded border border-slate-600 bg-slate-950 object-cover" alt="Swarm"> Ravenous Swarm
+              </td>
+              <td class="p-3">214M</td>
+              <td class="p-3">6/7/8 partes</td>
+              <td class="p-3 text-slate-500">inalterado</td>
+              <td class="p-3 text-slate-500">inalterado</td>
+              <td class="p-3">24%</td>
+              <td class="p-3">33%</td>
+            </tr>
+
+            <tr class="hover:bg-slate-800/30 transition-colors">
+              <td class="p-3 flex items-center gap-3 font-medium text-left">
+                <img src="Cards/PlagueAttack.png" class="w-8 h-8 rounded border border-slate-600 bg-slate-950 object-cover" alt="PlagueAttack"> Thriving Plague
+              </td>
+              <td class="p-3">200M</td>
+              <td class="p-3">6/7/8 partes</td>
+              <td class="p-3 text-slate-500">inalterado</td>
+              <td class="p-3 text-slate-500">inalterado</td>
+              <td class="p-3">31%</td>
+              <td class="p-3 text-cyan-400 font-bold">45%</td>
+            </tr>
+
+            <tr class="hover:bg-slate-800/30 transition-colors">
+              <td class="p-3 flex items-center gap-3 font-medium text-left">
+                <img src="Cards/Fuse.png" class="w-8 h-8 rounded border border-slate-600 bg-slate-950 object-cover" alt="Fuse"> Fusion Bomb
+              </td>
+              <td class="p-3">258M</td>
+              <td class="p-3">6/7/8 partes</td>
+              <td class="p-3 text-slate-500">inalterado</td>
+              <td class="p-3 text-slate-500">inalterado</td>
+              <td class="p-3 text-rose-400 font-bold">16%</td>
+              <td class="p-3">19%</td>
+            </tr>
+
+            <tr class="hover:bg-slate-800/30 transition-colors">
+              <td class="p-3 flex items-center gap-3 font-medium text-left">
+                <img src="Cards/BurningAttack.png" class="w-8 h-8 rounded border border-slate-600 bg-slate-950 object-cover" alt="BurningAttack"> Blazing Inferno
+              </td>
+              <td class="p-3">232M</td>
+              <td class="p-3">6/7/8 partes</td>
+              <td class="p-3 text-slate-500">inalterado</td>
+              <td class="p-3 text-slate-500">inalterado</td>
+              <td class="p-3 text-rose-400 font-bold">7%</td>
+              <td class="p-3 text-rose-400 font-bold">5%</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <div class="mt-8 p-4 bg-slate-800/50 border border-slate-700/50 rounded-xl flex items-center gap-4 text-sm text-slate-300">
+        <img src="Cards/MentalFocus.png" alt="MentalFocus" class="w-10 h-10 rounded border border-slate-600 object-cover bg-slate-950">
+        <span><strong class="text-white">Rancid Gas</strong> funciona de forma idêntica ao buff de Chance — também aumenta o número de partes que necessitam de ser atacadas.</span>
+      </div>
+
     </div>
   </div>
 

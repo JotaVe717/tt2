@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Importar Perfil & Cartas - Tap Titans 2</title>
+  <title>Perfil & Cartas do Clã - Tap Titans 2</title>
   <style>
     * {
       box-sizing: border-box;
@@ -35,9 +35,8 @@
       gap: 6px;
       transition: color 0.2s;
     }
-    .back-btn:hover {
-      color: #f5a623;
-    }
+    .back-btn:hover { color: #f5a623; }
+
     .container {
       width: 100%;
       background: #18202a;
@@ -52,56 +51,53 @@
       font-weight: 800;
       letter-spacing: 0.8px;
       text-transform: uppercase;
-      margin-bottom: 12px;
+      margin-bottom: 4px;
     }
-    .title span {
-      color: #f5a623;
+    .title span { color: #f5a623; }
+
+    .sync-status {
+      text-align: center;
+      font-size: 11px;
+      color: #8fa0b5;
+      margin-bottom: 10px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      background: rgba(15, 20, 28, 0.5);
     }
 
-    /* BARRA DE ENTRADA COMPACTA INTEGRADA */
+    /* BARRA DE SELEÇÃO DA API + COLAR MANUAL */
+    .controls-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 14px;
+      width: 100%;
+    }
     .import-inline-bar {
       background: #141c26;
       border: 1px solid #2d3e52;
       border-radius: 10px;
       padding: 6px 8px;
-      margin-bottom: 14px;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       width: 100%;
     }
-    .btn-paste {
-      background: #f5a623;
-      border: none;
-      color: #0f141c;
-      font-weight: 800;
-      padding: 8px 14px;
+    .player-select {
+      flex: 1;
+      height: 34px;
+      background: #0d131a;
+      border: 1px solid #283749;
       border-radius: 6px;
-      cursor: pointer;
-      font-size: 12px;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      white-space: nowrap;
-      flex-shrink: 0;
-      transition: opacity 0.2s;
-    }
-    .btn-paste:hover { opacity: 0.9; }
-
-    .btn-secondary {
-      background: #1e2a3a;
-      border: 1px solid #36495e;
-      color: #d1dbe5;
+      padding: 0 10px;
+      color: #ffffff;
       font-weight: 700;
-      padding: 8px 12px;
-      border-radius: 6px;
-      cursor: pointer;
       font-size: 12px;
-      white-space: nowrap;
-      flex-shrink: 0;
-      transition: border-color 0.2s, color 0.2s;
+      outline: none;
+      min-width: 0;
+      cursor: pointer;
     }
-    .btn-secondary:hover { border-color: #f5a623; color: #fff; }
+    .player-select:focus { border-color: #f5a623; }
 
     .json-inline-input {
       flex: 1;
@@ -115,9 +111,39 @@
       font-size: 11px;
       outline: none;
       min-width: 0;
-      transition: border-color 0.2s;
     }
     .json-inline-input:focus { border-color: #f5a623; }
+
+    .btn-paste {
+      background: #f5a623;
+      border: none;
+      color: #0f141c;
+      font-weight: 800;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 11.5px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .btn-paste:hover { opacity: 0.9; }
+
+    .btn-secondary {
+      background: #1e2a3a;
+      border: 1px solid #36495e;
+      color: #d1dbe5;
+      font-weight: 700;
+      padding: 8px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 11.5px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .btn-secondary:hover { border-color: #f5a623; color: #fff; }
 
     /* ESTRUTURA PARA ALINHAR SUMÁRIO E RESSONÂNCIA */
     .top-profile-resonance-row {
@@ -153,6 +179,9 @@
     .summary-item strong {
       font-size: 13px;
       color: #50e3c2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     /* ---------------- 1. SEÇÃO DE RESSONÂNCIA ---------------- */
@@ -201,9 +230,7 @@
       flex-shrink: 0;
       box-shadow: 0 3px 8px rgba(0,0,0,0.4);
     }
-    .resonance-category-badge img {
-      object-fit: contain;
-    }
+    .resonance-category-badge img { object-fit: contain; }
     .resonance-category-badge span {
       font-weight: 800;
       text-transform: uppercase;
@@ -354,12 +381,13 @@
     .empty-state {
       text-align: center;
       color: #8fa0b5;
-      font-size: 13px;
-      padding: 30px 10px;
+      font-size: 12.5px;
+      line-height: 1.5;
+      padding: 24px 10px;
     }
 
     /* =========================================================
-       DESKTOP DE MESA (> 600px): ALINHAMENTO JUSTO E PERFEITO
+       DESKTOP DE MESA (> 600px)
     ========================================================= */
     @media (min-width: 601px) {
       .container {
@@ -372,12 +400,11 @@
         width: fit-content;
         margin: 0 auto 10px auto;
       }
-      .import-inline-bar {
+      .controls-wrapper {
         max-width: 580px;
         margin: 0 auto 16px auto;
       }
 
-      /* Alinhamento superior comprimido */
       .top-profile-resonance-row {
         display: flex;
         flex-direction: row;
@@ -407,14 +434,9 @@
         border-bottom: none;
         padding-bottom: 0;
       }
-      .summary-item span {
-        font-size: 8.5px;
-      }
-      .summary-item strong {
-        font-size: 13.5px;
-      }
+      .summary-item span { font-size: 8.5px; }
+      .summary-item strong { font-size: 13.5px; }
 
-      /* Ressonância compactada */
       .resonance-section {
         width: fit-content;
         margin-bottom: 0;
@@ -434,9 +456,7 @@
         width: 22px;
         height: 22px;
       }
-      .resonance-category-badge span {
-        font-size: 7px;
-      }
+      .resonance-category-badge span { font-size: 7px; }
       .resonance-cards-strip {
         display: flex;
         gap: 6px;
@@ -447,7 +467,6 @@
         flex-shrink: 0;
       }
 
-      /* Catálogo perfeitamente contido e centralizado */
       .catalog-wrapper {
         width: fit-content;
         margin: 0 auto;
@@ -485,7 +504,6 @@
         left: 1.5px;
       }
 
-      /* Tooltip flutuante desktop */
       .card-tooltip {
         visibility: hidden;
         opacity: 0;
@@ -524,24 +542,20 @@
     }
 
     /* =========================================================
-       MOBILE (<= 600px): EXATAMENTE O LAYOUT PERFEITO ANTERIOR
+       MOBILE (<= 600px)
     ========================================================= */
     @media (max-width: 600px) {
       .import-inline-bar {
         padding: 6px;
         gap: 5px;
       }
-      .btn-paste {
+      .btn-paste, .btn-secondary {
         padding: 7px 10px;
         font-size: 11px;
       }
-      .btn-secondary {
-        padding: 7px 10px;
-        font-size: 11px;
-      }
-      .json-inline-input {
+      .player-select, .json-inline-input {
         height: 32px;
-        font-size: 10px;
+        font-size: 11px;
         padding: 0 6px;
       }
 
@@ -550,21 +564,15 @@
         flex-direction: column;
         gap: 12px;
       }
-      .player-summary {
-        margin-bottom: 0;
-      }
+      .player-summary { margin-bottom: 0; }
       .cards-grid-catalog {
         display: grid;
         grid-template-columns: repeat(3, 1fr) !important;
         gap: 2.5px !important;
         width: 100%;
       }
-      .catalog-3-groups {
-        gap: 3px !important;
-      }
-      .catalog-group {
-        padding: 5px 2px !important;
-      }
+      .catalog-3-groups { gap: 3px !important; }
+      .catalog-group { padding: 5px 2px !important; }
       .card-overlay-lvl {
         font-size: 7.5px !important;
         padding: 0.5px 1.5px !important;
@@ -585,12 +593,8 @@
         width: 18px !important;
         height: 18px !important;
       }
-      .resonance-category-badge span {
-        font-size: 6px !important;
-      }
-      .resonance-cards-strip {
-        gap: 2.5px !important;
-      }
+      .resonance-category-badge span { font-size: 6px !important; }
+      .resonance-cards-strip { gap: 2.5px !important; }
       .card-tooltip { display: none !important; }
 
       #mobileCardDrawer {
@@ -676,19 +680,31 @@
   <a href="index.html" class="back-btn">&larr; Voltar ao Menu</a>
 
   <div class="container">
-    <div class="title">Importar <span>Cartas & Níveis</span></div>
+    <div class="title">Cartas & <span>Níveis do Clã</span></div>
+    <div class="sync-status" id="syncStatus">Sincronizando dados da API no Supabase...</div>
 
-    <!-- BARRA COMPACTA EM LINHA ÚNICA -->
-    <div class="import-inline-bar">
-      <button class="btn-paste" onclick="colarDoClipboard()">📋 Colar</button>
-      <button class="btn-secondary" onclick="processarTextoManual()">Processar</button>
-      <input type="text" id="jsonInput" class="json-inline-input" placeholder="Cole o JSON exportado aqui..." onkeydown="if(event.key==='Enter') processarTextoManual()">
+    <div class="controls-wrapper">
+      <!-- LINHA 1: SELETOR AUTOMÁTICO DA API -->
+      <div class="import-inline-bar">
+        <select id="playerSelect" class="player-select" onchange="selecionarMembroAPI(this.value)">
+          <option value="">Carregando os 50 membros da API...</option>
+        </select>
+        <button class="btn-secondary" onclick="carregarDadosDaAPI()">🔄 Atualizar</button>
+      </div>
+
+      <!-- LINHA 2: BARRA MANUAL OPCIONAL -->
+      <div class="import-inline-bar">
+        <button class="btn-paste" onclick="colarDoClipboard()">📋 Colar</button>
+        <button class="btn-secondary" onclick="processarTextoManual()">Processar</button>
+        <input type="text" id="jsonInput" class="json-inline-input" placeholder="Ou cole o JSON exportado aqui..." onkeydown="if(event.key==='Enter') processarTextoManual()">
+      </div>
     </div>
 
     <!-- WRAPPER DO SUMÁRIO + RESSONÂNCIA -->
     <div class="top-profile-resonance-row" id="topProfileRow">
       <!-- SUMÁRIO DO JOGADOR -->
       <div class="player-summary" id="playerSummary">
+        <div class="summary-item"><span>Jogador</span><strong id="sumName" style="color: #ffffff;">-</strong></div>
         <div class="summary-item"><span>Max Stage</span><strong id="sumStage">-</strong></div>
         <div class="summary-item"><span>Raid Level</span><strong id="sumRaidLvl">-</strong></div>
         <div class="summary-item"><span>Soma Níveis</span><strong id="sumLvlSum">-</strong></div>
@@ -720,7 +736,7 @@
           <div class="resonance-cards-strip" id="resStripAffliction"></div>
         </div>
 
-        <!-- LINHA 3: SUPORTE (s.png) -->
+        <!-- LINHA 3: SUPORTE -->
         <div class="resonance-row">
           <div class="resonance-category-badge badge-support-res">
             <img src="Cards/s.png" alt="Support" onerror="this.src='Cards/wc.png'">
@@ -732,7 +748,7 @@
     </div>
 
     <div id="emptyMessage" class="empty-state">
-      Nenhum perfil carregado. Clique em <strong>Colar</strong> ou insira o JSON na barra acima para visualizar as cartas.
+      Cruzando dados de membros e cartas do clã...
     </div>
 
     <!-- ================= 2. CATÁLOGO COMPLETO ================= -->
@@ -784,68 +800,354 @@
   </div>
 
   <script>
-    const SEASON_BOOSTS = {
-      "FlakShot": "20",     // fs
-      "MirrorForce": "20",  // mf
-      "BurstBoost": "10"    // af
+    const SUPABASE_URL = "https://hqhirsnowapylfwhvduf.supabase.co";
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhxaGlyc25vd2FweWxmd2h2ZHVmIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc5MjkzNTkxOCwiZXhwIjoyMTA4NTExOTE4fQ.sAZeXN1XFKDh0gVGBomanuHM6GkcEto8AmxZzNRehpI";
+
+    let SEASON_BOOSTS = {
+      "FlakShot": "+20",
+      "MirrorForce": "+20",
+      "BurstBoost": "+10"
     };
 
     const CARD_METADATA = {
-      "MoonBeam": { name: "Moon Beam", rank: "A", type: "Burst", img: "Cards/mb.png", target: "Torso/Braços", desc: "Foco exclusivo de dano explosivo." },
-      "Fragmentize": { name: "Fragmentize", rank: "B", type: "Burst", img: "Cards/fr.png", target: "Armadura", desc: "Dano aumentado contra armadura." },
-      "SkullBash": { name: "Skull Bash", rank: "A", type: "Burst", img: "Cards/sb.png", target: "Cabeça/Pernas", desc: "Foco exclusivo de dano explosivo." },
-      "RazorWind": { name: "Razor Wind", rank: "B", type: "Burst", img: "Cards/rw.png", target: "Corpo", desc: "Rajadas cortantes." },
-      "WhipOfLightning": { name: "Whip of Lightning", rank: "A", type: "Burst", img: "Cards/wol.png", target: "5 ou 6 Partes", desc: "Golpes elétricos divididos." },
-      "BurstCount": { name: "Clanship Barrage", rank: "S", type: "Burst", img: "Cards/csb.png", target: "Qualquer Parte", desc: "Disparos do Clan Ship." },
-      "Purify": { name: "Purifying Blast", rank: "S", type: "Burst", img: "Cards/pb.png", target: "2 ou 3 Partes", desc: "Detona acúmulos de aflição." },
-      "LimbBurst": { name: "Psychic Shackles", rank: "A", type: "Burst", img: "Cards/ps.png", target: "Membros", desc: "Foco em membros." },
-      "FlakShot": { name: "Flak Shot", rank: "B", type: "Burst", img: "Cards/fs.png", target: "Armadura", desc: "Estilhaços em múltiplos alvos." },
-      "Haymaker": { name: "Cosmic Haymaker", rank: "S", type: "Burst", img: "Cards/ch.png", target: "Qualquer Parte", desc: "Dano massivo no tronco superior." },
-      "ChainLightning": { name: "Chain of Vengeance", rank: "A", type: "Burst", img: "Cards/cov.png", target: "6 Partes", desc: "Dano elétrico em cadeia." },
-      "MirrorForce": { name: "Mirror Force", rank: "S", type: "Burst", img: "Cards/mf.png", target: "Qualquer Parte", desc: "Bônus progressivo por ciclo." },
-      "CelestialStatic": { name: "Celestial Static", rank: "S", type: "Burst", img: "Cards/cs.png", target: "Membros + Cabeça/Torso", desc: "Dano contínuo na parte atacada." },
-      "Weaken": { name: "Guard Break", rank: "A", type: "Burst", img: "Cards/gb.png", target: "Qualquer Parte", desc: "Potencializa dano com partes destruídas." },
-      "BarbedMorningstar": { name: "Barbed Morningstar", rank: "B", type: "Burst", img: "Cards/bm.png", target: "Armadura ou Corpo", desc: "Explosão perfurante." },
+      "MoonBeam":          { name: "Moon Beam", rank: "A", type: "Burst", img: "Cards/MoonBeam.png", oldImg: "Cards/mb.png", target: "Torso/Braços", desc: "Foco exclusivo de dano explosivo." },
+      "Fragmentize":       { name: "Fragmentize", rank: "B", type: "Burst", img: "Cards/Fragmentize.png", oldImg: "Cards/fr.png", target: "Armadura", desc: "Dano aumentado contra armadura." },
+      "SkullBash":         { name: "Skull Bash", rank: "A", type: "Burst", img: "Cards/SkullBash.png", oldImg: "Cards/sb.png", target: "Cabeça/Pernas", desc: "Foco exclusivo de dano explosivo." },
+      "RazorWind":         { name: "Razor Wind", rank: "B", type: "Burst", img: "Cards/RazorWind.png", oldImg: "Cards/rw.png", target: "Corpo", desc: "Rajadas cortantes." },
+      "WhipOfLightning":   { name: "Whip of Lightning", rank: "A", type: "Burst", img: "Cards/WhipOfLightning.png", oldImg: "Cards/wol.png", target: "5 ou 6 Partes", desc: "Golpes elétricos divididos." },
+      "BurstCount":        { name: "Clanship Barrage", rank: "S", type: "Burst", img: "Cards/BurstCount.png", oldImg: "Cards/csb.png", target: "Qualquer Parte", desc: "Disparos do Clan Ship." },
+      "Purify":            { name: "Purifying Blast", rank: "S", type: "Burst", img: "Cards/Purify.png", oldImg: "Cards/pb.png", target: "2 ou 3 Partes", desc: "Detona acúmulos de aflição." },
+      "LimbBurst":         { name: "Psychic Shackles", rank: "A", type: "Burst", img: "Cards/LimbBurst.png", oldImg: "Cards/ps.png", target: "Membros", desc: "Foco em membros." },
+      "FlakShot":          { name: "Flak Shot", rank: "B", type: "Burst", img: "Cards/FlakShot.png", oldImg: "Cards/fs.png", target: "Armadura", desc: "Estilhaços em múltiplos alvos." },
+      "Haymaker":          { name: "Cosmic Haymaker", rank: "S", type: "Burst", img: "Cards/Haymaker.png", oldImg: "Cards/ch.png", target: "Qualquer Parte", desc: "Dano massivo no tronco superior." },
+      "ChainLightning":    { name: "Chain of Vengeance", rank: "A", type: "Burst", img: "Cards/ChainLightning.png", oldImg: "Cards/cov.png", target: "6 Partes", desc: "Dano elétrico em cadeia." },
+      "MirrorForce":       { name: "Mirror Force", rank: "S", type: "Burst", img: "Cards/MirrorForce.png", oldImg: "Cards/mf.png", target: "Qualquer Parte", desc: "Bônus progressivo por ciclo." },
+      "CelestialStatic":   { name: "Celestial Static", rank: "S", type: "Burst", img: "Cards/CelestialStatic.png", oldImg: "Cards/cs.png", target: "Membros + Cabeça/Torso", desc: "Dano contínuo na parte atacada." },
+      "Weaken":            { name: "Guard Break", rank: "A", type: "Burst", img: "Cards/Weaken.png", oldImg: "Cards/gb.png", target: "Qualquer Parte", desc: "Potencializa dano com partes destruídas." },
+      "BarbedMorningstar": { name: "Barbed Morningstar", rank: "B", type: "Burst", img: "Cards/BarbedMorningstar.png", oldImg: "Cards/bm.png", target: "Armadura ou Corpo", desc: "Explosão perfurante." },
 
-      "BurningAttack": { name: "Blazing Inferno", rank: "B", type: "Affliction", img: "Cards/bi.png", target: "Até 6 Partes", desc: "Fogo contínuo." },
-      "PoisonAttack": { name: "Acid Drench", rank: "A", type: "Affliction", img: "Cards/ad.png", target: "Parte Afetada", desc: "Veneno corrosivo." },
-      "DecayingAttack": { name: "Decaying Strike", rank: "S", type: "Affliction", img: "Cards/ds.png", target: "Corpo", desc: "Dano colossal em partes saudáveis." },
-      "Fuse": { name: "Fusion Bomb", rank: "A", type: "Affliction", img: "Cards/fb.png", target: "Múltiplas Partes", desc: "Bombas com contagem regressiva." },
-      "Shadow": { name: "Grim Shadow", rank: "A", type: "Affliction", img: "Cards/gs.png", target: "Até 6 Partes", desc: "Acúmulo de sombras." },
-      "PlagueAttack": { name: "Thriving Plague", rank: "S", type: "Affliction", img: "Cards/tp.png", target: "1 a 3 Partes", desc: "Praga altamente concentrada." },
-      "Disease": { name: "Radioactivity", rank: "A", type: "Affliction", img: "Cards/ra.png", target: "Até 6 Partes", desc: "Radiação contínua." },
-      "Swarm": { name: "Ravenous Swarm", rank: "A", type: "Affliction", img: "Cards/rs.png", target: "6 Partes", desc: "Enxame voraz." },
-      "RuinousRust": { name: "Ruinous Rain", rank: "S", type: "Affliction", img: "Cards/rr.png", target: "Armadura", desc: "Chuva corrosiva ácida." },
-      "PowerBubble": { name: "Corrosive Bubbles", rank: "A", type: "Affliction", img: "Cards/bb.png", target: "Armadura Amaldiçoada", desc: "Bolhas ácidas explosivas." },
-      "RuneAttack": { name: "Maelstrom", rank: "S", type: "Affliction", img: "Cards/ma.png", target: "Parte Afetada", desc: "Vórtice de aflição." },
-      "MagicPotion": { name: "Amplify", rank: "S", type: "Affliction", img: "Cards/am.png", target: "Todas as Aflições", desc: "Amplifica venenos e pragas." },
-      "SandsOfTime": { name: "Sands of Time", rank: "B", type: "Affliction", img: "Cards/sot.png", target: "6 Partes", desc: "Acelera ticks de aflição." },
-      "CosmicBarb": { name: "Electro Zap", rank: "S", type: "Affliction", img: "Cards/zz.png", target: "Qualquer Parte", desc: "O Céu é o Limite!!" },
+      "BurningAttack":     { name: "Blazing Inferno", rank: "B", type: "Affliction", img: "Cards/BurningAttack.png", oldImg: "Cards/bi.png", target: "Até 6 Partes", desc: "Fogo contínuo." },
+      "PoisonAttack":      { name: "Acid Drench", rank: "A", type: "Affliction", img: "Cards/PoisonAttack.png", oldImg: "Cards/ad.png", target: "Parte Afetada", desc: "Veneno corrosivo." },
+      "DecayingAttack":    { name: "Decaying Strike", rank: "S", type: "Affliction", img: "Cards/DecayingAttack.png", oldImg: "Cards/ds.png", target: "Corpo", desc: "Dano colossal em partes saudáveis." },
+      "Fuse":              { name: "Fusion Bomb", rank: "A", type: "Affliction", img: "Cards/Fuse.png", oldImg: "Cards/fb.png", target: "Múltiplas Partes", desc: "Bombas com contagem regressiva." },
+      "Shadow":            { name: "Grim Shadow", rank: "A", type: "Affliction", img: "Cards/Shadow.png", oldImg: "Cards/gs.png", target: "Até 6 Partes", desc: "Acúmulo de sombras." },
+      "PlagueAttack":      { name: "Thriving Plague", rank: "S", type: "Affliction", img: "Cards/PlagueAttack.png", oldImg: "Cards/tp.png", target: "1 a 3 Partes", desc: "Praga altamente concentrada." },
+      "Disease":           { name: "Radioactivity", rank: "A", type: "Affliction", img: "Cards/Disease.png", oldImg: "Cards/ra.png", target: "Até 6 Partes", desc: "Radiação contínua." },
+      "Swarm":             { name: "Ravenous Swarm", rank: "A", type: "Affliction", img: "Cards/Swarm.png", oldImg: "Cards/rs.png", target: "6 Partes", desc: "Enxame voraz." },
+      "RuinousRust":       { name: "Ruinous Rain", rank: "S", type: "Affliction", img: "Cards/RuinousRust.png", oldImg: "Cards/rr.png", target: "Armadura", desc: "Chuva corrosiva ácida." },
+      "PowerBubble":       { name: "Corrosive Bubbles", rank: "A", type: "Affliction", img: "Cards/PowerBubble.png", oldImg: "Cards/bb.png", target: "Armadura Amaldiçoada", desc: "Bolhas ácidas explosivas." },
+      "RuneAttack":        { name: "Maelstrom", rank: "S", type: "Affliction", img: "Cards/RuneAttack.png", oldImg: "Cards/ma.png", target: "Parte Afetada", desc: "Vórtice de aflição." },
+      "MagicPotion":       { name: "Amplify", rank: "S", type: "Affliction", img: "Cards/MagicPotion.png", oldImg: "Cards/am.png", target: "Todas as Aflições", desc: "Amplifica venenos e pragas." },
+      "SandsOfTime":       { name: "Sands of Time", rank: "B", type: "Affliction", img: "Cards/SandsOfTime.png", oldImg: "Cards/sot.png", target: "6 Partes", desc: "Acelera ticks de aflição." },
+      "CosmicBarb":        { name: "Electro Zap", rank: "S", type: "Affliction", img: "Cards/CosmicBarb.png", oldImg: "Cards/zz.png", target: "Qualquer Parte", desc: "O Céu é o Limite!!" },
 
-      "ExecutionersAxe": { name: "Crushing Instinct", rank: "A", type: "Support", img: "Cards/ci.png", target: "Geral", desc: "Aumento de chance crítica." },
-      "CrushingVoid": { name: "Insanity Void", rank: "S", type: "Support", img: "Cards/iv.png", target: "Alvo da Aflição", desc: "Aumenta aflição no corpo." },
-      "MentalFocus": { name: "Rancid Gas", rank: "B", type: "Support", img: "Cards/rg.png", target: "Veneno", desc: "Potencializa acúmulo de veneno." },
-      "ImpactAttack": { name: "Inspiring Force", rank: "A", type: "Support", img: "Cards/if.png", target: "Corpo", desc: "Bônus em golpes no corpo." },
-      "InnerTruth": { name: "Soul Fire", rank: "B", type: "Support", img: "Cards/sf.png", target: "Tronco/Braços", desc: "Eleva dano em tronco e braços." },
-      "FinisherAttack": { name: "Victory March", rank: "S", type: "Support", img: "Cards/vm.png", target: "Partes Destruídas", desc: "Bônus por partes destruídas." },
-      "SuperheatMetal": { name: "Prismatic Rift", rank: "A", type: "Support", img: "Cards/pr.png", target: "Armadura", desc: "Destrói armaduras." },
-      "BurstBoost": { name: "Ancestral Favor", rank: "S", type: "Support", img: "Cards/af.png", target: "Burst", desc: "Poder de ativação de Burst." },
-      "LimbSupport": { name: "Grasping Vines", rank: "A", type: "Support", img: "Cards/gv.png", target: "Membros", desc: "Dano extra em membros." },
-      "TotemFairySkill": { name: "Totem of Power", rank: "S", type: "Support", img: "Cards/tot.png", target: "Fada / Tap", desc: "Invoca fadas cumulativas." },
-      "TeamTactics": { name: "Team Tactics", rank: "S", type: "Support", img: "Cards/tt.png", target: "Clã", desc: "Eleva dano global do clã." },
-      "SpinalTap": { name: "Skeletal Smash", rank: "S", type: "Support", img: "Cards/ss.png", target: "1 Parte", desc: "Impacto destrutivo concentrado." },
-      "AstralEcho": { name: "Astral Echo", rank: "A", type: "Support", img: "Cards/ae.png", target: "Geral", desc: "Gera ecos astrais." },
-      "TriangleSupport": { name: "Radiant Kaleidoscope", rank: "S", type: "Support", img: "Cards/rk.png", target: "Burst + Aflição", desc: "Suporte prismático misto." },
-      "BattleDrums": { name: "Battle Drums", rank: "B", type: "Support", img: "Cards/bd.png", target: "Membros", desc: "Tambores de guerra." }
+      "ExecutionersAxe":   { name: "Crushing Instinct", rank: "A", type: "Support", img: "Cards/ExecutionersAxe.png", oldImg: "Cards/ci.png", target: "Geral", desc: "Aumento de chance crítica." },
+      "CrushingVoid":      { name: "Insanity Void", rank: "S", type: "Support", img: "Cards/CrushingVoid.png", oldImg: "Cards/iv.png", target: "Alvo da Aflição", desc: "Aumenta aflição no corpo." },
+      "MentalFocus":       { name: "Rancid Gas", rank: "B", type: "Support", img: "Cards/MentalFocus.png", oldImg: "Cards/rg.png", target: "Veneno", desc: "Potencializa acúmulo de veneno." },
+      "ImpactAttack":      { name: "Inspiring Force", rank: "A", type: "Support", img: "Cards/ImpactAttack.png", oldImg: "Cards/if.png", target: "Corpo", desc: "Bônus em golpes no corpo." },
+      "InnerTruth":        { name: "Soul Fire", rank: "B", type: "Support", img: "Cards/InnerTruth.png", oldImg: "Cards/sf.png", target: "Tronco/Braços", desc: "Eleva dano em tronco e braços." },
+      "FinisherAttack":    { name: "Victory March", rank: "S", type: "Support", img: "Cards/FinisherAttack.png", oldImg: "Cards/vm.png", target: "Partes Destruídas", desc: "Bônus por partes destruídas." },
+      "SuperheatMetal":    { name: "Prismatic Rift", rank: "A", type: "Support", img: "Cards/SuperheatMetal.png", oldImg: "Cards/pr.png", target: "Armadura", desc: "Destrói armaduras." },
+      "BurstBoost":        { name: "Ancestral Favor", rank: "S", type: "Support", img: "Cards/BurstBoost.png", oldImg: "Cards/af.png", target: "Burst", desc: "Poder de ativação de Burst." },
+      "LimbSupport":       { name: "Grasping Vines", rank: "A", type: "Support", img: "Cards/LimbSupport.png", oldImg: "Cards/gv.png", target: "Membros", desc: "Dano extra em membros." },
+      "TotemFairySkill":   { name: "Totem of Power", rank: "S", type: "Support", img: "Cards/TotemFairySkill.png", oldImg: "Cards/tot.png", target: "Fada / Tap", desc: "Invoca fadas cumulativas." },
+      "TeamTactics":       { name: "Team Tactics", rank: "S", type: "Support", img: "Cards/TeamTactics.png", oldImg: "Cards/tt.png", target: "Clã", desc: "Eleva dano global do clã." },
+      "SpinalTap":         { name: "Skeletal Smash", rank: "S", type: "Support", img: "Cards/SpinalTap.png", oldImg: "Cards/ss.png", target: "1 Parte", desc: "Impacto destrutivo concentrado." },
+      "AstralEcho":        { name: "Astral Echo", rank: "A", type: "Support", img: "Cards/AstralEcho.png", oldImg: "Cards/ae.png", target: "Geral", desc: "Gera ecos astrais." },
+      "TriangleSupport":   { name: "Radiant Kaleidoscope", rank: "S", type: "Support", img: "Cards/TriangleSupport.png", oldImg: "Cards/rk.png", target: "Burst + Aflição", desc: "Suporte prismático misto." },
+      "BattleDrums":       { name: "Battle Drums", rank: "B", type: "Support", img: "Cards/BattleDrums.png", oldImg: "Cards/bd.png", target: "Membros", desc: "Tambores de guerra." }
     };
+
+    const CARD_LOOKUP = {};
+    for (const [id, meta] of Object.entries(CARD_METADATA)) {
+      const cleanId = id.toLowerCase().replace(/[^a-z0-9]/g, "");
+      const cleanName = meta.name.toLowerCase().replace(/[^a-z0-9]/g, "");
+      const abbr = meta.oldImg.replace("Cards/", "").replace(".png", "").toLowerCase();
+      CARD_LOOKUP[cleanId] = id;
+      CARD_LOOKUP[cleanName] = id;
+      CARD_LOOKUP[abbr] = id;
+    }
+
+    function resolverCardId(rawKey) {
+      if (!rawKey) return null;
+      if (CARD_METADATA[rawKey]) return rawKey;
+      const clean = String(rawKey).toLowerCase().replace(/[^a-z0-9]/g, "");
+      return CARD_LOOKUP[clean] || rawKey;
+    }
+
+    function limparNome(nome) {
+      if (!nome) return "";
+      return String(nome).replace(/[\u0000-\u001F\u007F-\u009F]/g, "").trim();
+    }
+
+    let listaMembrosUnificada = [];
+
+    async function supabaseFetch(tabela, queryParams) {
+      const url = `${SUPABASE_URL}/rest/v1/${tabela}?${queryParams}`;
+      const res = await fetch(url, {
+        method: "GET",
+        headers: {
+          "apikey": SUPABASE_KEY,
+          "Authorization": `Bearer ${SUPABASE_KEY}`,
+          "Content-Type": "application/json"
+        }
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return await res.json();
+    }
+
+    async function carregarDadosDaAPI() {
+      const statusEl = document.getElementById("syncStatus");
+      statusEl.style.color = "#8fa0b5";
+      statusEl.textContent = "Cruzando dados de membros e ataques no Supabase...";
+
+      try {
+        const mapaJogadores = {};
+        let nomeCla = "2nd Mafia BR";
+
+        function garantirJogador(code) {
+          if (!code) return null;
+          const k = String(code).toLowerCase().trim();
+          if (!mapaJogadores[k]) {
+            mapaJogadores[k] = {
+              player_code: k,
+              name: "",
+              max_stage: null,
+              player_raid_level: null,
+              total_card_level: null,
+              raid_wildcard_count: null,
+              summon_level: null,
+              cards: {},
+              boosted_cards: []
+            };
+          }
+          return mapaJogadores[k];
+        }
+
+        // 1. Busca o último status_assinatura (que contém member_list com os 50 nomes e player_codes!)
+        const rowsAssinatura = await supabaseFetch(
+          "eventos_raid",
+          "select=dados&tipo_evento=eq.status_assinatura&order=id.desc&limit=3"
+        );
+
+        if (Array.isArray(rowsAssinatura)) {
+          for (const row of rowsAssinatura) {
+            const d = typeof row.dados === "string" ? JSON.parse(row.dados) : row.dados;
+            const okList = d?.ok || [];
+            for (const item of okList) {
+              if (item.clan_name) nomeCla = item.clan_name;
+              const memberList = item.member_list || [];
+              if (Array.isArray(memberList) && memberList.length > 0) {
+                memberList.forEach(m => {
+                  const p = garantirJogador(m.player_code);
+                  if (p && m.name) p.name = limparNome(m.name);
+                });
+                break;
+              }
+            }
+          }
+        }
+
+        // 2. Busca os eventos de attack (onde ficam os níveis reais em attack_log.cards_level e raid_level do player!)
+        const rowsAttacks = await supabaseFetch(
+          "eventos_raid",
+          "select=dados&tipo_evento=eq.attack&order=id.desc&limit=1000"
+        );
+
+        if (Array.isArray(rowsAttacks)) {
+          for (const row of rowsAttacks) {
+            const d = typeof row.dados === "string" ? JSON.parse(row.dados) : row.dados;
+            if (!d) continue;
+
+            const pl = d.player;
+            if (pl && pl.player_code) {
+              const p = garantirJogador(pl.player_code);
+              if (pl.name && !p.name) p.name = limparNome(pl.name);
+              if (pl.raid_level && (!p.player_raid_level || pl.raid_level > p.player_raid_level)) {
+                p.player_raid_level = pl.raid_level;
+              }
+
+              // Extrai exatamente de attack_log.cards_level: [{"id": "PowerBubble", "value": 18}, ...]
+              const cardsLevelList = d.attack_log?.cards_level || d.cards_level || [];
+              if (Array.isArray(cardsLevelList)) {
+                cardsLevelList.forEach(c => {
+                  const cardId = resolverCardId(c.id || c.card_id || c.name);
+                  const val = Number(c.value ?? c.level ?? c.lv ?? 0);
+                  if (cardId && val > 0) {
+                    p.cards[cardId] = Math.max(p.cards[cardId] || 0, val);
+                  }
+                });
+              }
+            }
+          }
+        }
+
+        // 3. Busca também dados_cla (que traz max_stage, raid_wildcard_count, summon_level, total_card_level e titan_cards)
+        try {
+          const rowsCla = await supabaseFetch("dados_cla", "select=*&order=id.asc&limit=5");
+          if (Array.isArray(rowsCla) && rowsCla.length > 0) {
+            for (const row of rowsCla) {
+              let obj = typeof row.dados === "string" ? JSON.parse(row.dados) : row.dados;
+              if (Array.isArray(obj) && obj.length > 0) obj = obj[0];
+              if (!obj) continue;
+
+              if (obj.clan_name) nomeCla = obj.clan_name;
+
+              // Encontra onde está a lista de membros em dados_cla
+              let listaCla = obj.members || obj.players || obj.clan_members || obj.leaderboard || obj.clan?.members || [];
+              if (!Array.isArray(listaCla)) {
+                for (const val of Object.values(obj)) {
+                  if (Array.isArray(val) && val.length > 0 && typeof val[0] === "object") {
+                    listaCla = val;
+                    break;
+                  }
+                }
+              }
+
+              if (Array.isArray(listaCla)) {
+                listaCla.forEach(m => {
+                  const code = m.player_code || m.id;
+                  if (!code) return;
+                  const p = garantirJogador(code);
+
+                  if (m.name) p.name = limparNome(m.name);
+                  if (m.max_stage !== undefined) p.max_stage = m.max_stage;
+                  if (m.player_raid_level !== undefined) p.player_raid_level = m.player_raid_level;
+                  if (m.total_card_level !== undefined) p.total_card_level = m.total_card_level;
+                  if (m.raid_wildcard_count !== undefined) p.raid_wildcard_count = m.raid_wildcard_count;
+                  if (m.summon_level !== undefined) p.summon_level = m.summon_level;
+                  if (Array.isArray(m.boosted_cards)) p.boosted_cards = m.boosted_cards;
+
+                  // Extrai titan_cards se estiverem presentes em dados_cla
+                  const tc = m.titan_cards || m.raid_cards || m.cards;
+                  if (Array.isArray(tc)) {
+                    tc.forEach(c => {
+                      if (typeof c === "object" && c !== null) {
+                        const cId = resolverCardId(c.id || c.card_id || c.name);
+                        const lv = Number(c.level ?? c.value ?? c.lv ?? 0);
+                        if (cId && lv > 0) {
+                          p.cards[cId] = Math.max(p.cards[cId] || 0, lv);
+                        }
+                      }
+                    });
+                  } else if (tc && typeof tc === "object") {
+                    for (const [k, v] of Object.entries(tc)) {
+                      const cId = resolverCardId(k);
+                      const lv = typeof v === "object" ? Number(v.level ?? v.value ?? v.lv ?? 0) : Number(v);
+                      if (cId && lv > 0) {
+                        p.cards[cId] = Math.max(p.cards[cId] || 0, lv);
+                      }
+                    }
+                  }
+                });
+              }
+            }
+          }
+        } catch (e) {
+          console.warn("Aviso ao consultar dados_cla:", e);
+        }
+
+        listaMembrosUnificada = Object.values(mapaJogadores);
+
+        if (listaMembrosUnificada.length === 0) {
+          statusEl.style.color = "#f5a623";
+          statusEl.textContent = "Nenhum membro encontrado no banco. Use a barra de JSON abaixo.";
+          return;
+        }
+
+        // Calcula a soma das cartas conhecidas caso total_card_level não tenha vindo
+        listaMembrosUnificada.forEach(p => {
+          const somaConhecida = Object.values(p.cards).reduce((acc, lv) => acc + lv, 0);
+          p.soma_conhecida = somaConhecida;
+          if (!p.name) p.name = `Jogador #${p.player_code}`;
+        });
+
+        // Ordena por Total Card Level (ou Raid Level / Soma de cartas vistas) decrescente
+        listaMembrosUnificada.sort((a, b) => {
+          const scoreA = a.total_card_level || (a.player_raid_level || 0) * 2 || a.soma_conhecida;
+          const scoreB = b.total_card_level || (b.player_raid_level || 0) * 2 || b.soma_conhecida;
+          return scoreB - scoreA;
+        });
+
+        const select = document.getElementById("playerSelect");
+        const ultimoPlayerCode = localStorage.getItem("tt2_selected_player");
+
+        select.innerHTML = listaMembrosUnificada.map(m => {
+          const rlTxt = m.player_raid_level ? ` • RL ${m.player_raid_level}` : "";
+          const totTxt = m.total_card_level ? ` • Σ ${m.total_card_level}` : (m.soma_conhecida > 0 ? ` • ${Object.keys(m.cards).length} cartas` : "");
+          return `<option value="${m.player_code}">${m.name}${rlTxt}${totTxt}</option>`;
+        }).join("");
+
+        // Seleciona o último jogador visto ou prioriza o seu perfil (xpy964 - MBR | JotaVe)
+        let indexInicial = 0;
+        const codigoPreferido = ultimoPlayerCode || "xpy964";
+        const achouIdx = listaMembrosUnificada.findIndex(m => m.player_code === codigoPreferido.toLowerCase());
+        if (achouIdx !== -1) {
+          indexInicial = achouIdx;
+          select.value = listaMembrosUnificada[achouIdx].player_code;
+        }
+
+        statusEl.style.color = "#4cd964";
+        statusEl.textContent = `✅ ${nomeCla} (${listaMembrosUnificada.length} membros sincronizados via API)`;
+
+        renderizarMembroUnificado(listaMembrosUnificada[indexInicial]);
+
+      } catch (err) {
+        console.error("Erro na API:", err);
+        statusEl.style.color = "#ff6b6b";
+        statusEl.textContent = "⚠️ Erro ao buscar dados da API: " + err.message;
+      }
+    }
+
+    function selecionarMembroAPI(codigoSelecionado) {
+      localStorage.setItem("tt2_selected_player", codigoSelecionado);
+      const membro = listaMembrosUnificada.find(m => m.player_code === String(codigoSelecionado).toLowerCase());
+      if (membro) {
+        renderizarMembroUnificado(membro);
+      }
+    }
+
+    function renderizarMembroUnificado(membro) {
+      const cardsMap = {};
+
+      for (const cardId of Object.keys(CARD_METADATA)) {
+        cardsMap[cardId] = { lv: membro.cards[cardId] || 0 };
+      }
+
+      if (Array.isArray(membro.boosted_cards) && membro.boosted_cards.length > 0) {
+        SEASON_BOOSTS = {};
+        membro.boosted_cards.forEach(bc => {
+          if (typeof bc === "string") {
+            const cId = resolverCardId(bc);
+            if (cId) SEASON_BOOSTS[cId] = "BOOST";
+          } else if (bc && typeof bc === "object") {
+            const cId = resolverCardId(bc.id || bc.card_id || bc.name);
+            const val = bc.level ?? bc.boost ?? bc.amount ?? bc.value;
+            if (cId) SEASON_BOOSTS[cId] = val ? `+${val}` : "BOOST";
+          }
+        });
+      }
+
+      const dadosNormalizados = {
+        playerName: membro.name,
+        maxStage: membro.max_stage ?? "-",
+        raidLevel: membro.player_raid_level ?? "-",
+        totalCardLevel: membro.total_card_level ?? (membro.soma_conhecida > 0 ? `${membro.soma_conhecida}+` : "-"),
+        wildcards: membro.raid_wildcard_count ?? "-",
+        necrobear: membro.summon_level ? `Nv. ${membro.summon_level}` : "-",
+        raidCards: cardsMap
+      };
+
+      renderizarInterfaceCartas(dadosNormalizados);
+    }
 
     async function colarDoClipboard() {
       try {
         const text = await navigator.clipboard.readText();
         document.getElementById("jsonInput").value = text;
-        processarJSON(text);
+        processarJSONManual(text);
       } catch (err) {
-        alert("Permissão negada. Cole o JSON manualmente no campo.");
+        alert("Cole o JSON diretamente na caixa de texto ao lado e clique em Processar.");
       }
     }
 
@@ -855,10 +1157,10 @@
         alert("Cole um JSON válido do jogo no campo.");
         return;
       }
-      processarJSON(text);
+      processarJSONManual(text);
     }
 
-    function processarJSON(rawText) {
+    function processarJSONManual(rawText) {
       try {
         const data = JSON.parse(rawText);
         if (!data.raidCards) {
@@ -866,60 +1168,94 @@
           return;
         }
 
-        document.getElementById("playerSummary").style.display = (window.innerWidth > 600) ? "flex" : "grid";
-        document.getElementById("sumStage").textContent = data.playerStats?.["Max Prestige Stage"] || "-";
-        document.getElementById("sumRaidLvl").textContent = data.raidStats?.["Raid Level"] || "-";
-        document.getElementById("sumLvlSum").textContent = data.raidStats?.["Total Raid Card Levels"] || "-";
-        document.getElementById("sumWildcards").textContent = data.raidStats?.["Wildcards"] || "0";
-        document.getElementById("sumNecrobear").textContent = data.playerStats?.["Necrobear Level"] ? `Nv. ${data.playerStats["Necrobear Level"]}` : "-";
-
-        document.getElementById("emptyMessage").style.display = "none";
-
-        const burstList = [];
-        const afflictionList = [];
-        const supportList = [];
-
-        for (const [key, val] of Object.entries(data.raidCards)) {
-          const meta = CARD_METADATA[key] || { name: key, rank: "B", type: "Support", img: "Cards/wc.png", target: "Geral", desc: "Sem descrição." };
-          const cardObj = { id: key, name: meta.name, rank: meta.rank, target: meta.target, desc: meta.desc, type: meta.type, img: meta.img, level: val.lv || 0 };
-
-          if (meta.type === "Burst") burstList.push(cardObj);
-          else if (meta.type === "Affliction") afflictionList.push(cardObj);
-          else supportList.push(cardObj);
+        const cardsNormalizadas = {};
+        for (const [k, v] of Object.entries(data.raidCards)) {
+          const cId = resolverCardId(k);
+          cardsNormalizadas[cId] = { lv: Number(v.lv ?? v.level ?? v ?? 0) };
         }
 
-        burstList.sort((a, b) => b.level - a.level);
-        afflictionList.sort((a, b) => b.level - a.level);
-        supportList.sort((a, b) => b.level - a.level);
+        const dadosNormalizados = {
+          playerName: data.playerStats?.["Player Name"] || "Importado",
+          maxStage: data.playerStats?.["Max Prestige Stage"] || "-",
+          raidLevel: data.raidStats?.["Raid Level"] || "-",
+          totalCardLevel: data.raidStats?.["Total Raid Card Levels"] || "-",
+          wildcards: data.raidStats?.["Wildcards"] || "0",
+          necrobear: data.playerStats?.["Necrobear Level"] ? `Nv. ${data.playerStats["Necrobear Level"]}` : "-",
+          raidCards: cardsNormalizadas
+        };
 
-        // 1. Ressonância (Top 6)
-        document.getElementById("secResonance").style.display = "flex";
-        renderStrip("resStripBurst", burstList.slice(0, 6), "border-burst");
-        renderStrip("resStripAffliction", afflictionList.slice(0, 6), "border-affliction");
-        renderStrip("resStripSupport", supportList.slice(0, 6), "border-support");
-
-        // 2. Catálogo Restante (sem repetir)
-        const remBurst = burstList.slice(6);
-        const remAffliction = afflictionList.slice(6);
-        const remSupport = supportList.slice(6);
-
-        document.getElementById("secCatalog").style.display = "flex";
-        document.getElementById("countBurst").textContent = remBurst.length;
-        document.getElementById("countAffliction").textContent = remAffliction.length;
-        document.getElementById("countSupport").textContent = remSupport.length;
-
-        renderGrid("gridCatalogBurst", remBurst, "border-burst");
-        renderGrid("gridCatalogAffliction", remAffliction, "border-affliction");
-        renderGrid("gridCatalogSupport", remSupport, "border-support");
-
+        const statusEl = document.getElementById("syncStatus");
+        statusEl.style.color = "#f5a623";
+        statusEl.textContent = "📋 Exibindo Perfil Importado via JSON Manual";
+        renderizarInterfaceCartas(dadosNormalizados);
       } catch (err) {
         alert("Erro ao interpretar o JSON colado.");
       }
     }
 
+    function renderizarInterfaceCartas(perfil) {
+      document.getElementById("playerSummary").style.display = (window.innerWidth > 600) ? "flex" : "grid";
+      document.getElementById("sumName").textContent = perfil.playerName || "-";
+      document.getElementById("sumStage").textContent = !isNaN(Number(perfil.maxStage)) ? Number(perfil.maxStage).toLocaleString("pt-BR") : perfil.maxStage;
+      document.getElementById("sumRaidLvl").textContent = perfil.raidLevel;
+      document.getElementById("sumLvlSum").textContent = !isNaN(Number(perfil.totalCardLevel)) ? Number(perfil.totalCardLevel).toLocaleString("pt-BR") : perfil.totalCardLevel;
+      document.getElementById("sumWildcards").textContent = !isNaN(Number(perfil.wildcards)) ? Number(perfil.wildcards).toLocaleString("pt-BR") : perfil.wildcards;
+      document.getElementById("sumNecrobear").textContent = perfil.necrobear;
+
+      document.getElementById("emptyMessage").style.display = "none";
+
+      const burstList = [];
+      const afflictionList = [];
+      const supportList = [];
+
+      for (const [key, val] of Object.entries(perfil.raidCards)) {
+        const meta = CARD_METADATA[key] || { name: key, rank: "B", type: "Support", img: `Cards/${key}.png`, oldImg: "Cards/wc.png", target: "Geral", desc: "Sem descrição." };
+        const cardObj = {
+          id: key,
+          name: meta.name,
+          rank: meta.rank,
+          target: meta.target,
+          desc: meta.desc,
+          type: meta.type,
+          img: meta.img,
+          oldImg: meta.oldImg || "Cards/wc.png",
+          level: val.lv || 0
+        };
+
+        if (meta.type === "Burst") burstList.push(cardObj);
+        else if (meta.type === "Affliction") afflictionList.push(cardObj);
+        else supportList.push(cardObj);
+      }
+
+      burstList.sort((a, b) => b.level - a.level);
+      afflictionList.sort((a, b) => b.level - a.level);
+      supportList.sort((a, b) => b.level - a.level);
+
+      document.getElementById("secResonance").style.display = "flex";
+      renderStrip("resStripBurst", burstList.slice(0, 6), "border-burst");
+      renderStrip("resStripAffliction", afflictionList.slice(0, 6), "border-affliction");
+      renderStrip("resStripSupport", supportList.slice(0, 6), "border-support");
+
+      const remBurst = burstList.slice(6);
+      const remAffliction = afflictionList.slice(6);
+      const remSupport = supportList.slice(6);
+
+      document.getElementById("secCatalog").style.display = "flex";
+      document.getElementById("countBurst").textContent = remBurst.length;
+      document.getElementById("countAffliction").textContent = remAffliction.length;
+      document.getElementById("countSupport").textContent = remSupport.length;
+
+      renderGrid("gridCatalogBurst", remBurst, "border-burst");
+      renderGrid("gridCatalogAffliction", remAffliction, "border-affliction");
+      renderGrid("gridCatalogSupport", remSupport, "border-support");
+    }
+
     function criarCardTile(card, borderClass) {
       const div = document.createElement("div");
       div.className = `card-tile ${borderClass}`;
+      if (card.level === 0) {
+        div.style.opacity = "0.32";
+      }
 
       div.onclick = (e) => {
         if (window.innerWidth <= 600) {
@@ -932,7 +1268,7 @@
       const boostBadgeHtml = boostVal ? `<span class="card-overlay-boost">${boostVal}</span>` : '';
 
       div.innerHTML = `
-        <img src="${card.img}" class="card-thumb" alt="${card.name}" onerror="this.src='Cards/wc.png'">
+        <img src="${card.img}" class="card-thumb" alt="${card.name}" onerror="if(this.src.indexOf('${card.oldImg}')===-1){this.src='${card.oldImg}';}else{this.src='Cards/wc.png';}">
         ${boostBadgeHtml}
         <span class="card-overlay-lvl">${card.level}</span>
         <div class="card-tooltip">
@@ -988,6 +1324,10 @@
       if (pSummary && pSummary.style.display !== "none" && pSummary.style.display !== "") {
         pSummary.style.display = (window.innerWidth > 600) ? "flex" : "grid";
       }
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      carregarDadosDaAPI();
     });
   </script>
 </body>

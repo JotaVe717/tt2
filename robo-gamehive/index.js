@@ -35,9 +35,9 @@ async function assinarEPuxarDados() {
     });
 
     const dadosSub = await resSub.json();
-    console.log("RESPOSTA DO SUBSCRIBE:", JSON.stringify(dadosSub));
+    console.log("RESPOSTA DO SUBSCRIBE:", JSON.stringify(dadosSub).slice(0, 300));
 
-    // Salva a resposta do subscribe no Cofre para você ver no site também
+    // Salva a resposta do subscribe no Supabase (tabela eventos_raid)
     await supabase.from("eventos_raid").insert({
       tipo_evento: "status_assinatura",
       dados: dadosSub
@@ -52,6 +52,7 @@ async function assinarEPuxarDados() {
 
 async function atualizarFichaDoCla() {
   try {
+    console.log("Atualizando ficha completa do clã (clan_data)...");
     const resposta = await fetch("https://tt2-public.gamehivegames.com/raid/clan_data", {
       method: "POST",
       headers: {
@@ -62,7 +63,7 @@ async function atualizarFichaDoCla() {
       body: JSON.stringify({
         player_token: PLAYER_TOKEN,
         properties: [
-          "max_stage", "raid_wildcard_count", "total_raid_player_xp",
+          "name", "player_code", "max_stage", "raid_wildcard_count", "total_raid_player_xp",
           "player_raid_level", "summon_level", "total_card_level",
           "role", "weekly_ticket_count", "titan_cards", "boosted_cards"
         ]
@@ -70,15 +71,16 @@ async function atualizarFichaDoCla() {
     });
 
     const textoOuJson = await resposta.json();
-    console.log("RESPOSTA DO CLAN_DATA:", JSON.stringify(textoOuJson).slice(0, 300));
-
-    if (resposta.ok && textoOuJson.clan_name) {
+    
+    if (resposta.ok && (textoOuJson.clan_name || textoOuJson.members || textoOuJson.leaderboard)) {
       await supabase.from("dados_cla").upsert({
         id: 1,
         atualizado_em: new Date().toISOString(),
         dados: textoOuJson
       });
-      console.log("Ficha completa do clã salva no Cofre!");
+      console.log(`Ficha do clã '${textoOuJson.clan_name || "Macacos Hidráulicos"}' salva com sucesso no Supabase!`);
+    } else {
+      console.warn("Aviso ao buscar clan_data:", JSON.stringify(textoOuJson).slice(0, 200));
     }
   } catch (erro) {
     console.error("Erro ao atualizar ficha de 12h:", erro);
@@ -102,10 +104,13 @@ socket.on("connect_error", (erro) => {
   console.log("Erro ao conectar no canal ao vivo:", erro.message || erro);
 });
 
-// Captura QUALQUER evento que vier da GameHive (mesmo que tenha nome diferente)
+// Captura QUALQUER evento que vier da GameHive
 socket.onAny(async (nomeEvento, pacoteDeDados) => {
-  console.log("Evento recebido ao vivo:", nomeEvento);
   if (nomeEvento !== "connected") {
+    // Exibe no console apenas eventos importantes para não poluir
+    if (["attack", "start_attack", "raid_sub_cycle", "cycle_reset"].includes(nomeEvento)) {
+      console.log("Evento relevante recebido ao vivo:", nomeEvento);
+    }
     await supabase.from("eventos_raid").insert({
       tipo_evento: nomeEvento,
       dados: pacoteDeDados || {}
@@ -113,6 +118,8 @@ socket.onAny(async (nomeEvento, pacoteDeDados) => {
   }
 });
 
+// Atualiza a ficha do clã a cada 12 horas automaticamente
 setInterval(atualizarFichaDoCla, 12 * 60 * 60 * 1000);
 
+// Servidor HTTP simples para manter o bot ativo em plataformas como Render
 http.createServer((req, res) => res.end("Ponte TT2 Online!")).listen(process.env.PORT || 3000);

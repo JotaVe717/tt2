@@ -12,9 +12,10 @@
       font-family: 'Segoe UI', Arial, sans-serif;
       -webkit-tap-highlight-color: transparent;
     }
+
     body {
-      background-color: #0f141c;
-      background-image: 
+      background-color: #0b0f17;
+      background-image:
         url('Cards/triade.png'),
         url('Cards/triade.jpg'),
         url('Cards/triade.webp'),
@@ -25,65 +26,99 @@
       background-position: center;
       background-attachment: fixed;
       background-repeat: no-repeat;
-      color: #ffffff;
+      color: #f8fafc;
       display: flex;
       flex-direction: column;
       align-items: center;
       min-height: 100vh;
-      padding: 32px 14px 40px 14px;
+      padding: 24px 14px 40px;
       overflow-x: hidden;
     }
-    .header {
-      position: relative;
-      text-align: center;
-      margin-bottom: 24px;
-      background: rgba(15, 20, 28, 0.78);
-      backdrop-filter: blur(8px);
-      padding: 20px 20px 16px 20px;
-      border-radius: 12px;
-      border: 1px solid rgba(43, 57, 74, 0.6);
-      max-width: 900px;
+
+    .wrapper {
       width: 100%;
+      max-width: 920px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
     }
-    
+
+    /* CABEÇALHO COMPACTO */
+    .header {
+      background: rgba(13, 18, 28, 0.86);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(51, 68, 92, 0.7);
+      border-radius: 14px;
+      padding: 18px 22px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.55);
+    }
+
+    .header-text h1 {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+    }
+
+    .header-text h1 span {
+      color: #f5a623;
+    }
+
+    .header-text p {
+      color: #9fb0c4;
+      font-size: 13px;
+      margin-top: 4px;
+    }
+
     /* BOTÃO DINÂMICO DE PERFIL / DISCORD */
     .top-profile-btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 7px;
+      gap: 8px;
       background: #5865F2;
       color: #ffffff;
       text-decoration: none;
       font-size: 12.5px;
       font-weight: 700;
-      padding: 7px 16px;
-      border-radius: 20px;
-      margin-bottom: 14px;
-      border: 1px solid rgba(255,255,255,0.2);
+      padding: 8px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
       box-shadow: 0 4px 14px rgba(88, 101, 242, 0.35);
       transition: all 0.2s ease;
+      white-space: nowrap;
     }
+
     .top-profile-btn:hover {
       background: #4752c4;
       transform: translateY(-1px);
       box-shadow: 0 6px 18px rgba(88, 101, 242, 0.55);
     }
+
     .top-profile-btn.logged-in {
-      background: rgba(80, 227, 194, 0.12);
+      background: rgba(80, 227, 194, 0.14);
       border-color: #50e3c2;
       color: #50e3c2;
       box-shadow: 0 0 12px rgba(80, 227, 194, 0.25);
     }
+
     .top-profile-btn.logged-in:hover {
-      background: rgba(80, 227, 194, 0.2);
+      background: rgba(80, 227, 194, 0.24);
       box-shadow: 0 0 16px rgba(80, 227, 194, 0.4);
     }
+
     .top-profile-btn svg {
       width: 16px;
       height: 16px;
       fill: currentColor;
     }
+
     .status-dot {
       width: 8px;
       height: 8px;
@@ -93,152 +128,213 @@
       display: inline-block;
     }
 
-    .header h1 {
-      font-size: 26px;
-      font-weight: 800;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
-    }
-    .header h1 span {
-      color: #f5a623;
-    }
-    .header p {
-      color: #b0c0d0;
-      font-size: 13.5px;
-      margin-top: 6px;
-      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
-    }
-    .deck-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 16px;
-      width: 100%;
-      max-width: 900px;
-      margin-bottom: 24px;
-    }
-    .deck-card {
-      background: rgba(25, 34, 45, 0.92);
+    /* SEÇÕES CATEGORIZADAS */
+    .category-block {
+      background: rgba(13, 18, 28, 0.72);
       backdrop-filter: blur(10px);
-      border: 1px solid #2b394a;
-      border-radius: 12px;
-      padding: 18px;
+      border: 1px solid rgba(45, 60, 82, 0.65);
+      border-radius: 14px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+    }
+
+    .category-header {
       display: flex;
       align-items: center;
-      gap: 16px;
+      justify-content: space-between;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(51, 68, 92, 0.55);
+    }
+
+    .category-title {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #cbd5e1;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .category-title::before {
+      content: '';
+      width: 4px;
+      height: 14px;
+      border-radius: 2px;
+      background: #f5a623;
+      display: inline-block;
+    }
+
+    .category-block.live-cat .category-title::before { background: #ff5252; }
+    .category-block.calc-cat .category-title::before { background: #50e3c2; }
+    .category-block.guide-cat .category-title::before { background: #4cd964; }
+
+    /* GRADES FECHADAS (SEM CARTÕES ÓRFÃOS) */
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    @media (max-width: 820px) {
+      .grid-3 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* CARTÕES */
+    .deck-card {
+      background: rgba(23, 32, 45, 0.94);
+      border: 1px solid #2b3a4e;
+      border-radius: 11px;
+      padding: 14px;
+      display: flex;
+      align-items: center;
+      gap: 13px;
       text-decoration: none;
       color: inherit;
-      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+      transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
     }
+
     .deck-card:hover {
-      transform: translateY(-3px);
+      transform: translateY(-2px);
       border-color: #4cd964;
-      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.7);
-      background: rgba(30, 40, 54, 0.97);
+      background: rgba(29, 40, 56, 0.98);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.65);
     }
-    .deck-card.highlight:hover {
+
+    .deck-card.cyan-hover:hover {
       border-color: #50e3c2;
+      box-shadow: 0 8px 20px rgba(80, 227, 194, 0.18);
     }
-    .deck-card.gold-highlight:hover {
+
+    .deck-card.gold-hover:hover {
       border-color: #f5a623;
+      box-shadow: 0 8px 20px rgba(245, 166, 35, 0.18);
     }
-    .deck-card.live-highlight {
-      border-color: rgba(255, 82, 82, 0.5);
+
+    .deck-card.live-card {
+      border-color: rgba(255, 82, 82, 0.45);
     }
-    .deck-card.live-highlight:hover {
+
+    .deck-card.live-card:hover {
       border-color: #ff5252;
-      box-shadow: 0 8px 22px rgba(255, 82, 82, 0.35);
+      box-shadow: 0 8px 20px rgba(255, 82, 82, 0.28);
     }
+
+    .deck-card.new-card {
+      border-color: rgba(80, 227, 194, 0.45);
+    }
+
     .deck-thumb {
-      width: 60px;
-      height: 60px;
+      width: 52px;
+      height: 52px;
       border-radius: 10px;
       object-fit: cover;
-      border: 2px solid #3a4b60;
-      background-color: #121921;
+      border: 1.5px solid #3a4c63;
+      background-color: #101720;
       flex-shrink: 0;
     }
+
     .deck-icon-thumb {
-      width: 60px;
-      height: 60px;
+      width: 52px;
+      height: 52px;
       border-radius: 10px;
-      border: 2px solid #3a4b60;
-      background-color: #121921;
+      border: 1.5px solid #3a4c63;
+      background-color: #101720;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 28px;
+      font-size: 24px;
       flex-shrink: 0;
     }
+
+    .deck-info {
+      min-width: 0;
+    }
+
+    .deck-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 2px;
+      color: #f5a623;
+    }
+
+    .deck-badge.green { color: #4cd964; }
+    .deck-badge.cyan  { color: #50e3c2; }
+    .deck-badge.gold  { color: #f5a623; }
+    .deck-badge.live  { color: #ff5252; }
+
     .deck-info h2 {
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 700;
       color: #ffffff;
       margin-bottom: 3px;
     }
+
     .deck-info p {
-      font-size: 12px;
-      color: #8fa0b5;
+      font-size: 11.8px;
+      color: #8fa1b7;
       line-height: 1.35;
     }
-    .deck-badge {
-      display: inline-block;
-      font-size: 10.5px;
-      font-weight: 700;
-      color: #f5a623;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 3px;
-    }
-    .deck-badge.green { color: #4cd964; }
-    .deck-badge.cyan { color: #50e3c2; }
-    .deck-badge.gold { color: #f5a623; }
-    .deck-badge.live { color: #ff5252; font-weight: 900; }
 
-    /* SEÇÃO DE CRÉDITOS */
+    /* SEÇÃO DE CRÉDITOS & APOIO */
     .credits-section {
-      width: 100%;
-      max-width: 900px;
-      background: rgba(20, 27, 36, 0.94);
+      background: rgba(16, 22, 32, 0.92);
       backdrop-filter: blur(12px);
-      border: 1px solid #314255;
+      border: 1px solid #2e3f54;
       border-radius: 14px;
-      padding: 18px;
+      padding: 16px 18px;
       box-shadow: 0 10px 28px rgba(0, 0, 0, 0.6);
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-    .author-header {
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
-      gap: 12px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid #283748;
+      gap: 14px;
     }
+
     .author-title-group {
       display: flex;
       align-items: center;
       gap: 12px;
     }
+
     .author-avatar {
-      width: 44px;
-      height: 44px;
+      width: 42px;
+      height: 42px;
       border-radius: 50%;
-      background: #141c24;
+      background: #121923;
       border: 2px solid #f5a623;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 900;
       color: #f5a623;
       flex-shrink: 0;
     }
+
     .author-meta h3 {
-      font-size: 15.5px;
+      font-size: 15px;
       font-weight: 800;
       color: #ffffff;
       display: flex;
@@ -246,6 +342,7 @@
       align-items: center;
       gap: 6px;
     }
+
     .author-clan-badge {
       font-size: 10px;
       background: rgba(245, 166, 35, 0.15);
@@ -255,49 +352,27 @@
       border-radius: 4px;
       font-weight: 700;
     }
+
     .author-desc {
       font-size: 11.5px;
       color: #8fa0b5;
       margin-top: 2px;
     }
 
-    /* BARRA DE APOIO */
-    .support-bar {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      background: #16202c;
-      border: 1px dashed #35475c;
-      padding: 12px 14px;
-      border-radius: 10px;
-    }
-    .support-text {
-      font-size: 12px;
-      color: #c4d1de;
-      line-height: 1.4;
-      flex: 1;
-      min-width: 220px;
-    }
-    .support-text span {
-      color: #f5a623;
-      font-weight: 700;
-    }
     .support-actions {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
       gap: 8px;
-      width: auto;
     }
+
     .btn-pix {
       background: #32bcad;
-      color: #0b2220;
+      color: #091e1c;
       font-weight: 800;
       font-size: 12px;
       padding: 8px 14px;
-      border-radius: 6px;
+      border-radius: 7px;
       border: none;
       cursor: pointer;
       display: inline-flex;
@@ -306,17 +381,19 @@
       gap: 6px;
       transition: all 0.2s;
     }
+
     .btn-pix:hover {
       background: #3ee2d1;
       transform: translateY(-1px);
     }
+
     .btn-discord {
       background: #5865F2;
       color: #ffffff;
       font-weight: 700;
       font-size: 12px;
-      padding: 8px 12px;
-      border-radius: 6px;
+      padding: 8px 13px;
+      border-radius: 7px;
       border: none;
       cursor: pointer;
       display: inline-flex;
@@ -325,6 +402,7 @@
       gap: 6px;
       transition: all 0.2s;
     }
+
     .btn-discord:hover {
       background: #4752c4;
       transform: translateY(-1px);
@@ -344,11 +422,12 @@
       bottom: 24px;
       left: 50%;
       transform: translateX(-50%);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
       font-size: 13px;
       opacity: 0;
       transition: opacity 0.3s, bottom 0.3s;
     }
+
     #copyToast.show {
       visibility: visible;
       opacity: 1;
@@ -356,8 +435,8 @@
     }
 
     footer {
-      margin-top: 24px;
-      color: #d1dbe5;
+      margin-top: 6px;
+      color: #cbd5e1;
       font-size: 11.5px;
       text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
       text-align: center;
@@ -365,155 +444,159 @@
 
     @media (max-width: 600px) {
       body {
-        padding: 20px 10px 30px 10px;
+        padding: 14px 10px 30px;
       }
       .header {
-        padding: 14px 12px;
-        margin-bottom: 16px;
+        flex-direction: column;
+        text-align: center;
+        padding: 16px 14px;
       }
-      .header h1 {
-        font-size: 20px;
+      .header-text h1 {
+        font-size: 19px;
       }
-      .header p {
-        font-size: 12px;
-      }
-      .deck-grid {
-        grid-template-columns: 1fr;
-        gap: 12px;
-      }
-      .deck-card {
-        padding: 14px 12px;
-        gap: 12px;
-      }
-      .deck-thumb, .deck-icon-thumb {
-        width: 50px;
-        height: 50px;
-        font-size: 24px;
+      .top-profile-btn {
+        width: 100%;
       }
       .credits-section {
-        padding: 14px 12px;
-      }
-      .support-bar {
         flex-direction: column;
         align-items: stretch;
-        gap: 10px;
       }
       .support-actions {
-        width: 100%;
-        display: flex;
         flex-direction: column;
-        gap: 8px;
+        width: 100%;
       }
       .btn-pix, .btn-discord {
         width: 100%;
         padding: 10px;
-        font-size: 13px;
       }
     }
   </style>
 </head>
 <body>
 
-  <div class="header">
-    <!-- BOTÃO COM DETECÇÃO DINÂMICA DE SESSÃO -->
-    <a href="perfil.html" id="btnPerfilTop" class="top-profile-btn">
-      <svg viewBox="0 0 127.14 96.36">
-        <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,45.91,53.91,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,45.91,96.12,53,91.08,65.69,84.69,65.69Z"/>
-      </svg>
-      <span id="labelPerfilTop">Entrar com Discord</span>
-    </a>
-
-    <h1>Guia de Decks & Raids <span>Tap Titans 2</span></h1>
-    <p>Selecione um guia ou tabela abaixo para visualizar as composições ideais e métricas de dano.</p>
-  </div>
-
-  <div class="deck-grid">
-
-    <!-- 1. RAID EM TEMPO REAL -->
-    <a href="painel_raid.html" class="deck-card live-highlight">
-      <img src="Cards/TeamTactics.png" alt="Raid em Tempo Real" class="deck-thumb" onerror="this.src='Cards/wc.png'">
-      <div class="deck-info">
-        <span class="deck-badge live">🔴 Ao Vivo</span>
-        <h2>Raid em Tempo Real</h2>
-        <p>Acompanhe o titã atual no campo, status anatômico, vida restante e buffs ativos.</p>
+  <div class="wrapper">
+    <!-- CABEÇALHO -->
+    <header class="header">
+      <div class="header-text">
+        <h1>Guia de Decks & Raids <span>Tap Titans 2</span></h1>
+        <p>Ferramentas ao vivo, simuladores de custo e guias táticos do clã.</p>
       </div>
-    </a>
 
-    <!-- 2. ATAQUES & RANKING -->
-    <a href="ataques_ranking.html" class="deck-card highlight">
-      <div class="deck-icon-thumb">⚡</div>
-      <div class="deck-info">
-        <span class="deck-badge cyan">Estatísticas</span>
-        <h2>Ataques & Ranking</h2>
-        <p>Histórico completo de ataques em tempo real, decks usados e ranking detalhado de dano do clã.</p>
+      <a href="perfil.html" id="btnPerfilTop" class="top-profile-btn">
+        <svg viewBox="0 0 127.14 96.36">
+          <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,45.91,53.91,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,45.91,96.12,53,91.08,65.69,84.69,65.69Z"/>
+        </svg>
+        <span id="labelPerfilTop">Entrar com Discord</span>
+      </a>
+    </header>
+
+    <!-- 1. OPERAÇÕES & DADOS DO CLÃ -->
+    <section class="category-block live-cat">
+      <div class="category-header">
+        <span class="category-title">Raid & Dados do Clã</span>
       </div>
-    </a>
+      <div class="grid-3">
+        <a href="painel_raid.html" class="deck-card live-card">
+          <img src="Cards/TeamTactics.png" alt="Raid em Tempo Real" class="deck-thumb" onerror="this.src='Cards/wc.png'">
+          <div class="deck-info">
+            <span class="deck-badge live">🔴 Ao Vivo</span>
+            <h2>Raid em Tempo Real</h2>
+            <p>Titã atual, status anatômico, vida restante e buffs ativos.</p>
+          </div>
+        </a>
 
-    <!-- 3. IMPORTADOR DE PERFIL -->
-    <a href="importar_cartas.html" class="deck-card gold-highlight">
-      <div class="deck-icon-thumb">📥</div>
-      <div class="deck-info">
-        <span class="deck-badge gold">Perfil & Cartas</span>
-        <h2>Importar Cartas</h2>
-        <p>Cole o JSON do seu jogo para listar todos os seus níveis de cartas e fragmentos.</p>
+        <a href="ataques_ranking.html" class="deck-card cyan-hover">
+          <div class="deck-icon-thumb">⚡</div>
+          <div class="deck-info">
+            <span class="deck-badge cyan">Estatísticas</span>
+            <h2>Ataques & Ranking</h2>
+            <p>Histórico de ataques em tempo real, decks usados e ranking de dano.</p>
+          </div>
+        </a>
+
+        <a href="importar_cartas.html" class="deck-card gold-hover">
+          <div class="deck-icon-thumb">📥</div>
+          <div class="deck-info">
+            <span class="deck-badge gold">Perfil & JSON</span>
+            <h2>Importar Cartas</h2>
+            <p>Cole o JSON do jogo para listar níveis de cartas e fragmentos.</p>
+          </div>
+        </a>
       </div>
-    </a>
+    </section>
 
-    <!-- 4. COMBINAÇÕES DE DECKS -->
-    <a href="combinacoes.html" class="deck-card highlight">
-      <img src="Cards/Fuse.png" alt="Combinações de Decks" class="deck-thumb" onerror="this.src='Cards/wc.png'">
-      <div class="deck-info">
-        <span class="deck-badge cyan">Guia de Montagem</span>
-        <h2>Combinações de Decks</h2>
-        <p>Aprenda a montar os 6 decks ideais e suas variações para cada tipo de buff de raid.</p>
+    <!-- 2. CALCULADORAS & SIMULADORES -->
+    <section class="category-block calc-cat">
+      <div class="category-header">
+        <span class="category-title">Calculadoras & Simuladores</span>
       </div>
-    </a>
+      <div class="grid-2">
+        <a href="custo.html" class="deck-card new-card cyan-hover">
+          <div class="deck-icon-thumb">🧮</div>
+          <div class="deck-info">
+            <span class="deck-badge cyan">Novo • Custo & ROI</span>
+            <h2>Calculadora de Custo & VS</h2>
+            <p>Calcule o gasto de upgrade (0–150) e compare custo, dano e ROI entre decks.</p>
+          </div>
+        </a>
 
-    <!-- 5. FLUXOGRAMAS DE DECKS -->
-    <a href="fluxogramas.html" class="deck-card">
-      <img src="Cards/PlagueAttack.png" alt="Fluxogramas de Decks" class="deck-thumb" onerror="this.src='Cards/wc.png'">
-      <div class="deck-info">
-        <span class="deck-badge green">Montagem Tática</span>
-        <h2>Fluxogramas de Decks</h2>
-        <p>Diagramas visuais de montagem para Plague, Foguetes, Purify, TT e outros com conexões em SVG.</p>
+        <a href="reducoes.html" class="deck-card gold-hover">
+          <div class="deck-icon-thumb">⚖️</div>
+          <div class="deck-info">
+            <span class="deck-badge gold">Mecânicas</span>
+            <h2>Tabela de Reduções</h2>
+            <p>Conversão matemática para All Damage e All Gold com calculadora.</p>
+          </div>
+        </a>
       </div>
-    </a>
+    </section>
 
-    <!-- 6. TABELA DE AFLIÇÕES -->
-    <a href="tabela_aflicoes.html" class="deck-card highlight">
-      <img src="Cards/a.png" alt="Tabela de Aflições" class="deck-thumb" onerror="this.src='Cards/wc.png'">
-      <div class="deck-info">
-        <span class="deck-badge cyan">Guia de Ataque</span>
-        <h2>Tabela de Aflições</h2>
-        <p>Quantas partes bater por buff (Chance / Duração) e bônus de dano de cada carta.</p>
+    <!-- 3. GUIAS TÁTICOS & DECKS -->
+    <section class="category-block guide-cat">
+      <div class="category-header">
+        <span class="category-title">Guias Táticos & Montagem</span>
       </div>
-    </a>
+      <div class="grid-2">
+        <a href="combinacoes.html" class="deck-card cyan-hover">
+          <img src="Cards/Fuse.png" alt="Combinações de Decks" class="deck-thumb" onerror="this.src='Cards/wc.png'">
+          <div class="deck-info">
+            <span class="deck-badge cyan">Montagem</span>
+            <h2>Combinações de Decks</h2>
+            <p>Monte os 6 decks ideais e suas variações para cada buff de raid.</p>
+          </div>
+        </a>
 
-    <!-- 7. GUIA DE NIVELAMENTO -->
-    <a href="nivelamento_decks.html" class="deck-card">
-      <img src="Cards/wc.png" alt="Nivelamento" class="deck-thumb">
-      <div class="deck-info">
-        <span class="deck-badge cyan">Guia Tático</span>
-        <h2>Nivelamento de Decks</h2>
-        <p>Regras de níveis por tipo de carta (Dano, Buff, Efeito Fixo) e lista completa.</p>
+        <a href="fluxogramas.html" class="deck-card">
+          <img src="Cards/PlagueAttack.png" alt="Fluxogramas de Decks" class="deck-thumb" onerror="this.src='Cards/wc.png'">
+          <div class="deck-info">
+            <span class="deck-badge green">Diagramas</span>
+            <h2>Fluxogramas de Decks</h2>
+            <p>Diagramas visuais de Plague, Foguetes, Purify, TT e outros em SVG.</p>
+          </div>
+        </a>
+
+        <a href="tabela_aflicoes.html" class="deck-card cyan-hover">
+          <img src="Cards/a.png" alt="Tabela de Aflições" class="deck-thumb" onerror="this.src='Cards/wc.png'">
+          <div class="deck-info">
+            <span class="deck-badge cyan">Ataque</span>
+            <h2>Tabela de Aflições</h2>
+            <p>Quantas partes bater por buff (Chance / Duração) e bônus de cada carta.</p>
+          </div>
+        </a>
+
+        <a href="nivelamento_decks.html" class="deck-card">
+          <img src="Cards/wc.png" alt="Nivelamento" class="deck-thumb">
+          <div class="deck-info">
+            <span class="deck-badge green">Progressão</span>
+            <h2>Nivelamento de Decks</h2>
+            <p>Regras de níveis por tipo de carta (Dano, Buff, Efeito Fixo) e lista completa.</p>
+          </div>
+        </a>
       </div>
-    </a>
+    </section>
 
-    <!-- 8. MÓDULO DE REDUÇÕES -->
-    <a href="reducoes.html" class="deck-card gold-highlight">
-      <div class="deck-icon-thumb">⚖️</div>
-      <div class="deck-info">
-        <span class="deck-badge gold">Mecânicas de Jogo</span>
-        <h2>Tabela de Reduções</h2>
-        <p>Conversão matemática para All Damage e All Gold com calculadora.</p>
-      </div>
-    </a>
-
-  </div>
-
-  <!-- SEÇÃO DE CRÉDITOS & APOIO -->
-  <div class="credits-section">
-    <div class="author-header">
+    <!-- CRÉDITOS & APOIO -->
+    <section class="credits-section">
       <div class="author-title-group">
         <div class="author-avatar">JV</div>
         <div class="author-meta">
@@ -521,31 +604,22 @@
             JotaVe
             <span class="author-clan-badge">Clã Máfia BR (975xx)</span>
           </h3>
-          <div class="author-desc">Expert em Raid & Desenvolvedor</div>
+          <div class="author-desc">Expert em Raid & Desenvolvedor • Apoie o projeto para mantê-lo atualizado</div>
         </div>
       </div>
-    </div>
 
-    <div class="support-bar">
-      <div class="support-text">
-        Curtiu os guias e ferramentas? <span>Apoie com qualquer valor</span> para manter o projeto ativo e sempre atualizado!
-      </div>
       <div class="support-actions">
-        <button class="btn-pix" onclick="copiarPix()">
-          ⚡ Copiar Chave PIX
-        </button>
-        <button class="btn-discord" onclick="copiarDiscord()">
-          💬 Discord: jotave717
-        </button>
+        <button class="btn-pix" onclick="copiarPix()">⚡ Copiar PIX</button>
+        <button class="btn-discord" onclick="copiarDiscord()">💬 jotave717</button>
       </div>
-    </div>
+    </section>
+
+    <footer>
+      Guia tático de raids — Tap Titans 2 • Criado por JotaVe
+    </footer>
   </div>
 
   <div id="copyToast">Chave PIX copiada com sucesso!</div>
-
-  <footer>
-    Guia tático de raids — Tap Titans 2 • Criado por JotaVe
-  </footer>
 
   <script>
     const CHAVE_PIX = "eec03fbb-828a-42be-a53a-1fa6814c7d4e";

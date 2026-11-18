@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora & Comparador VS • Raid Cards</title>
+  <style>
+    :root {
+      --bg-page: #090d16;
+      --bg-surface: #111827;
+      --bg-elevated: #172033;
+      --bg-input: #0b101b;
+      --bg-footer: #0d1320;
+      --border: #233047;
+      --border-subtle: rgba(35, 48, 71, 0.6);
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --accent: #38bdf8;
+      --accent-soft: rgba(56, 189, 248, 0.12);
+      --green: #34d399;
+      --green-soft: rgba(52, 211, 153, 0.12);
+      --amber: #fbbf24;
+      --purple: #c084fc;
+      --red: #f87171;
+      --vs-accent: #f43f5e;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-page);
+      color: var(--text-primary);
+      padding: 14px 12px 48px;
+      font-size: 13.5px;
+      line-height: 1.35;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .container {
+      max-width: 880px;
+      margin: 0 auto;
+    }
+
+    /* Header compacto e fixo */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      background: rgba(17, 24, 39, 0.94);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 9px 14px;
+      margin-bottom: 14px;
+      position: sticky;
+      top: 8px;
+      z-index: 100;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    }
+
+    .brand {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .brand h1 {
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.01em;
+    }
+
+    .brand h1 span {
+      color: var(--accent);
+    }
+
+    .brand small {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .header-kpis {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .kpi-chip {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 4px 9px;
+    }
+
+    .kpi-chip span {
+      font-size: 0.66rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-secondary);
+      font-weight: 600;
+    }
+
+    .kpi-chip strong {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--green);
+    }
+
+    .kpi-chip.gain strong {
+      color: var(--amber);
+    }
+
+    .kpi-chip.dmg strong {
+      color: var(--accent);
+    }
+
+    .btn-reset {
+      background: rgba(248, 113, 113, 0.08);
+      border: 1px solid rgba(248, 113, 113, 0.35);
+      color: var(--red);
+      padding: 5px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.74rem;
+      transition: all 0.15s ease;
+    }
+
+    .btn-reset:hover {
+      background: var(--red);
+      color: #090d16;
+    }
+
+    /* Lista de Confrontos VS */
+    .vs-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .vs-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+    }
+
+    .vs-grid {
+      display: grid;
+      grid-template-columns: 1fr 1px 1fr;
+      position: relative;
+    }
+
+    .vs-divider {
+      background: var(--border);
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .vs-pill {
+      position: absolute;
+      background: var(--vs-accent);
+      color: #fff;
+      font-size: 0.64rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      padding: 3px 6px;
+      border-radius: 999px;
+      border: 2px solid var(--bg-surface);
+      box-shadow: 0 2px 8px rgba(244, 63, 94, 0.45);
+      z-index: 2;
+    }
+
+    @media (max-width: 780px) {
+      .vs-grid {
+        grid-template-columns: 1fr;
+      }
+      .vs-divider {
+        height: 1px;
+        width: 100%;
+      }
+    }
+
+    /* Painel Individual de Cada Deck */
+    .deck-pane {
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      transition: background-color 0.2s ease;
+      min-width: 0;
+    }
+
+    .deck-pane.winner-efficiency {
+      background: linear-gradient(180deg, rgba(52, 211, 153, 0.05) 0%, transparent 100%);
+    }
+
+    .deck-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .deck-id-wrap {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .deck-name {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .roi-badge {
+      display: none;
+      font-size: 0.62rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      background: var(--green-soft);
+      color: var(--green);
+      border: 1px solid rgba(52, 211, 153, 0.35);
+      padding: 1px 5px;
+      border-radius: 4px;
+    }
+
+    .deck-pane.winner-efficiency .roi-badge {
+      display: inline-block;
+    }
+
+    .delta-pill {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      padding: 2px 7px;
+      border-radius: 5px;
+      white-space: nowrap;
+    }
+
+    /* Barra compacta de Dano Inicial -> Final */
+    .dmg-bar {
+      display: grid;
+      grid-template-columns: auto 1fr auto 1fr;
+      align-items: center;
+      gap: 5px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 4px 7px;
+    }
+
+    .dmg-bar-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      letter-spacing: 0.04em;
+      padding-right: 2px;
+    }
+
+    .dmg-input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+      min-width: 0;
+    }
+
+    .dmg-input-wrap span {
+      position: absolute;
+      left: 6px;
+      font-size: 0.62rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    .dmg-input-wrap input {
+      width: 100%;
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      color: var(--text-primary);
+      padding: 3px 6px 3px 28px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    .dmg-input-wrap input:focus {
+      border-color: var(--accent);
+    }
+
+    .dmg-sep {
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+
+    /* Tabela compacta das 3 cartas */
+    table.cards-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    table.cards-table th {
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+      padding: 2px 3px 4px;
+      border-bottom: 1px solid var(--border-subtle);
+      text-align: left;
+    }
+
+    table.cards-table th.c-lvl,
+    table.cards-table td.c-lvl {
+      width: 56px;
+      text-align: center;
+    }
+
+    table.cards-table th.c-cost,
+    table.cards-table td.c-cost {
+      width: 66px;
+      text-align: right;
+    }
+
+    table.cards-table td {
+      padding: 3px 3px;
+      border-bottom: 1px solid rgba(35, 48, 71, 0.35);
+    }
+
+    table.cards-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .card-name {
+      width: 100%;
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 4px;
+      color: var(--text-primary);
+      font-size: 0.83rem;
+      padding: 3px 4px;
+      outline: none;
+      transition: all 0.15s;
+    }
+
+    .card-name:hover {
+      background: rgba(11, 16, 27, 0.45);
+    }
+
+    .card-name:focus {
+      background: var(--bg-input);
+      border-color: var(--border);
+    }
+
+    .lvl-box {
+      width: 100%;
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text-primary);
+      padding: 3px 2px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-align: center;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    .lvl-box:focus {
+      border-color: var(--accent);
+    }
+
+    .cost-cell {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--amber);
+    }
+
+    /* Rodapé compacto do Deck */
+    .deck-summary-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+      background: var(--bg-input);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 4px 8px;
+      font-size: 0.74rem;
+    }
+
+    .deck-summary-bar .cost-total {
+      color: var(--text-secondary);
+      white-space: nowrap;
+    }
+
+    .deck-summary-bar .cost-total strong {
+      color: var(--green);
+      font-size: 0.88rem;
+      margin-left: 3px;
+    }
+
+    .deck-summary-bar .base-power {
+      color: var(--text-muted);
+      font-size: 0.71rem;
+      white-space: nowrap;
+    }
+
+    .deck-summary-bar .base-power strong {
+      color: var(--purple);
+      font-weight: 600;
+    }
+
+    /* Barra de Comparação VS acoplada na base */
+    .vs-telemetry {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      background: var(--bg-footer);
+      border-top: 1px solid var(--border);
+    }
+
+    @media (max-width: 780px) {
+      .vs-telemetry {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 460px) {
+      .vs-telemetry {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .tele-item {
+      padding: 7px 10px;
+      border-right: 1px solid var(--border-subtle);
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      min-width: 0;
+    }
+
+    .tele-item:last-child {
+      border-right: none;
+    }
+
+    @media (max-width: 780px) {
+      .tele-item:nth-child(2) {
+        border-right: none;
+      }
+      .tele-item:nth-child(1),
+      .tele-item:nth-child(2) {
+        border-bottom: 1px solid var(--border-subtle);
+      }
+    }
+
+    .tele-label {
+      font-size: 0.62rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--text-muted);
+    }
+
+    .tele-val {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .tele-sub {
+      font-size: 0.69rem;
+      color: var(--text-secondary);
+    }
+
+    .c-green { color: var(--green); }
+    .c-amber { color: var(--amber); }
+    .c-cyan  { color: var(--accent); }
+    .c-muted { color: var(--text-muted); }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <h1>Calculadora <span>VS</span> • Raid Cards</h1>
+        <small>Níveis 0–150 • K, M, B, T</small>
+      </div>
+      <div class="header-kpis">
+        <div class="kpi-chip">
+          <span>Custo</span>
+          <strong id="grand-cost">0</strong>
+        </div>
+        <div class="kpi-chip gain">
+          <span>Ganho</span>
+          <strong id="grand-gain">+0</strong>
+        </div>
+        <div class="kpi-chip dmg">
+          <span>Dano Final</span>
+          <strong id="grand-damage">0</strong>
+        </div>
+        <button type="button" class="btn-reset" onclick="resetAll()">Limpar</button>
+      </div>
+    </header>
+
+    <main class="vs-list" id="vs-container"></main>
+  </div>
+
+  <script>
+    const LEVEL_COSTS = {
+      1: 1, 2: 3, 3: 5, 4: 10, 5: 14, 6: 17, 7: 28, 8: 34, 9: 40, 10: 55,
+      11: 65, 12: 82, 13: 95, 14: 140, 15: 182, 16: 195, 17: 204, 18: 209, 19: 213, 20: 232,
+      21: 240, 22: 260, 23: 267, 24: 271, 25: 275, 26: 280, 27: 284, 28: 291, 29: 342, 30: 345,
+      31: 348, 32: 351, 33: 354, 34: 357, 35: 361, 36: 364, 37: 367, 38: 373, 39: 404, 40: 410,
+      41: 413, 42: 417, 43: 525, 44: 540, 45: 547, 46: 555, 47: 570, 48: 577, 49: 585, 50: 600,
+      51: 615, 52: 630, 53: 645, 54: 660, 55: 675, 56: 690, 57: 705, 58: 720, 59: 735, 60: 750,
+      61: 765, 62: 780, 63: 795, 64: 810, 65: 825, 66: 840, 67: 855, 68: 870, 69: 885, 70: 900,
+      71: 920, 72: 940, 73: 960, 74: 980, 75: 1000, 76: 1020, 77: 1040, 78: 1060, 79: 1080, 80: 1102,
+      81: 1125, 82: 1147, 83: 1170, 84: 1192, 85: 1215, 86: 1237, 87: 1260, 88: 1282, 89: 1305, 90: 1327,
+      91: 1350, 92: 1372, 93: 1395, 94: 1417, 95: 1440, 96: 1462, 97: 1485, 98: 1507, 99: 1530, 100: 1555,
+      101: 1580, 102: 1605, 103: 1630, 104: 1655, 105: 1680, 106: 1705, 107: 1730, 108: 1755, 109: 1780, 110: 1805,
+      111: 1830, 112: 1855, 113: 1880, 114: 1905, 115: 1930, 116: 1955, 117: 1980, 118: 2005, 119: 2030, 120: 2055,
+      121: 2080, 122: 2105, 123: 2130, 124: 2155, 125: 2180, 126: 2205, 127: 2230, 128: 2255, 129: 2280, 130: 2305,
+      131: 2330, 132: 2355, 133: 2380, 134: 2405, 135: 2430, 136: 2455, 137: 2480, 138: 2505, 139: 2530, 140: 2555,
+      141: 2580, 142: 2605, 143: 2630, 144: 2655, 145: 2680, 146: 2705, 147: 2730, 148: 2755, 149: 2780, 150: 2805
+    };
+
+    const LEVEL_DAMAGE = {
+      0: 0,
+      1: 7.156, 2: 7.606, 3: 8.055, 4: 8.505, 5: 8.954, 6: 9.404, 7: 9.854, 8: 10.303, 9: 10.753, 10: 11.292,
+      11: 11.745, 12: 12.207, 13: 12.662, 14: 13.112, 15: 13.556, 16: 13.995, 17: 14.428, 18: 14.855, 19: 15.278, 20: 15.820,
+      21: 16.235, 22: 16.645, 23: 17.050, 24: 17.450, 25: 17.845, 26: 18.235, 27: 18.621, 28: 19.002, 29: 19.378, 30: 19.908,
+      31: 20.278, 32: 20.644, 33: 21.005, 34: 21.363, 35: 21.716, 36: 22.066, 37: 22.411, 38: 22.752, 39: 23.090, 40: 23.612,
+      41: 23.945, 42: 24.274, 43: 24.600, 44: 24.923, 45: 25.242, 46: 25.559, 47: 25.872, 48: 26.182, 49: 26.489, 50: 27.007,
+      51: 27.311, 52: 27.612, 53: 27.910, 54: 28.206, 55: 28.499, 56: 28.790, 57: 29.079, 58: 29.365, 59: 29.649, 60: 30.171,
+      61: 30.453, 62: 30.734, 63: 31.012, 64: 31.289, 65: 31.565, 66: 31.838, 67: 32.111, 68: 32.381, 69: 32.651, 70: 33.183,
+      71: 33.452, 72: 33.720, 73: 33.987, 74: 34.254, 75: 34.519, 76: 34.784, 77: 35.048, 78: 35.312, 79: 35.575, 80: 36.124,
+      81: 36.389, 82: 36.653, 83: 36.918, 84: 37.182, 85: 37.446, 86: 37.711, 87: 37.975, 88: 38.240, 89: 38.505, 90: 39.081,
+      91: 39.350, 92: 39.619, 93: 39.889, 94: 40.160, 95: 40.431, 96: 40.704, 97: 40.978, 98: 41.253, 99: 41.529, 100: 42.141,
+      101: 42.422, 102: 42.705, 103: 42.990, 104: 43.276, 105: 43.564, 106: 43.854, 107: 44.146, 108: 44.440, 109: 44.736, 110: 45.394,
+      111: 45.697, 112: 46.003, 113: 46.311, 114: 46.622, 115: 46.935, 116: 47.251, 117: 47.570, 118: 47.892, 119: 48.217, 120: 48.934,
+      121: 49.268, 122: 49.606, 123: 49.947, 124: 50.291, 125: 50.639, 126: 50.991, 127: 51.347, 128: 51.706, 129: 52.070, 130: 52.857,
+      131: 53.231, 132: 53.610, 133: 53.994, 134: 54.382, 135: 54.774, 136: 55.171, 137: 55.573, 138: 55.979, 139: 56.391, 140: 57.262,
+      141: 57.687, 142: 58.117, 143: 58.552, 144: 58.993, 145: 59.440, 146: 59.892, 147: 60.349, 148: 60.813, 149: 61.282, 150: 62.251
+    };
+
+    const NUM_DECKS = 8;
+    const CARDS_PER_DECK = 3;
+    const STORAGE_KEY = 'raid_card_calculator_vs_v3';
+
+    function formatInt(num) {
+      return Math.round(num).toLocaleString('pt-BR');
+    }
+
+    function formatCompactDamage(num) {
+      if (!num || isNaN(num)) return '0';
+      const abs = Math.abs(num);
+      const sign = num < 0 ? '-' : '';
+      if (abs >= 1e12) return sign + (abs / 1e12).toLocaleString('pt-BR', { maximumFractionDigits: 2 }) + 'T';
+      if (abs >= 1e9)  return sign + (abs / 1e9).toLocaleString('pt-BR', { maximumFractionDigits: 2 }) + 'B';
+      if (abs >= 1e6)  return sign + (abs / 1e6).toLocaleString('pt-BR', { maximumFractionDigits: 2 }) + 'M';
+      if (abs >= 1e3)  return sign + (abs / 1e3).toLocaleString('pt-BR', { maximumFractionDigits: 2 }) + 'K';
+      return sign + abs.toLocaleString('pt-BR', { maximumFractionDigits: 2 });
+    }
+
+    function formatSignedDamage(num) {
+      if (!num || isNaN(num)) return '+0';
+      const formatted = formatCompactDamage(num);
+      return num > 0 ? `+${formatted}` : formatted;
+    }
+
+    function parseDamageInput(raw) {
+      if (!raw) return 0;
+      const cleaned = raw.trim().toUpperCase().replace(/\s+/g, '').replace(',', '.');
+      const match = cleaned.match(/^([+-]?\d*\.?\d+)([KMBT]?)$/);
+      if (!match) return 0;
+
+      const value = parseFloat(match[1]);
+      if (isNaN(value)) return 0;
+
+      const multipliers = { '': 1, 'K': 1e3, 'M': 1e6, 'B': 1e9, 'T': 1e12 };
+      return value * (multipliers[match[2]] || 1);
+    }
+
+    function clampLevel(val) {
+      const parsed = parseInt(val, 10);
+      if (isNaN(parsed) || parsed < 0) return 0;
+      if (parsed > 150) return 150;
+      return parsed;
+    }
+
+    function calculateUpgradeCost(before, after) {
+      const start = clampLevel(before);
+      const end = clampLevel(after);
+      if (end <= start) return 0;
+
+      let total = 0;
+      for (let lvl = start + 1; lvl <= end; lvl++) {
+        total += LEVEL_COSTS[lvl] || 0;
+      }
+      return total;
+    }
+
+    function createDeckHTML(d) {
+      let rowsHTML = '';
+      for (let c = 1; c <= CARDS_PER_DECK; c++) {
+        rowsHTML += `
+          <tr>
+            <td>
+              <input
+                type="text"
+                class="card-name"
+                id="d${d}-c${c}-name"
+                placeholder="Carta ${c}"
+                oninput="updateAll()"
+              />
+            </td>
+            <td class="c-lvl">
+              <input
+                type="number"
+                class="lvl-box"
+                id="d${d}-c${c}-before"
+                min="0"
+                max="150"
+                placeholder="0"
+                oninput="updateAll()"
+              />
+            </td>
+            <td class="c-lvl">
+              <input
+                type="number"
+                class="lvl-box"
+                id="d${d}-c${c}-after"
+                min="0"
+                max="150"
+                placeholder="0"
+                oninput="updateAll()"
+              />
+            </td>
+            <td class="c-cost">
+              <span class="cost-cell" id="d${d}-c${c}-cost">0</span>
+            </td>
+          </tr>
+        `;
+      }
+
+      return `
+        <section class="deck-pane" id="deck-block-${d}">
+          <div class="deck-header">
+            <div class="deck-id-wrap">
+              <span class="deck-name">Deck ${d}</span>
+              <span class="roi-badge">Melhor ROI</span>
+            </div>
+            <span class="delta-pill" id="d${d}-dmg-delta">+0 (0.0%)</span>
+          </div>
+
+          <div class="dmg-bar">
+            <span class="dmg-bar-label">Dano</span>
+            <div class="dmg-input-wrap">
+              <span>Ini</span>
+              <input
+                type="text"
+                id="d${d}-dmg-start"
+                placeholder="120M"
+                oninput="updateAll()"
+              />
+            </div>
+            <span class="dmg-sep">→</span>
+            <div class="dmg-input-wrap">
+              <span>Fim</span>
+              <input
+                type="text"
+                id="d${d}-dmg-end"
+                placeholder="155M"
+                oninput="updateAll()"
+              />
+            </div>
+          </div>
+
+          <table class="cards-table">
+            <thead>
+              <tr>
+                <th>Carta</th>
+                <th class="c-lvl">Inicial</th>
+                <th class="c-lvl">Final</th>
+                <th class="c-cost">Custo</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rowsHTML}
+            </tbody>
+          </table>
+
+          <div class="deck-summary-bar">
+            <span class="cost-total">Custo:<strong id="d${d}-total">0</strong></span>
+            <span class="base-power">Base: <strong id="d${d}-theory">0 → 0 (+0%)</strong></span>
+          </div>
+        </section>
+      `;
+    }
+
+    function buildUI() {
+      const container = document.getElementById('vs-container');
+      container.innerHTML = '';
+
+      for (let d = 1; d <= NUM_DECKS; d += 2) {
+        const pairIndex = (d + 1) / 2;
+        const card = document.createElement('article');
+        card.className = 'vs-card';
+        card.innerHTML = `
+          <div class="vs-grid">
+            ${createDeckHTML(d)}
+            <div class="vs-divider"><span class="vs-pill">VS</span></div>
+            ${createDeckHTML(d + 1)}
+          </div>
+
+          <div class="vs-telemetry" id="vs-analytics-${pairIndex}">
+            <div class="tele-item">
+              <span class="tele-label">Diferença de Custo</span>
+              <span class="tele-val" id="vs${pairIndex}-cost-main">Empate (0)</span>
+              <span class="tele-sub" id="vs${pairIndex}-cost-sub">Investimento idêntico</span>
+            </div>
+
+            <div class="tele-item">
+              <span class="tele-label">Ganho Real (Fim − Ini)</span>
+              <span class="tele-val" id="vs${pairIndex}-gain-main">Aguardando...</span>
+              <span class="tele-sub" id="vs${pairIndex}-gain-sub">Preencha Dano Ini e Fim</span>
+            </div>
+
+            <div class="tele-item">
+              <span class="tele-label">Dano Final Absoluto</span>
+              <span class="tele-val" id="vs${pairIndex}-final-main">Aguardando...</span>
+              <span class="tele-sub" id="vs${pairIndex}-final-sub">Teto pós-upgrade</span>
+            </div>
+
+            <div class="tele-item">
+              <span class="tele-label">Custo-Benefício (Ganho / 1k)</span>
+              <span class="tele-val" id="vs${pairIndex}-eff-main">—</span>
+              <span class="tele-sub" id="vs${pairIndex}-eff-sub">Retorno por 1k custo</span>
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      }
+    }
+
+    function updateAll() {
+      let grandCost = 0;
+      let grandFinalDamage = 0;
+      let grandGainDamage = 0;
+      const state = {};
+      const deckStats = {};
+
+      for (let d = 1; d <= NUM_DECKS; d++) {
+        let deckCost = 0;
+        let baseDmgStart = 0;
+        let baseDmgEnd = 0;
+
+        const rawStart = document.getElementById(`d${d}-dmg-start`).value;
+        const rawEnd = document.getElementById(`d${d}-dmg-end`).value;
+
+        const dmgStart = parseDamageInput(rawStart);
+        const dmgEnd = parseDamageInput(rawEnd);
+        const dmgGain = (rawStart !== '' || rawEnd !== '') ? (dmgEnd - dmgStart) : 0;
+
+        state[`d${d}`] = {
+          dmgStart: rawStart,
+          dmgEnd: rawEnd,
+          cards: {}
+        };
+
+        for (let c = 1; c <= CARDS_PER_DECK; c++) {
+          const name = document.getElementById(`d${d}-c${c}-name`).value;
+          const beforeRaw = document.getElementById(`d${d}-c${c}-before`).value;
+          const afterRaw = document.getElementById(`d${d}-c${c}-after`).value;
+
+          const startLvl = clampLevel(beforeRaw);
+          const endLvl = afterRaw === '' ? startLvl : clampLevel(afterRaw);
+
+          const cardCost = calculateUpgradeCost(startLvl, endLvl);
+          document.getElementById(`d${d}-c${c}-cost`).textContent = formatInt(cardCost);
+
+          deckCost += cardCost;
+          baseDmgStart += LEVEL_DAMAGE[startLvl] || 0;
+          baseDmgEnd += LEVEL_DAMAGE[endLvl] || 0;
+
+          state[`d${d}`].cards[`c${c}`] = {
+            name,
+            before: beforeRaw,
+            after: afterRaw
+          };
+        }
+
+        const deltaBadge = document.getElementById(`d${d}-dmg-delta`);
+        const gainPct = dmgStart > 0
+          ? (((dmgEnd - dmgStart) / dmgStart) * 100).toFixed(1)
+          : (dmgEnd > 0 ? '100.0' : '0.0');
+
+        deltaBadge.textContent = `${formatSignedDamage(dmgGain)} (${dmgGain >= 0 ? '+' : ''}${gainPct}%)`;
+        deltaBadge.style.color = dmgGain > 0 ? 'var(--green)' : (dmgGain < 0 ? 'var(--red)' : 'var(--text-secondary)');
+        deltaBadge.style.borderColor = dmgGain > 0 ? 'rgba(52, 211, 153, 0.4)' : 'var(--border)';
+
+        const theoryPct = baseDmgStart > 0
+          ? (((baseDmgEnd - baseDmgStart) / baseDmgStart) * 100).toFixed(1)
+          : (baseDmgEnd > 0 ? '100.0' : '0.0');
+
+        document.getElementById(`d${d}-total`).textContent = formatInt(deckCost);
+        document.getElementById(`d${d}-theory`).textContent =
+          `${baseDmgStart.toFixed(1)} → ${baseDmgEnd.toFixed(1)} (${theoryPct >= 0 ? '+' : ''}${theoryPct}%)`;
+
+        deckStats[d] = {
+          cost: deckCost,
+          dmgStart,
+          dmgEnd,
+          dmgGain,
+          gainPct: parseFloat(gainPct)
+        };
+
+        grandCost += deckCost;
+        grandFinalDamage += dmgEnd;
+        grandGainDamage += dmgGain;
+      }
+
+      for (let d = 1; d <= NUM_DECKS; d += 2) {
+        const pairIndex = (d + 1) / 2;
+        const a = deckStats[d];
+        const b = deckStats[d + 1];
+
+        // 1. Custo
+        const costMain = document.getElementById(`vs${pairIndex}-cost-main`);
+        const costSub = document.getElementById(`vs${pairIndex}-cost-sub`);
+        const costDiff = Math.abs(a.cost - b.cost);
+
+        if (a.cost === b.cost) {
+          costMain.innerHTML = `<span class="c-amber">Empate (${formatInt(a.cost)})</span>`;
+          costSub.textContent = 'Investimento idêntico';
+        } else {
+          const cheaper = a.cost < b.cost ? d : d + 1;
+          const expensive = a.cost < b.cost ? d + 1 : d;
+          const minCost = Math.min(a.cost, b.cost);
+          const pctMore = minCost > 0 ? ((costDiff / minCost) * 100).toFixed(1) : '∞';
+          costMain.innerHTML = `<span class="c-green">Deck ${cheaper} poupa ${formatInt(costDiff)}</span>`;
+          costSub.textContent = `Deck ${expensive} custa +${pctMore}%`;
+        }
+
+        // 2. Ganho Real
+        const gainMain = document.getElementById(`vs${pairIndex}-gain-main`);
+        const gainSub = document.getElementById(`vs${pairIndex}-gain-sub`);
+
+        if (a.dmgGain === 0 && b.dmgGain === 0) {
+          gainMain.innerHTML = `<span class="c-muted">Aguardando...</span>`;
+          gainSub.textContent = 'Preencha Dano Ini e Fim';
+        } else if (a.dmgGain === b.dmgGain) {
+          gainMain.innerHTML = `<span class="c-amber">Empate (${formatSignedDamage(a.dmgGain)})</span>`;
+          gainSub.textContent = 'Mesmo salto de dano';
+        } else {
+          const gainWinner = a.dmgGain > b.dmgGain ? d : d + 1;
+          const gainLoser = a.dmgGain > b.dmgGain ? d + 1 : d;
+          const diffGain = Math.abs(a.dmgGain - b.dmgGain);
+          const winObj = a.dmgGain > b.dmgGain ? a : b;
+          const loseObj = a.dmgGain > b.dmgGain ? b : a;
+
+          gainMain.innerHTML = `<span class="c-green">Deck ${gainWinner} +${formatCompactDamage(diffGain)}</span>`;
+          gainSub.textContent = `D${gainWinner}: ${formatSignedDamage(winObj.dmgGain)} (${winObj.gainPct}%) vs D${gainLoser}: ${formatSignedDamage(loseObj.dmgGain)} (${loseObj.gainPct}%)`;
+        }
+
+        // 3. Dano Final Absoluto
+        const finalMain = document.getElementById(`vs${pairIndex}-final-main`);
+        const finalSub = document.getElementById(`vs${pairIndex}-final-sub`);
+
+        if (a.dmgEnd === 0 && b.dmgEnd === 0) {
+          finalMain.innerHTML = `<span class="c-muted">Aguardando...</span>`;
+          finalSub.textContent = 'Teto pós-upgrade';
+        } else if (a.dmgEnd === b.dmgEnd) {
+          finalMain.innerHTML = `<span class="c-amber">Empate (${formatCompactDamage(a.dmgEnd)})</span>`;
+          finalSub.textContent = 'Mesmo dano final';
+        } else {
+          const finalWinner = a.dmgEnd > b.dmgEnd ? d : d + 1;
+          const finalLoser = a.dmgEnd > b.dmgEnd ? d + 1 : d;
+          const minEnd = Math.min(a.dmgEnd, b.dmgEnd);
+          const endDiff = Math.abs(a.dmgEnd - b.dmgEnd);
+          const pctMoreEnd = minEnd > 0 ? ((endDiff / minEnd) * 100).toFixed(1) : '∞';
+
+          finalMain.innerHTML = `<span class="c-cyan">Deck ${finalWinner} +${formatCompactDamage(endDiff)}</span>`;
+          finalSub.textContent = `Bate +${pctMoreEnd}% que Deck ${finalLoser}`;
+        }
+
+        // 4. Custo-Benefício (ROI)
+        const effMain = document.getElementById(`vs${pairIndex}-eff-main`);
+        const effSub = document.getElementById(`vs${pairIndex}-eff-sub`);
+        const blockA = document.getElementById(`deck-block-${d}`);
+        const blockB = document.getElementById(`deck-block-${d + 1}`);
+        blockA.classList.remove('winner-efficiency');
+        blockB.classList.remove('winner-efficiency');
+
+        const effA = (a.cost > 0 && a.dmgGain > 0) ? (a.dmgGain / (a.cost / 1000)) : 0;
+        const effB = (b.cost > 0 && b.dmgGain > 0) ? (b.dmgGain / (b.cost / 1000)) : 0;
+
+        if (effA === 0 && effB === 0) {
+          effMain.innerHTML = `<span class="c-muted">—</span>`;
+          effSub.textContent = 'Retorno por 1k custo';
+        } else if (effA === effB) {
+          effMain.innerHTML = `<span class="c-amber">Empate (${formatCompactDamage(effA)}/1k)</span>`;
+          effSub.textContent = 'Mesma eficiência';
+        } else {
+          const effWinner = effA > effB ? d : d + 1;
+          const winVal = Math.max(effA, effB);
+          const loseVal = Math.min(effA, effB);
+          if (effA > effB) blockA.classList.add('winner-efficiency');
+          else blockB.classList.add('winner-efficiency');
+
+          effMain.innerHTML = `<span class="c-green">Deck ${effWinner} (${formatCompactDamage(winVal)}/1k)</span>`;
+          effSub.textContent = `Contra ${formatCompactDamage(loseVal)}/1k do outro`;
+        }
+      }
+
+      document.getElementById('grand-cost').textContent = formatInt(grandCost);
+      document.getElementById('grand-gain').textContent = formatSignedDamage(grandGainDamage);
+      document.getElementById('grand-damage').textContent = formatCompactDamage(grandFinalDamage);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function loadState() {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (!saved) return;
+
+      try {
+        const state = JSON.parse(saved);
+        for (let d = 1; d <= NUM_DECKS; d++) {
+          const deckData = state[`d${d}`];
+          if (!deckData) continue;
+
+          document.getElementById(`d${d}-dmg-start`).value = deckData.dmgStart || '';
+          document.getElementById(`d${d}-dmg-end`).value = deckData.dmgEnd || '';
+          for (let c = 1; c <= CARDS_PER_DECK; c++) {
+            const cardData = deckData.cards?.[`c${c}`];
+            if (!cardData) continue;
+
+            document.getElementById(`d${d}-c${c}-name`).value = cardData.name || '';
+            document.getElementById(`d${d}-c${c}-before`).value = cardData.before || '';
+            document.getElementById(`d${d}-c${c}-after`).value = cardData.after || '';
+          }
+        }
+      } catch (e) {
+        console.error('Erro ao carregar dados salvos:', e);
+      }
+    }
+
+    function resetAll() {
+      if (!confirm('Deseja limpar todos os níveis, nomes e danos preenchidos?')) return;
+      localStorage.removeItem(STORAGE_KEY);
+      buildUI();
+      updateAll();
+    }
+
+    buildUI();
+    loadState();
+    updateAll();
+  </script>
+</body>
+</html>
